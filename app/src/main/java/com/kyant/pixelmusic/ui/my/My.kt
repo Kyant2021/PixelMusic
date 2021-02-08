@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -15,6 +14,7 @@ import androidx.compose.material.icons.outlined.History
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.ui.component.TwoToneCard
 import com.kyant.pixelmusic.ui.theme.androidBlue
 import com.kyant.pixelmusic.ui.theme.androidOrange
@@ -27,7 +27,7 @@ fun My(modifier: Modifier = Modifier) {
                 Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                RoundedCornerShape(16.dp),
+                SuperellipseCornerShape(16.dp),
                 MaterialTheme.colors.primary,
                 elevation = 0.dp
             ) {

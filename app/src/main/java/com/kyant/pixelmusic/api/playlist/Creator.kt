@@ -10,7 +10,7 @@ data class Creator(
     val gender: Int? = 0,
     val city: Int? = 0,
     val birthday: Long? = 0,
-    val userId: Int? = 0,
+    val userId: Long? = 0,
     val userType: Int? = 0,
     val nickname: String? = "",
     val signature: String? = "",

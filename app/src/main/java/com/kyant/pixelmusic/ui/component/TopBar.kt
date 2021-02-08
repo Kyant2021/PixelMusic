@@ -46,6 +46,7 @@ fun TopBar(
             )
             Text(
                 stringResource(R.string.app_name),
+                Modifier.padding(top = 4.dp),
                 color = LocalContentColor.current.copy(ContentAlpha.high),
                 style = MaterialTheme.typography.h5
             )
