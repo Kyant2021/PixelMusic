@@ -9,6 +9,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.ui.component.TwoToneCard
 import com.kyant.pixelmusic.ui.theme.androidBlue
 import com.kyant.pixelmusic.ui.theme.androidOrange
+import com.kyant.pixelmusic.ui.theme.googleRed
 
 @Composable
 fun My(modifier: Modifier = Modifier) {
@@ -55,6 +57,13 @@ fun My(modifier: Modifier = Modifier) {
                 androidOrange,
                 "Favorites",
                 Icons.Outlined.Favorite, "Favorites"
+            )
+        }
+        item {
+            TwoToneCard(
+                googleRed,
+                "Join QQ group to feedback: 1026441579",
+                Icons.Outlined.BugReport, "Report bug"
             )
         }
     }

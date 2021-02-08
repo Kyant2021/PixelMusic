@@ -36,7 +36,7 @@ fun Home(modifier: Modifier = Modifier) {
                         .padding(32.dp)
                 ) {
                     Text(
-                        "Pixel Music Pre-Alpha",
+                        "Pixel Music Alpha",
                         style = MaterialTheme.typography.h5
                     )
                     Spacer(Modifier.preferredHeight(8.dp))
