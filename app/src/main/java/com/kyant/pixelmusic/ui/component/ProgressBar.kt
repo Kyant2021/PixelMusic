@@ -3,6 +3,7 @@ package com.kyant.pixelmusic.ui.component
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -15,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
@@ -66,24 +66,22 @@ fun ProgressBar(modifier: Modifier = Modifier) {
                         .onSizeChanged { width = it.width }
                         .pointerInput(Unit) {
                             detectTapGestures {
-                                player.seekTo(((it.x / width).coerceIn(0f..1f) * player.duration).toLong())
+                                player.snapTo(((it.x / width).coerceIn(0f..1f) * player.duration).toLong())
                             }
                         }
                         .draggable(
                             rememberDraggableState { draggingOffset += it },
                             Orientation.Horizontal,
                             onDragStopped = {
-                                player.seekTo((player.position.value + durationOffset).toLong())
+                                player.snapTo((player.position.value + durationOffset).toLong())
                                 draggingOffset = 0f
                             }
                         )
                 ) {
                     Box(
                         Modifier
-                            .offset(x = with(LocalDensity.current) {
-                                (this@BoxWithConstraints.maxWidth * player.progress + draggingOffset.toDp())
-                            } - 8.dp)
-                            .preferredSize(16.dp)
+                            .offset(x = with(LocalDensity.current) { (this@BoxWithConstraints.maxWidth * player.progress + draggingOffset.toDp()) } - 8.dp)
+                            .size(16.dp)
                             .background(MaterialTheme.colors.primary, RoundedCornerShape(50))
                     )
                 }

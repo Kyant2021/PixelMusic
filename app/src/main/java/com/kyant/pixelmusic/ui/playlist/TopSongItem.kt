@@ -20,7 +20,7 @@ fun TopSongItem(
 ) {
     Card(
         Modifier
-            .preferredWidth(192.dp)
+            .width(192.dp)
             .padding(4.dp),
         RoundedCornerShape(8.dp),
         elevation = 3.dp
@@ -34,7 +34,7 @@ fun TopSongItem(
                 maxLines = 1,
                 style = MaterialTheme.typography.h5
             )
-            Spacer(Modifier.preferredHeight(8.dp))
+            Spacer(Modifier.height(8.dp))
             Text(
                 topList.updateFrequency.toString(),
                 overflow = TextOverflow.Ellipsis,

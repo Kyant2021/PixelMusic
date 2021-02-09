@@ -39,7 +39,7 @@ fun Home(modifier: Modifier = Modifier) {
                         "Pixel Music Alpha",
                         style = MaterialTheme.typography.h5
                     )
-                    Spacer(Modifier.preferredHeight(8.dp))
+                    Spacer(Modifier.height(8.dp))
                     Text(
                         "Still developing...",
                         style = MaterialTheme.typography.body1

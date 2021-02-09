@@ -3,7 +3,7 @@ package com.kyant.pixelmusic.ui.player
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -23,17 +23,17 @@ fun PlayController(modifier: Modifier = Modifier) {
         IconButton({}) {
             Icon(Icons.Outlined.FavoriteBorder, "Favorite")
         }
-        Spacer(Modifier.preferredWidth(16.dp))
+        Spacer(Modifier.width(16.dp))
         IconButton({ player.previous() }) {
             Icon(Icons.Outlined.SkipPrevious, "Skip to prevoius")
         }
-        Spacer(Modifier.preferredWidth(16.dp))
+        Spacer(Modifier.width(16.dp))
         PlayPauseButton()
-        Spacer(Modifier.preferredWidth(16.dp))
+        Spacer(Modifier.width(16.dp))
         IconButton({ player.next() }) {
             Icon(Icons.Outlined.SkipNext, "Skip to next")
         }
-        Spacer(Modifier.preferredWidth(16.dp))
+        Spacer(Modifier.width(16.dp))
         IconButton({}) {
             Icon(Icons.Outlined.Info, "Info")
         }

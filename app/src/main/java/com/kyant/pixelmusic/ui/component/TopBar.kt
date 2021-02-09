@@ -30,7 +30,7 @@ fun TopBar(
     Row(
         modifier
             .fillMaxWidth()
-            .preferredHeight(56.dp)
+            .height(56.dp)
             .background(MaterialTheme.colors.surface.copy(0.92f))
             .padding(8.dp),
         Arrangement.SpaceBetween,
@@ -40,7 +40,7 @@ fun TopBar(
             Image(
                 painterResource(R.drawable.ic_launcher_foreground), null,
                 Modifier
-                    .preferredHeight(56.dp)
+                    .height(56.dp)
                     .padding(end = 8.dp),
                 colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
             )

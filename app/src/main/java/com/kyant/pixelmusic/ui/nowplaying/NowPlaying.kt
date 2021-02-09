@@ -1,22 +1,23 @@
 package com.kyant.pixelmusic.ui.nowplaying
 
 import android.graphics.Bitmap
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.*
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Article
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.toArgb
@@ -28,8 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.palette.graphics.Palette
 import com.kyant.inimate.layer.progress
-import com.kyant.inimate.shape.SmoothRoundedCornerShape
+import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.inimate.util.offsetGradientBackground
+import com.kyant.pixelmusic.api.EmptyLyrics
+import com.kyant.pixelmusic.api.findLyrics
 import com.kyant.pixelmusic.locals.LocalNowPlaying
 import com.kyant.pixelmusic.locals.LocalPixelPlayer
 import com.kyant.pixelmusic.ui.component.ProgressBar
@@ -42,12 +45,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun BoxWithConstraintsScope.NowPlaying(
     state: SwipeableState<Boolean>,
     playlistState: SwipeableState<Boolean>,
-    lyricsState: SwipeableState<Boolean>,
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
@@ -56,8 +58,14 @@ fun BoxWithConstraintsScope.NowPlaying(
     val song = LocalNowPlaying.current
     val progress = state.progress(constraints).coerceIn(0f..1f)
     var horizontalDragOffset by remember { mutableStateOf(0f) }
+    var lyricsState by remember { mutableStateOf(false) }
+    val transition = updateTransition(lyricsState)
     val defaultColor = MaterialTheme.colors.surface
     var colors by remember { mutableStateOf(listOf(defaultColor, defaultColor)) }
+    val squareSize = minOf(maxWidth, maxHeight)
+    if (!state.targetValue) {
+        lyricsState = false
+    }
     song.icon.LaunchedIOEffectUnit {
         song.icon?.asAndroidBitmap()?.copy(Bitmap.Config.ARGB_8888, true)?.let { bitmap ->
             Palette.from(bitmap).generate { palette ->
@@ -72,7 +80,7 @@ fun BoxWithConstraintsScope.NowPlaying(
     }
     Card(
         modifier
-            .preferredSize(
+            .size(
                 256.dp + (maxWidth - 256.dp) * progress,
                 72.dp + (maxHeight - 72.dp) * progress
             )
@@ -100,12 +108,12 @@ fun BoxWithConstraintsScope.NowPlaying(
                 }
             },
         shape = RoundedCornerShape(12.dp * (1f - progress)),
+        backgroundColor = Color.Transparent,
         elevation = 1.dp + 23.dp * progress
     ) {
         BoxWithConstraints(
             Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(12.dp * (1f - progress)))
                 .offsetGradientBackground(
                     listOf(
                         animateColorAsState(colors[0]).value,
@@ -117,7 +125,7 @@ fun BoxWithConstraintsScope.NowPlaying(
             Column(
                 Modifier.fillMaxWidth()
                     .align(Alignment.BottomCenter)
-                    .offset(y = maxHeight * (1f - (progress - 0.5f).coerceAtLeast(0f) * 2))
+                    .offset(y = maxHeight / 1.5f * (1f - (progress - 0.5f).coerceAtLeast(0f) * 2))
                     .alpha((progress - 0.5f).coerceAtLeast(0f) * 2),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -131,15 +139,6 @@ fun BoxWithConstraintsScope.NowPlaying(
                     )
                     PlayController(Modifier.padding(16.dp))
                     ProgressBar(Modifier.padding(32.dp, 8.dp))
-                    Row(modifier) {
-                        IconButton({
-                            CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                                lyricsState.animateTo(true)
-                            }
-                        }) {
-                            Icon(Icons.Outlined.Article, "Lyrics")
-                        }
-                    }
                 }
             }
             Box(
@@ -161,15 +160,28 @@ fun BoxWithConstraintsScope.NowPlaying(
                     song,
                     Modifier
                         .padding(horizontal = 16.dp * (1f - progress))
-                        .preferredSize((48.dp + 208.dp * progress * 2).coerceIn(256.dp * progress..256.dp))
-                        .offset(80.dp * progress, 68.dp * progress)
-                        .clip(SmoothRoundedCornerShape((5f - progress).toDouble()))
-                        .clickable { player.playOrPause() }
+                        .size(48.dp + (squareSize - 96.dp) * progress - transition.animateDp { if (it) (squareSize - 96.dp) else 0.dp }.value)
+                        .offset(
+                            24.dp * progress,
+                            68.dp * progress - transition.animateDp { if (it) 44.dp else 0.dp }.value
+                        )
+                        .clip(SuperellipseCornerShape(8.dp + 8.dp * progress - transition.animateDp { if (it) 8.dp else 0.dp }.value))
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                if (state.currentValue) {
+                                    lyricsState = !lyricsState
+                                } else {
+                                    player.playOrPause()
+                                }
+                            }
+                        }
                         .zIndex(1f)
                 )
                 Column(
-                    Modifier.offset(80.dp + 16.dp * progress, 4.dp + 384.dp * progress)
-                        .alpha((progress - 0.5f).absoluteValue * 2)
+                    Modifier.offset(
+                        80.dp + 16.dp * progress,
+                        4.dp + (squareSize + 68.dp) * progress - transition.animateDp { if (it) (squareSize + 48.dp) else 0.dp }.value
+                    ).alpha((progress - 0.5f).absoluteValue * 2)
                 ) {
                     Text(
                         song.title.toString(),
@@ -187,6 +199,17 @@ fun BoxWithConstraintsScope.NowPlaying(
                         style = MaterialTheme.typography.caption
                     )
                 }
+            }
+            val lyrics = (song.id?.findLyrics() ?: EmptyLyrics).toList().sortedBy { it.first }.toMap()
+            AnimatedVisibility(
+                lyricsState,
+                Modifier
+                    .fillMaxSize()
+                    .padding(top = 96.dp, bottom = 160.dp),
+                enter = slideInVertically({ constraints.maxHeight }),
+                exit = fadeOut(animationSpec = spring(stiffness = Spring.StiffnessHigh))
+            ) {
+                Lyrics(lyrics)
             }
         }
     }

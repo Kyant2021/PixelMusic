@@ -38,7 +38,7 @@ fun BackLayer(
         Surface(
             modifier
                 .fillMaxSize()
-                .padding(top = (statusBarHeight * progress - 8.dp * progress).coerceAtLeast(0.dp))
+                .padding(top = statusBarHeight / 2 * progress)
                 .scale((maxWidth - 24.dp * progress) / maxWidth),
             RoundedCornerShape(
                 (16.dp * progress).coerceAtLeast(0.dp),

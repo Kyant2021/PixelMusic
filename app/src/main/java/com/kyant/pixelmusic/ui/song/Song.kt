@@ -30,7 +30,7 @@ fun Song(
     Row(
         modifier
             .fillMaxWidth()
-            .preferredHeight(64.dp)
+            .height(64.dp)
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(8.dp))
             .clickable {
@@ -59,7 +59,7 @@ fun Song(
         Cover(
             song,
             Modifier
-                .preferredSize(48.dp)
+                .size(48.dp)
                 .clip(SmoothRoundedCornerShape())
         )
         Column(Modifier.padding(horizontal = 16.dp)) {
@@ -70,7 +70,7 @@ fun Song(
                 maxLines = 1,
                 style = MaterialTheme.typography.body1
             )
-            Spacer(Modifier.preferredHeight(4.dp))
+            Spacer(Modifier.height(4.dp))
             Text(
                 song.subtitle.toString(),
                 overflow = TextOverflow.Ellipsis,

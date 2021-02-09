@@ -43,7 +43,7 @@ fun ChipGroup(
             ).value
             Row(
                 Modifier
-                    .preferredHeight(32.dp)
+                    .height(32.dp)
                     .clip(RoundedCornerShape(50))
                     .background(
                         MaterialTheme.colors.primary.copy(
@@ -66,7 +66,7 @@ fun ChipGroup(
                     label,
                     Modifier
                         .padding(start = 12.dp, end = 4.dp)
-                        .preferredSize(20.dp),
+                        .size(20.dp),
                     color
                 )
                 Text(
@@ -76,7 +76,7 @@ fun ChipGroup(
                     style = MaterialTheme.typography.subtitle2
                 )
             }
-            Spacer(Modifier.preferredWidth(8.dp))
+            Spacer(Modifier.width(8.dp))
         }
     }
 }

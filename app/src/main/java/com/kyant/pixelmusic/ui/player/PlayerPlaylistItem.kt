@@ -81,7 +81,7 @@ fun PlayerPlaylistItem(
                 Cover(
                     song,
                     Modifier
-                        .preferredSize(coverSize)
+                        .size(coverSize)
                         .clip(SmoothRoundedCornerShape())
                 )
                 Column(Modifier.padding(horizontal = 16.dp)) {
@@ -91,7 +91,7 @@ fun PlayerPlaylistItem(
                         maxLines = 1,
                         style = MaterialTheme.typography.h6
                     )
-                    Spacer(Modifier.preferredHeight(4.dp))
+                    Spacer(Modifier.height(4.dp))
                     Text(
                         song.subtitle.toString(),
                         overflow = TextOverflow.Ellipsis,

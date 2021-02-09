@@ -17,10 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.api.findPlaylist
 import com.kyant.pixelmusic.api.toplist.TopList
 import com.kyant.pixelmusic.media.toSongs
-import com.kyant.inimate.shape.SmoothRoundedCornerShape
 import com.kyant.pixelmusic.ui.song.Song
 import com.kyant.pixelmusic.util.EmptyImage
 import com.kyant.pixelmusic.util.loadImage
@@ -42,8 +42,8 @@ fun Playlist(
                     topList.value?.name.orEmpty(),
                     modifier
                         .padding(16.dp)
-                        .preferredSize(160.dp)
-                        .clip(SmoothRoundedCornerShape(4.0))
+                        .size(160.dp)
+                        .clip(SuperellipseCornerShape(8.dp))
                 )
                 Column(Modifier.padding(horizontal = 16.dp)) {
                     Text(
@@ -58,7 +58,7 @@ fun Playlist(
                         Modifier.padding(horizontal = 8.dp)
                     ) {
                         Icon(Icons.Outlined.PlaylistPlay, "Play all")
-                        Spacer(Modifier.preferredWidth(8.dp))
+                        Spacer(Modifier.width(8.dp))
                         Text("Play all")
                     }
                 }

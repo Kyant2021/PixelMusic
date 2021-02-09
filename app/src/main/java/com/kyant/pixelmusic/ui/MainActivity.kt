@@ -17,6 +17,8 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.text.SoftwareKeyboardController
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.*
@@ -30,7 +32,6 @@ import com.kyant.pixelmusic.media.*
 import com.kyant.pixelmusic.ui.component.BottomNav
 import com.kyant.pixelmusic.ui.component.TopBar
 import com.kyant.pixelmusic.ui.my.My
-import com.kyant.pixelmusic.ui.nowplaying.Lyrics
 import com.kyant.pixelmusic.ui.nowplaying.NowPlaying
 import com.kyant.pixelmusic.ui.player.PlayerPlaylist
 import com.kyant.pixelmusic.ui.playlist.Playlist
@@ -38,7 +39,7 @@ import com.kyant.pixelmusic.ui.screens.*
 import com.kyant.pixelmusic.ui.search.Search
 import com.kyant.pixelmusic.ui.theme.PixelMusicTheme
 import com.kyant.pixelmusic.util.currentRoute
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 enum class Screens { HOME, EXPLORE }
 
@@ -60,16 +61,17 @@ class MainActivity : AppCompatActivity() {
                 val nowPlayingState = rememberSwipeableState(false)
                 val playerPlaylistState = rememberSwipeableState(false)
                 val playlistState = rememberSwipeableState(false)
-                val lyricsState = rememberSwipeableState(false)
                 val topList = remember { mutableStateOf<TopList?>(null) }
                 val isLight = MaterialTheme.colors.isLight
+                val focusRequester = FocusRequester.Default
+                val softwareKeyboardController =
+                    remember { mutableStateOf<SoftwareKeyboardController?>(null) }
                 val items = listOf(
                     Triple(Screens.HOME.name, "Home", Icons.Outlined.Home),
                     Triple(Screens.EXPLORE.name, "Explore", Icons.Outlined.Explore)
                 )
                 BackHandler(
                     myState.currentValue or
-                            lyricsState.currentValue or
                             playerPlaylistState.currentValue or
                             nowPlayingState.currentValue or
                             playlistState.currentValue or
@@ -78,7 +80,6 @@ class MainActivity : AppCompatActivity() {
                     coroutineScope.launch {
                         when {
                             myState.currentValue -> myState.animateTo(false)
-                            lyricsState.currentValue -> lyricsState.animateTo(false)
                             playerPlaylistState.currentValue -> playerPlaylistState.animateTo(false)
                             nowPlayingState.currentValue -> nowPlayingState.animateTo(false)
                             playlistState.currentValue -> playlistState.animateTo(false)
@@ -93,7 +94,6 @@ class MainActivity : AppCompatActivity() {
                             BackLayer(
                                 listOf(
                                     myState,
-                                    lyricsState,
                                     playerPlaylistState,
                                     playlistState,
                                     searchState
@@ -124,18 +124,24 @@ class MainActivity : AppCompatActivity() {
                                 Modifier.align(Alignment.BottomCenter)
                             )
                             ForeLayer(searchState) {
-                                Search()
+                                Search(focusRequester, softwareKeyboardController)
+                                LaunchedEffect(searchState.targetValue) {
+                                    if (searchState.targetValue) {
+                                        focusRequester.requestFocus()
+                                        softwareKeyboardController.value?.showSoftwareKeyboard()
+                                    } else {
+                                        focusRequester.freeFocus()
+                                        softwareKeyboardController.value?.hideSoftwareKeyboard()
+                                    }
+                                }
                             }
                             ForeLayer(playlistState) {
                                 Playlist(topList)
                             }
                             ProvideNowPlaying(Media.nowPlaying) {
-                                NowPlaying(nowPlayingState, playerPlaylistState, lyricsState)
+                                NowPlaying(nowPlayingState, playerPlaylistState)
                                 ForeLayer(playerPlaylistState) {
                                     PlayerPlaylist()
-                                }
-                                ForeLayer(lyricsState) {
-                                    Lyrics()
                                 }
                             }
                             ForeLayer(myState) {

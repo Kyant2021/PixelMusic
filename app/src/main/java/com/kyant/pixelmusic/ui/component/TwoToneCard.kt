@@ -40,7 +40,7 @@ fun TwoToneCard(
                     contentDescription,
                     tint = contentColor
                 )
-                Spacer(Modifier.preferredWidth(32.dp))
+                Spacer(Modifier.width(32.dp))
             }
             Text(
                 text,

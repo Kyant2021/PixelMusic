@@ -34,10 +34,8 @@ object Media {
     var session: MediaSessionCompat? by mutableStateOf(null)
 
     private lateinit var dataSourceFactory: DataSource.Factory
-    val songs: SnapshotStateList<Song> = mutableStateListOf<Song>().apply {
-        forEach {
-            session?.controller?.addQueueItem(it.toMediaDescription())
-        }
+    val songs: SnapshotStateList<Song> = mutableStateListOf<Song>().onEach {
+        session?.controller?.addQueueItem(it.toMediaDescription())
     }
     var nowPlaying: Song? by mutableStateOf(null)
 
@@ -94,11 +92,13 @@ object Media {
     }
 
     fun addSongToPlaylist(index: Int, song: Song) {
-        songs.add(index, song)
-        val source = ProgressiveMediaSource
-            .Factory(dataSourceFactory)
-            .createMediaSource(MediaItem.fromUri(song.mediaUrl!!.toUri()))
-        player?.addMediaSource(index, source)
+        song.mediaUrl?.let {
+            songs.add(index, song)
+            val source = ProgressiveMediaSource
+                .Factory(dataSourceFactory)
+                .createMediaSource(MediaItem.fromUri(it.toUri()))
+            player?.addMediaSource(index, source)
+        }
     }
 
     fun clearPlaylist() {
@@ -108,10 +108,12 @@ object Media {
 
     private fun syncSongsWithPlaylists(songList: List<Song>) {
         songs.addAll(songList)
-        val sources = songList.map {
-            ProgressiveMediaSource
-                .Factory(dataSourceFactory)
-                .createMediaSource(MediaItem.fromUri(it.mediaUrl!!.toUri()))
+        val sources = songList.mapNotNull { song ->
+            song.mediaUrl?.let {
+                ProgressiveMediaSource
+                    .Factory(dataSourceFactory)
+                    .createMediaSource(MediaItem.fromUri(it.toUri()))
+            }
         }
         player?.setMediaSources(sources)
     }

@@ -28,8 +28,8 @@ fun AmplitudeVisualizer(modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier) {
         Box(
             Modifier
-                .preferredWidth(2.dp)
-                .preferredHeight(72.dp)
+                .width(2.dp)
+                .height(72.dp)
                 .background(
                     MaterialTheme.colors.secondary.copy(ContentAlpha.medium),
                     RoundedCornerShape(50)
@@ -45,11 +45,11 @@ fun AmplitudeVisualizer(modifier: Modifier = Modifier) {
             items(amplitudes) {
                 Box(
                     Modifier
-                        .preferredWidth(2.dp)
-                        .preferredHeight(it.normalize().dp * 32)
+                        .width(2.dp)
+                        .height(it.normalize().dp * 32)
                         .background(MaterialTheme.colors.primary, RoundedCornerShape(50))
                 )
-                Spacer(Modifier.preferredWidth(5.dp))
+                Spacer(Modifier.width(5.dp))
             }
         }
     }

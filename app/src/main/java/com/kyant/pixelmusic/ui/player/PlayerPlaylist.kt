@@ -42,7 +42,7 @@ fun PlayerPlaylist(modifier: Modifier = Modifier) {
                 Modifier.padding(horizontal = 8.dp)
             ) {
                 Icon(Icons.Outlined.ClearAll, "Clear all")
-                Spacer(Modifier.preferredWidth(8.dp))
+                Spacer(Modifier.width(8.dp))
                 Text("Clear all")
             }
         }
