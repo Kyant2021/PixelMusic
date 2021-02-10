@@ -7,13 +7,9 @@ This is a beautiful **unofficial NetEase Cloud music player** for Android 🥳!
 * This project is still **in progress**, which means it is unstable. The features are poor now and
   animations may not be fluent enough.
 
-* I'm so sorry that my application **cannot run on the devices below Android 7**. I temporarily
-  adjusted the min sdk version to 24. If you have the crash log on those devices, please send to me,
-  so I will be able to resolve the annoying crashes, thank you.
-
 ## Screenshots
 
-### 2021, Feb 8
+### 0.1.0-alpha03: 2021, Feb 10
 
 ![Home](arts/home.png)
 ![Now Playing](arts/now_playing.png)

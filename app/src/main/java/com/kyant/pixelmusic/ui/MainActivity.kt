@@ -8,6 +8,7 @@ import android.support.v4.media.session.MediaControllerCompat
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
@@ -22,9 +23,7 @@ import androidx.compose.ui.text.SoftwareKeyboardController
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.*
-import com.kyant.inimate.layer.BackLayer
-import com.kyant.inimate.layer.ForeLayer
-import com.kyant.inimate.layer.progress
+import com.kyant.inimate.layer.*
 import com.kyant.pixelmusic.R
 import com.kyant.pixelmusic.api.toplist.TopList
 import com.kyant.pixelmusic.locals.*
@@ -56,11 +55,8 @@ class MainActivity : AppCompatActivity() {
             PixelMusicTheme(window) {
                 val coroutineScope = rememberCoroutineScope()
                 val navController = rememberNavController()
-                val searchState = rememberSwipeableState(false)
-                val myState = rememberSwipeableState(false)
-                val nowPlayingState = rememberSwipeableState(false)
-                val playerPlaylistState = rememberSwipeableState(false)
-                val playlistState = rememberSwipeableState(false)
+                val (myState, playerPlaylistState, nowPlayingState, playlistState, searchState) =
+                    rememberSwipeableState(false)
                 val topList = remember { mutableStateOf<TopList?>(null) }
                 val isLight = MaterialTheme.colors.isLight
                 val focusRequester = FocusRequester.Default
@@ -71,19 +67,24 @@ class MainActivity : AppCompatActivity() {
                     Triple(Screens.EXPLORE.name, "Explore", Icons.Outlined.Explore)
                 )
                 BackHandler(
-                    myState.currentValue or
-                            playerPlaylistState.currentValue or
-                            nowPlayingState.currentValue or
-                            playlistState.currentValue or
-                            searchState.currentValue
+                    myState.targetValue or
+                            playerPlaylistState.targetValue or
+                            nowPlayingState.targetValue or
+                            playlistState.targetValue or
+                            searchState.targetValue
                 ) {
                     coroutineScope.launch {
                         when {
-                            myState.currentValue -> myState.animateTo(false)
-                            playerPlaylistState.currentValue -> playerPlaylistState.animateTo(false)
-                            nowPlayingState.currentValue -> nowPlayingState.animateTo(false)
-                            playlistState.currentValue -> playlistState.animateTo(false)
-                            searchState.currentValue -> searchState.animateTo(false)
+                            myState.targetValue ->
+                                myState.animateTo(false, spring(stiffness = 700f))
+                            playerPlaylistState.targetValue ->
+                                playerPlaylistState.animateTo(false, spring(stiffness = 700f))
+                            nowPlayingState.targetValue ->
+                                nowPlayingState.animateTo(false, spring(stiffness = 700f))
+                            playlistState.targetValue ->
+                                playlistState.animateTo(false, spring(stiffness = 700f))
+                            searchState.targetValue ->
+                                searchState.animateTo(false, spring(stiffness = 700f))
                         }
                     }
                 }
@@ -92,15 +93,10 @@ class MainActivity : AppCompatActivity() {
                     ProvideJsonParser {
                         BoxWithConstraints(Modifier.fillMaxSize()) {
                             BackLayer(
-                                listOf(
-                                    myState,
-                                    playerPlaylistState,
-                                    playlistState,
-                                    searchState
-                                ),
+                                listOf(myState, playerPlaylistState, playlistState, searchState),
                                 darkIcons = { progress, statusBarHeightRatio ->
                                     when {
-                                        nowPlayingState.progress(constraints) >= 1f - statusBarHeightRatio / 2 -> isLight
+                                        nowPlayingState.progressOf(constraints.maxHeight.toFloat()) >= 1f - statusBarHeightRatio / 2 -> isLight
                                         isLight -> progress <= 0.5f
                                         else -> false
                                     }

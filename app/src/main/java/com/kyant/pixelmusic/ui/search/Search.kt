@@ -46,7 +46,10 @@ fun Search(
                 label = { Text("Search songs") },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions.Default.apply {
-                    onSearch?.let { softwareKeyboardController.value?.hideSoftwareKeyboard() }
+                    onSearch?.let {
+                        focusRequester.freeFocus()
+                        softwareKeyboardController.value?.hideSoftwareKeyboard()
+                    }
                 },
                 singleLine = true,
                 onTextInputStarted = { softwareKeyboardController.value = it },

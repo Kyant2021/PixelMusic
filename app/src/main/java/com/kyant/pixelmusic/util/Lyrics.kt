@@ -20,16 +20,18 @@ fun String.toLyrics(): Lyrics {
 }
 
 @OptIn(ExperimentalTime::class)
-fun Time.toMilliseconds(): Long {
-    return (substring(0, 2).toLong().toDuration(DurationUnit.MINUTES) +
+fun Time.toMilliseconds(): Long =
+    (substring(0, 2).toLong().toDuration(DurationUnit.MINUTES) +
             substring(3, 5).toLong().toDuration(DurationUnit.SECONDS) +
             substring(6, length - 1).toLong().toDuration(DurationUnit.MILLISECONDS) * (11 - length))
         .toLongMilliseconds()
+
+@Composable
+fun Time.isCurrentLine(lyrics: Lyrics): Boolean = this == lyrics.keys.lastOrNull {
+    LocalPixelPlayer.current.position.value >= it.toMilliseconds()
 }
 
 @Composable
-fun Time.isCurrentLine(lyrics: Lyrics): Boolean {
-    return this == lyrics.keys.lastOrNull {
-        LocalPixelPlayer.current.position.value >= it.toMilliseconds()
-    }
-}
+fun Lyrics.currentIndex(): Int = keys.lastIndexOf(keys.lastOrNull {
+    LocalPixelPlayer.current.position.value >= it.toMilliseconds()
+})

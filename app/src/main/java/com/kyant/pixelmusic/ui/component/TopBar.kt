@@ -1,5 +1,6 @@
 package com.kyant.pixelmusic.ui.component
 
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -27,6 +29,7 @@ fun TopBar(
     myState: SwipeableState<Boolean>,
     modifier: Modifier = Modifier
 ) {
+    val scope = rememberCoroutineScope()
     Row(
         modifier
             .fillMaxWidth()
@@ -53,8 +56,8 @@ fun TopBar(
         }
         Row {
             IconButton({
-                CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                    searchState.animateTo(true)
+                scope.launch {
+                    searchState.animateTo(true, spring(stiffness = 700f))
                 }
             }) {
                 Icon(
@@ -63,8 +66,8 @@ fun TopBar(
                 )
             }
             IconButton({
-                CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                    myState.animateTo(true)
+                scope.launch {
+                    myState.animateTo(true, spring(stiffness = 700f))
                 }
             }) {
                 Icon(

@@ -2,10 +2,8 @@ package com.kyant.pixelmusic.ui.nowplaying
 
 import android.graphics.Bitmap
 import androidx.compose.animation.*
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.draggable
@@ -18,30 +16,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.palette.graphics.Palette
-import com.kyant.inimate.layer.progress
+import com.kyant.inimate.insets.statusBarsPadding
+import com.kyant.inimate.layer.FloatingForeLayer
+import com.kyant.inimate.layer.progressOf
 import com.kyant.inimate.shape.SuperellipseCornerShape
-import com.kyant.inimate.util.offsetGradientBackground
 import com.kyant.pixelmusic.api.EmptyLyrics
 import com.kyant.pixelmusic.api.findLyrics
 import com.kyant.pixelmusic.locals.LocalNowPlaying
 import com.kyant.pixelmusic.locals.LocalPixelPlayer
-import com.kyant.pixelmusic.ui.component.ProgressBar
+import com.kyant.pixelmusic.ui.player.ProgressBar
 import com.kyant.pixelmusic.ui.player.PlayController
+import com.kyant.pixelmusic.ui.player.PlayPauseTransparentButton
 import com.kyant.pixelmusic.ui.song.Cover
 import com.kyant.pixelmusic.util.LaunchedIOEffectUnit
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -53,19 +48,19 @@ fun BoxWithConstraintsScope.NowPlaying(
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
-    val isLight = MaterialTheme.colors.isLight
     val player = LocalPixelPlayer.current
     val song = LocalNowPlaying.current
-    val progress = state.progress(constraints).coerceIn(0f..1f)
+    val scope = rememberCoroutineScope()
     var horizontalDragOffset by remember { mutableStateOf(0f) }
     var lyricsState by remember { mutableStateOf(false) }
+    val infoState = rememberSwipeableState(false)
     val transition = updateTransition(lyricsState)
+    val progress = state.progressOf(constraints.maxHeight.toFloat()).coerceIn(0f..1f)
+    val isLight = MaterialTheme.colors.isLight
     val defaultColor = MaterialTheme.colors.surface
     var colors by remember { mutableStateOf(listOf(defaultColor, defaultColor)) }
     val squareSize = minOf(maxWidth, maxHeight)
-    if (!state.targetValue) {
-        lyricsState = false
-    }
+    val lyrics = (song.id?.findLyrics() ?: EmptyLyrics).toList().sortedBy { it.first }.toMap()
     song.icon.LaunchedIOEffectUnit {
         song.icon?.asAndroidBitmap()?.copy(Bitmap.Config.ARGB_8888, true)?.let { bitmap ->
             Palette.from(bitmap).generate { palette ->
@@ -97,13 +92,16 @@ fun BoxWithConstraintsScope.NowPlaying(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onLongPress = {
-                        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                            playlistState.animateTo(!playlistState.currentValue)
+                        scope.launch {
+                            playlistState.animateTo(
+                                !playlistState.currentValue,
+                                spring(stiffness = 700f)
+                            )
                         }
                     }
                 ) {
-                    CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                        state.animateTo(true)
+                    scope.launch {
+                        state.animateTo(true, spring(stiffness = 700f))
                     }
                 }
             },
@@ -114,19 +112,21 @@ fun BoxWithConstraintsScope.NowPlaying(
         BoxWithConstraints(
             Modifier
                 .fillMaxSize()
-                .offsetGradientBackground(
-                    listOf(
-                        animateColorAsState(colors[0]).value,
-                        animateColorAsState(colors[1]).value
-                    ),
-                    constraints.maxWidth.toFloat()
+                .background(
+                    Brush.horizontalGradient(
+                        0f to animateColorAsState(colors[0]).value,
+                        1f to animateColorAsState(colors[1]).value
+                    )
                 )
         ) {
             Column(
                 Modifier.fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .offset(y = maxHeight / 1.5f * (1f - (progress - 0.5f).coerceAtLeast(0f) * 2))
-                    .alpha((progress - 0.5f).coerceAtLeast(0f) * 2),
+                    .alpha(transition.animateFloat {
+                        if (it) -((progress - 0.5f).coerceAtLeast(0f) * 2)
+                        else (progress - 0.5f).coerceAtLeast(0f) * 2
+                    }.value),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Column(
@@ -137,7 +137,15 @@ fun BoxWithConstraintsScope.NowPlaying(
                         Modifier.padding(8.dp),
                         MaterialTheme.colors.onSurface.copy(0.08f)
                     )
-                    PlayController(Modifier.padding(16.dp))
+                    PlayController(
+                        onFavoriteButtonClick = {},
+                        onInfoButtonClick = {
+                            scope.launch {
+                                infoState.animateTo(true)
+                            }
+                        },
+                        Modifier.padding(16.dp)
+                    )
                     ProgressBar(Modifier.padding(32.dp, 8.dp))
                 }
             }
@@ -160,12 +168,15 @@ fun BoxWithConstraintsScope.NowPlaying(
                     song,
                     Modifier
                         .padding(horizontal = 16.dp * (1f - progress))
-                        .size(48.dp + (squareSize - 96.dp) * progress - transition.animateDp { if (it) (squareSize - 96.dp) else 0.dp }.value)
+                        .size(
+                            48.dp + ((squareSize - 96.dp) * progress - transition.animateDp { if (it) (squareSize - 96.dp) * progress else 0.dp }.value)
+                                .coerceAtLeast(0.dp)
+                        )
                         .offset(
                             24.dp * progress,
-                            68.dp * progress - transition.animateDp { if (it) 44.dp else 0.dp }.value
+                            68.dp * progress - transition.animateDp { if (it) 44.dp * progress else 0.dp }.value
                         )
-                        .clip(SuperellipseCornerShape(8.dp + 8.dp * progress - transition.animateDp { if (it) 8.dp else 0.dp }.value))
+                        .clip(SuperellipseCornerShape(8.dp + 8.dp * progress - transition.animateDp { if (it) 8.dp * progress else 0.dp }.value))
                         .pointerInput(Unit) {
                             detectTapGestures {
                                 if (state.currentValue) {
@@ -175,13 +186,14 @@ fun BoxWithConstraintsScope.NowPlaying(
                                 }
                             }
                         }
-                        .zIndex(1f)
                 )
                 Column(
-                    Modifier.offset(
-                        80.dp + 16.dp * progress,
-                        4.dp + (squareSize + 68.dp) * progress - transition.animateDp { if (it) (squareSize + 48.dp) else 0.dp }.value
-                    ).alpha((progress - 0.5f).absoluteValue * 2)
+                    Modifier
+                        .offset(
+                            80.dp + 16.dp * progress - transition.animateDp { if (it) 8.dp * progress else 0.dp }.value,
+                            4.dp + (squareSize + 68.dp) * progress - transition.animateDp { if (it) (squareSize + 48.dp) * progress else 0.dp }.value
+                        )
+                        .alpha((progress - 0.5f).absoluteValue * 2)
                 ) {
                     Text(
                         song.title.toString(),
@@ -200,17 +212,34 @@ fun BoxWithConstraintsScope.NowPlaying(
                     )
                 }
             }
-            val lyrics = (song.id?.findLyrics() ?: EmptyLyrics).toList().sortedBy { it.first }.toMap()
+            AnimatedVisibility(
+                lyricsState && state.targetValue,
+                Modifier
+                    .align(Alignment.TopEnd)
+                    .statusBarsPadding()
+                    .padding(16.dp, 8.dp),
+                enter = slideInHorizontally({ constraints.maxWidth }),
+                exit = fadeOut(animationSpec = spring(stiffness = Spring.StiffnessHigh))
+            ) {
+                PlayPauseTransparentButton()
+            }
             AnimatedVisibility(
                 lyricsState,
                 Modifier
                     .fillMaxSize()
-                    .padding(top = 96.dp, bottom = 160.dp),
+                    .padding(top = 96.dp),
                 enter = slideInVertically({ constraints.maxHeight }),
                 exit = fadeOut(animationSpec = spring(stiffness = Spring.StiffnessHigh))
             ) {
-                Lyrics(lyrics)
+                Lyrics(
+                    lyrics,
+                    colors.map { it.luminance() }.average() < 0.5f,
+                    contentPadding = PaddingValues(16.dp, 16.dp, 16.dp, 48.dp)
+                )
             }
         }
+    }
+    FloatingForeLayer(infoState) {
+        Info(song)
     }
 }

@@ -1,4 +1,4 @@
-package com.kyant.pixelmusic.ui.component
+package com.kyant.pixelmusic.ui.player
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi

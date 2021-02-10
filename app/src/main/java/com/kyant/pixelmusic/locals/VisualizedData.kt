@@ -23,8 +23,8 @@ fun ProvideAmplitudes(
     val amplitudes: Amplitudes = remember(song.id) { mutableStateListOf() }
 
     if (enabled) {
-        ProvideDataStore("songs") {
-            val dataStore = LocalDataStore.current
+        ProvideCacheDataStore("songs") {
+            val dataStore = LocalCacheDataStore.current
             song.id.LaunchedIOEffectUnit {
                 dataStore.writeWhileNotExist(
                     song.id.toString(),

@@ -33,19 +33,15 @@ fun BackLayer(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        val progress = states.map { it.progress(constraints) }.maxByOrNull { it } ?: 0f
+        val progress = states.map { it.progressOf(constraints.maxHeight.toFloat()) }
+            .maxByOrNull { it } ?: 0f
         val isDarkIcons = darkIcons(progress, statusBarHeight / maxHeight)
         Surface(
             modifier
                 .fillMaxSize()
                 .padding(top = statusBarHeight / 2 * progress)
                 .scale((maxWidth - 24.dp * progress) / maxWidth),
-            RoundedCornerShape(
-                (16.dp * progress).coerceAtLeast(0.dp),
-                (16.dp * progress).coerceAtLeast(0.dp),
-                0.dp,
-                0.dp
-            )
+            RoundedCornerShape(16.dp * progress, 16.dp * progress, 0.dp, 0.dp)
         ) {
             Box(
                 Modifier

@@ -1,9 +1,14 @@
 package com.kyant.pixelmusic.ui.component
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,40 +19,30 @@ import com.kyant.inimate.shape.SuperellipseCornerShape
 
 @SuppressLint("ModifierParameter")
 @Composable
-fun TwoToneCard(
+fun Tag(
     color: Color,
     text: String,
     icon: ImageVector? = null,
     contentDescription: String? = null,
     modifier: Modifier = Modifier,
 ) {
-    val contentColor = if (MaterialTheme.colors.isLight) color else LocalContentColor.current
     Card(
-        modifier
-            .fillMaxWidth()
-            .padding(16.dp, 8.dp),
-        SuperellipseCornerShape(16.dp),
-        color.copy(if (MaterialTheme.colors.isLight) 0.05f else 0.2f),
+        modifier.padding(4.dp),
+        SuperellipseCornerShape(4.dp),
+        color,
         elevation = 0.dp
     ) {
         Row(
-            Modifier
-                .clickable {}
-                .padding(32.dp),
+            Modifier.padding(8.dp, 2.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             icon?.let {
-                Icon(
-                    it,
-                    contentDescription,
-                    tint = contentColor
-                )
-                Spacer(Modifier.width(32.dp))
+                Icon(it, contentDescription)
+                Spacer(Modifier.width(8.dp))
             }
             Text(
                 text,
-                color = contentColor,
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.caption
             )
         }
     }
