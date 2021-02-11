@@ -7,6 +7,11 @@ This is a beautiful **unofficial NetEase Cloud music player** for Android 🥳!
 * This project is still **in progress**, which means it is unstable. The features are poor now and
   animations may not be fluent enough.
 
+## Where to get test apk
+
+* [**Telegram Channel**](https://t.me/pixel_music_app)
+* **QQ Group**: 1026441579
+
 ## Screenshots
 
 ### 0.1.0-alpha03: 2021, Feb 10
