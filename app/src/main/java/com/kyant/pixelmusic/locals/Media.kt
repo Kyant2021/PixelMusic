@@ -70,9 +70,9 @@ object Media {
     fun syncWithPlaylists(context: Context) {
         scope.launch {
             DataStore(context, "playlists")
-                .getOrNull<List<SerializedSong>>("playlist_0")
-                ?.toSongs(context)
-                ?.let { syncSongsWithPlaylists(it) }
+                .getOrNull<List<SerializedSong>>("playlist_0")?.forEach {
+                    addSongToPlaylist(songs.size, it.toSong(context))
+                }
             DataStore(context, "playlists")
                 .getOrNull<Pair<Int?, Long?>>("playlist_0_state")?.let {
                     player?.seekTo(it.first ?: 0, it.second ?: 0)
@@ -104,17 +104,5 @@ object Media {
     fun clearPlaylist() {
         songs.clear()
         player?.clearMediaItems()
-    }
-
-    private fun syncSongsWithPlaylists(songList: List<Song>) {
-        songs.addAll(songList)
-        val sources = songList.mapNotNull { song ->
-            song.mediaUrl?.let {
-                ProgressiveMediaSource
-                    .Factory(dataSourceFactory)
-                    .createMediaSource(MediaItem.fromUri(it.toUri()))
-            }
-        }
-        player?.setMediaSources(sources)
     }
 }

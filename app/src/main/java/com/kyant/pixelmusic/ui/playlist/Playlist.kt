@@ -10,27 +10,52 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlaylistPlay
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.api.findPlaylist
 import com.kyant.pixelmusic.api.toplist.TopList
-import com.kyant.pixelmusic.media.toSongs
+import com.kyant.pixelmusic.media.Song
+import com.kyant.pixelmusic.media.toSong
 import com.kyant.pixelmusic.ui.song.Song
 import com.kyant.pixelmusic.util.EmptyImage
 import com.kyant.pixelmusic.util.loadImage
+import com.kyant.pixelmusic.util.loadCoverWithCache
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun Playlist(
     topList: MutableState<TopList?>,
     modifier: Modifier = Modifier
 ) {
-    val songs = topList.value?.id?.findPlaylist()?.playlist?.tracks?.toSongs()
+    val context = LocalContext.current
+    var image by remember(topList.value?.id) { mutableStateOf(EmptyImage) }
+    val songs = remember(topList.value?.id) { mutableStateListOf<Song>() }
+    val icons = remember(topList.value?.id) { mutableStateMapOf<Long, ImageBitmap>() }
+    LaunchedEffect(topList.value?.id) {
+        withContext(Dispatchers.IO) {
+            image = topList.value?.coverImgUrl?.loadImage(context) ?: EmptyImage
+            topList.value?.id?.findPlaylist()?.playlist?.tracks?.apply {
+                forEach {
+                    songs += it.toSong()
+                }
+                parallelStream().forEachOrdered {
+                    launch {
+                        icons[it.al?.id ?: 0] =
+                            it.al?.id?.loadCoverWithCache(context, "covers", 100) ?: EmptyImage
+                    }
+                }
+            }
+        }
+    }
     LazyColumn(modifier) {
         item {
             Row(
@@ -38,7 +63,7 @@ fun Playlist(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    topList.value?.coverImgUrl?.loadImage() ?: EmptyImage,
+                    image,
                     topList.value?.name.orEmpty(),
                     modifier
                         .padding(16.dp)
@@ -64,10 +89,8 @@ fun Playlist(
                 }
             }
         }
-        if (!songs.isNullOrEmpty()) {
-            items(songs, { it.id.toString() }) {
-                Song(it)
-            }
+        items(songs, { it.id?.toString().orEmpty() }) {
+            Song(it.copy(icon = icons.getOrElse(it.albumId ?: 0) { EmptyImage }))
         }
     }
 }

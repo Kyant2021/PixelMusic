@@ -3,8 +3,9 @@ package com.kyant.pixelmusic.locals
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
-import com.kyant.pixelmusic.util.LaunchedIOEffectUnit
 import com.kyant.pixelmusic.util.normalize
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import linc.com.amplituda.Amplituda
 import java.net.URL
 
@@ -25,26 +26,28 @@ fun ProvideAmplitudes(
     if (enabled) {
         ProvideCacheDataStore("songs") {
             val dataStore = LocalCacheDataStore.current
-            song.id.LaunchedIOEffectUnit {
-                dataStore.writeWhileNotExist(
-                    song.id.toString(),
-                    URL(song.mediaUrl.toString()).readBytes()
-                )
-                song.id?.let {
-                    try {
-                        amplituda.fromPath(dataStore.requirePath(it.toString()))
-                            .amplitudesAsList { list ->
-                                var position = 0
-                                val accurateStep = 38.3 / 5
-                                val step = accurateStep.toInt()
-                                for (i in 0 until (list.size / accurateStep).toInt()) {
-                                    val mean = list.slice(position..position + step).average()
-                                    amplitudes.plusAssign(mean.normalize())
-                                    position += step
+            LaunchedEffect(song.id) {
+                withContext(Dispatchers.IO) {
+                    dataStore.writeWhileNotExist(
+                        song.id.toString(),
+                        URL(song.mediaUrl.toString()).readBytes()
+                    )
+                    song.id?.let {
+                        try {
+                            amplituda.fromPath(dataStore.requirePath(it.toString()))
+                                .amplitudesAsList { list ->
+                                    var position = 0
+                                    val accurateStep = 38.3 / 5
+                                    val step = accurateStep.toInt()
+                                    for (i in 0 until (list.size / accurateStep).toInt()) {
+                                        val mean = list.slice(position..position + step).average()
+                                        amplitudes.plusAssign(mean.normalize())
+                                        position += step
+                                    }
                                 }
-                            }
-                    } catch (e: NumberFormatException) {
-                        println(e)
+                        } catch (e: NumberFormatException) {
+                            println(e)
+                        }
                     }
                 }
             }

@@ -1,12 +1,11 @@
 package com.kyant.pixelmusic.ui.player
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
@@ -16,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.kyant.pixelmusic.locals.LocalPixelPlayer
 import com.kyant.pixelmusic.locals.Media
 
+@SuppressLint("ModifierParameter")
 @Composable
 fun PlayController(
     onFavoriteButtonClick: () -> Unit,
@@ -28,13 +28,19 @@ fun PlayController(
             Icon(Icons.Outlined.FavoriteBorder, "Favorite")
         }
         Spacer(Modifier.width(16.dp))
-        IconButton({ player.previous() }) {
+        IconButton({
+            player.previous()
+            player.snapTo(0)
+        }) {
             Icon(Icons.Outlined.SkipPrevious, "Skip to prevoius")
         }
         Spacer(Modifier.width(16.dp))
         PlayPauseButton()
         Spacer(Modifier.width(16.dp))
-        IconButton({ player.next() }) {
+        IconButton({
+            player.next()
+            player.snapTo(0)
+        }) {
             Icon(Icons.Outlined.SkipNext, "Skip to next")
         }
         Spacer(Modifier.width(16.dp))
@@ -44,20 +50,7 @@ fun PlayController(
     }
 }
 
-@Composable
-fun PlayControllerCompact(modifier: Modifier = Modifier) {
-    val player = LocalPixelPlayer.current
-    Row(modifier) {
-        IconButton({ player.previous() }) {
-            Icon(Icons.Outlined.SkipPrevious, "Skip to prevoius")
-        }
-        PlayPauseButton()
-        IconButton({ player.next() }) {
-            Icon(Icons.Outlined.SkipNext, "Skip to next")
-        }
-    }
-}
-
+@SuppressLint("ModifierParameter")
 @Composable
 fun PlayPauseButton(modifier: Modifier = Modifier) {
     val player = LocalPixelPlayer.current
@@ -69,7 +62,7 @@ fun PlayPauseButton(modifier: Modifier = Modifier) {
             }
         },
         modifier.background(
-            MaterialTheme.colors.primary,
+            animateColorAsState(MaterialTheme.colors.primary).value,
             RoundedCornerShape(50)
         )
     ) {
@@ -91,10 +84,7 @@ fun PlayPauseTransparentButton(modifier: Modifier = Modifier) {
                     player.playOrPause()
                 }
             },
-            Modifier.background(
-                Color.Transparent,
-                RoundedCornerShape(50)
-            )
+            Modifier.background(Color.Transparent, RoundedCornerShape(50))
         ) {
             Icon(
                 if (player.isPlayingState) Icons.Outlined.Pause else Icons.Outlined.PlayArrow,

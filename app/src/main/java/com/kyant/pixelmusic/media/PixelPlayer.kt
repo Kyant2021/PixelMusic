@@ -44,7 +44,7 @@ class PixelPlayer(context: Context) : SimpleExoPlayer(Builder(context)) {
         }
         val audioAttributes = AudioAttributes.Builder()
             .setUsage(C.USAGE_MEDIA)
-            .setContentType(C.CONTENT_TYPE_MOVIE)
+            .setContentType(C.CONTENT_TYPE_MUSIC)
             .build()
         setAudioAttributes(audioAttributes, true)
         prepare()

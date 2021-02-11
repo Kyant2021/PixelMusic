@@ -3,7 +3,6 @@ package com.kyant.pixelmusic.media
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.media.MediaDescriptionCompat
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -11,11 +10,18 @@ import androidx.core.net.toUri
 import com.kyant.pixelmusic.api.AlbumId
 import com.kyant.pixelmusic.api.SongId
 import com.kyant.pixelmusic.api.findUrl
-import com.kyant.pixelmusic.api.findUrls2
+import com.kyant.pixelmusic.api.newsongs.Data
 import com.kyant.pixelmusic.api.playlist.Track
-import com.kyant.pixelmusic.util.loadCachedImage
-import com.kyant.pixelmusic.util.loadCoverWithDiskCache
+import com.kyant.pixelmusic.util.loadCoverWithCache
 import java.io.Serializable
+
+data class SerializedSong(
+    val id: SongId? = null,
+    val albumId: AlbumId? = null,
+    val title: String? = null,
+    val subtitle: String? = null,
+    val description: String? = null
+) : Serializable
 
 data class Song(
     val id: SongId? = null,
@@ -27,14 +33,6 @@ data class Song(
     val mediaUrl: String? = null
 )
 
-data class SerializedSong(
-    val id: SongId? = null,
-    val albumId: AlbumId? = null,
-    val title: String? = null,
-    val subtitle: String? = null,
-    val description: String? = null
-) : Serializable
-
 fun Song.serialize(): SerializedSong = SerializedSong(
     id,
     albumId,
@@ -43,20 +41,18 @@ fun Song.serialize(): SerializedSong = SerializedSong(
     description
 )
 
-fun List<SerializedSong>.toSongs(context: Context): List<Song> {
-    val urls = map { it.id!! }.findUrls2()
-    return mapIndexed { index, song ->
-        Song(
-            song.id,
-            song.albumId,
-            song.title,
-            song.subtitle,
-            song.description,
-            loadCachedImage(context, song.albumId.toString(), "covers"),
-            urls[index]
-        )
-    }
-}
+suspend fun Song.fix(context: Context, size: Int = 500): Song = copy(
+    icon = albumId?.loadCoverWithCache(context, "covers", size),
+    mediaUrl = id?.findUrl()
+)
+
+suspend fun SerializedSong.toSong(context: Context): Song = Song(
+    id,
+    albumId,
+    title,
+    subtitle,
+    description
+).fix(context)
 
 fun Song.toMediaDescription(): MediaDescriptionCompat = MediaDescriptionCompat.Builder()
     .setMediaId(id.toString())
@@ -80,28 +76,26 @@ fun MediaDescriptionCompat.toSong(): Song = Song(
     mediaUri.toString()
 )
 
-@Composable
 fun com.kyant.pixelmusic.api.search.Song.toSong(): Song = Song(
     id,
     album?.id,
     name,
     artists?.map { it.name }?.joinToString(),
-    album?.name,
-    album?.id?.loadCoverWithDiskCache(),
-    id?.findUrl()
+    album?.name
 )
 
-@Composable
-fun List<Track>.toSongs(): List<Song> {
-    return map { track ->
-        Song(
-            track.id,
-            track.al?.id,
-            track.name,
-            track.ar?.map { it.name }?.joinToString(),
-            track.al?.name,
-            track.al?.id?.loadCoverWithDiskCache(),
-            track.id?.findUrl()
-        )
-    }
-}
+fun Track.toSong(): Song = Song(
+    id,
+    al?.id,
+    name,
+    ar?.map { it.name }?.joinToString(),
+    al?.name
+)
+
+fun Data.toSong(): Song = Song(
+    id,
+    album?.id,
+    name,
+    artists?.map { it.name }?.joinToString(),
+    album?.name
+)

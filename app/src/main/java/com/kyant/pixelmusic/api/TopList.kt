@@ -1,17 +1,11 @@
 package com.kyant.pixelmusic.api
 
-import androidx.compose.runtime.Composable
+import com.kyant.pixelmusic.api.toplist.TopList
 import com.kyant.pixelmusic.api.toplist.TopListResult
-import com.kyant.pixelmusic.locals.LocalJsonParser
-import com.kyant.pixelmusic.util.launchedIOEffect
+import com.kyant.pixelmusic.locals.JsonParser
 import java.net.URL
 
 typealias TopListId = Long
 
-@Composable
-fun findTopList(): TopListResult? {
-    val jsonParser = LocalJsonParser.current
-    return Unit.launchedIOEffect {
-        jsonParser.parse<TopListResult>(URL("$API2/toplist").readText())
-    }
-}
+suspend fun findTopList(): List<TopList>? =
+    JsonParser().parse<TopListResult>(URL("$API2/toplist").readText())?.list

@@ -12,7 +12,7 @@ android {
         minSdkVersion(24)
         targetSdkVersion(30)
         versionCode(1)
-        versionName = "0.1.0-alpha03"
+        versionName = "0.1.0-alpha04"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -49,10 +49,6 @@ dependencies {
     implementation(kotlin("reflect", "1.4.30"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-SNAPSHOT")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-SNAPSHOT")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0-SNAPSHOT")
-    implementation("androidx.savedstate:savedstate-ktx:1.2.0-SNAPSHOT")
-    implementation("androidx.activity:activity-ktx:1.3.0-SNAPSHOT")
     implementation("androidx.appcompat:appcompat:1.3.0-SNAPSHOT")
     implementation("androidx.core:core-ktx:1.5.0-SNAPSHOT")
     implementation("androidx.media:media:1.3.0-SNAPSHOT")

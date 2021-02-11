@@ -1,30 +1,18 @@
 package com.kyant.pixelmusic.media
 
-import android.app.PendingIntent
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import androidx.compose.runtime.*
 import androidx.media.MediaBrowserServiceCompat
 import com.kyant.pixelmusic.locals.Media
-import com.kyant.pixelmusic.ui.MainActivity
 
 class MediaPlaybackService : MediaBrowserServiceCompat() {
     override fun onCreate() {
         super.onCreate()
         Media.session = MediaSessionCompat(baseContext, "PIXEL_MUSIC").apply {
-            setSessionActivity(
-                PendingIntent.getActivity(
-                    this@MediaPlaybackService,
-                    1,
-                    Intent(this@MediaPlaybackService, MainActivity::class.java),
-                    PendingIntent.FLAG_UPDATE_CURRENT
-                )
-            )
             setFlags(MediaSessionCompat.FLAG_HANDLES_QUEUE_COMMANDS)
             setPlaybackState(
                 PlaybackStateCompat.Builder()

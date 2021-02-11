@@ -23,7 +23,7 @@ fun AmplitudeVisualizer(modifier: Modifier = Modifier) {
     val amplitudes = LocalAmplitudes.current
     val player = LocalPixelPlayer.current
     LaunchedEffect(player.progress) {
-        state.snapToItemIndex((state.layoutInfo.totalItemsCount * player.progress).toInt())
+        state.scrollToItem((state.layoutInfo.totalItemsCount * player.progress).toInt())
     }
     BoxWithConstraints(modifier) {
         Box(

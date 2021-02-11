@@ -29,7 +29,7 @@ fun My(modifier: Modifier = Modifier) {
                 Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                SuperellipseCornerShape(16.dp),
+                SuperellipseCornerShape(8.dp),
                 MaterialTheme.colors.primary,
                 elevation = 0.dp
             ) {

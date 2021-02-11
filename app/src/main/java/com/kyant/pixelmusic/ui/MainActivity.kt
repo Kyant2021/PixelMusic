@@ -12,11 +12,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Explore
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.SoftwareKeyboardController
@@ -28,7 +24,6 @@ import com.kyant.pixelmusic.R
 import com.kyant.pixelmusic.api.toplist.TopList
 import com.kyant.pixelmusic.locals.*
 import com.kyant.pixelmusic.media.*
-import com.kyant.pixelmusic.ui.component.BottomNav
 import com.kyant.pixelmusic.ui.component.TopBar
 import com.kyant.pixelmusic.ui.my.My
 import com.kyant.pixelmusic.ui.nowplaying.NowPlaying
@@ -37,10 +32,9 @@ import com.kyant.pixelmusic.ui.playlist.Playlist
 import com.kyant.pixelmusic.ui.screens.*
 import com.kyant.pixelmusic.ui.search.Search
 import com.kyant.pixelmusic.ui.theme.PixelMusicTheme
-import com.kyant.pixelmusic.util.currentRoute
 import kotlinx.coroutines.*
 
-enum class Screens { HOME, EXPLORE }
+enum class Screens { HOME, EXPLORE, NEW_SONGS }
 
 class MainActivity : AppCompatActivity() {
     private val mediaButtonReceiver = MediaButtonReceiver()
@@ -53,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         Media.init(this, connectionCallbacks)
         setContent {
             PixelMusicTheme(window) {
-                val coroutineScope = rememberCoroutineScope()
+                val scope = rememberCoroutineScope()
                 val navController = rememberNavController()
                 val (myState, playerPlaylistState, nowPlayingState, playlistState, searchState) =
                     rememberSwipeableState(false)
@@ -62,10 +56,6 @@ class MainActivity : AppCompatActivity() {
                 val focusRequester = FocusRequester.Default
                 val softwareKeyboardController =
                     remember { mutableStateOf<SoftwareKeyboardController?>(null) }
-                val items = listOf(
-                    Triple(Screens.HOME.name, "Home", Icons.Outlined.Home),
-                    Triple(Screens.EXPLORE.name, "Explore", Icons.Outlined.Explore)
-                )
                 BackHandler(
                     myState.targetValue or
                             playerPlaylistState.targetValue or
@@ -73,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                             playlistState.targetValue or
                             searchState.targetValue
                 ) {
-                    coroutineScope.launch {
+                    scope.launch {
                         when {
                             myState.targetValue ->
                                 myState.animateTo(false, spring(stiffness = 700f))
@@ -103,22 +93,18 @@ class MainActivity : AppCompatActivity() {
                                 }
                             ) {
                                 NavHost(navController, Screens.HOME.name) {
-                                    composable(Screens.HOME.name) { Home() }
+                                    composable(Screens.HOME.name) {
+                                        Home(navController)
+                                    }
                                     composable(Screens.EXPLORE.name) {
-                                        Explore(
-                                            playlistState,
-                                            topList
-                                        )
+                                        Explore(playlistState, topList)
+                                    }
+                                    composable(Screens.NEW_SONGS.name) {
+                                        NewSongs()
                                     }
                                 }
                                 TopBar(searchState, myState)
                             }
-                            BottomNav(
-                                items,
-                                { navController.currentRoute() == it },
-                                { navController.navigate(it) },
-                                Modifier.align(Alignment.BottomCenter)
-                            )
                             ForeLayer(searchState) {
                                 Search(focusRequester, softwareKeyboardController)
                                 LaunchedEffect(searchState.targetValue) {

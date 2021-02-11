@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.kyant.inimate.insets.LocalSysUiController
@@ -37,19 +38,23 @@ fun BackLayer(
             .maxByOrNull { it } ?: 0f
         val isDarkIcons = darkIcons(progress, statusBarHeight / maxHeight)
         Surface(
-            modifier
+            Modifier
                 .fillMaxSize()
                 .padding(top = statusBarHeight / 2 * progress)
                 .scale((maxWidth - 24.dp * progress) / maxWidth),
             RoundedCornerShape(16.dp * progress, 16.dp * progress, 0.dp, 0.dp)
         ) {
             Box(
-                Modifier
+                modifier
                     .fillMaxSize()
                     .statusBarsPadding()
             ) {
                 content()
             }
+            Surface(
+                Modifier.fillMaxSize(),
+                color = lerp(Color.Transparent, Color.Black.copy(0.04f), progress)
+            ) {}
         }
         LaunchedEffect(isDarkIcons) {
             systemUiController.setSystemBarsColor(Color.Transparent, isDarkIcons)

@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.animation.smoothScrollBy
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,15 +13,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kyant.inimate.shape.SuperellipseCornerShape
@@ -37,24 +31,20 @@ import kotlin.math.pow
 @Composable
 fun Lyrics(
     lyrics: Lyrics,
-    dark: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues()
 ) {
     val player = LocalPixelPlayer.current
     val state = rememberLazyListState()
-    val positions = remember { mutableStateMapOf<Int, Float>() }
     val currentIndex = lyrics.currentIndex()
     val transition = updateTransition(currentIndex)
-    LaunchedEffect(Unit) {
-        state.snapToItemIndex((currentIndex - 1).coerceAtLeast(0))
-    }
-    LaunchedEffect(currentIndex) {
-        state.smoothScrollBy(
-            (positions.getOrDefault(currentIndex - 1, 0f) -
-                    state.firstVisibleItemScrollOffset).absoluteValue,
-            spring(stiffness = 100f)
-        )
+    if (lyrics.isNotEmpty()) {
+        LaunchedEffect(Unit) {
+            state.scrollToItem((currentIndex - 1).coerceAtLeast(0))
+        }
+        LaunchedEffect(currentIndex) {
+            state.animateScrollToItem((currentIndex - 1).coerceAtLeast(0))
+        }
     }
     LazyColumn(
         modifier.fillMaxWidth(),
@@ -70,7 +60,6 @@ fun Lyrics(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .onGloballyPositioned { positions[index] = it.positionInParent.y }
                     .offset(y = offset.value)
                     .clip(SuperellipseCornerShape(16.dp))
                     .clickable { player.snapTo(time.toMilliseconds() + 1) }
@@ -82,10 +71,10 @@ fun Lyrics(
                         .alpha(
                             animateFloatAsState(
                                 if (isCurrentLine) 1f
-                                else (0.3f * (6 - deltaIndex) / 6).coerceAtLeast(0.1f)
+                                else if (!player.isPlayingState) 0.5f
+                                else (0.3f * (6 - deltaIndex) / 6).coerceAtLeast(0.05f)
                             ).value
                         ),
-                   if (dark) Color.White else Color.Black,
                     fontWeight = FontWeight.Black,
                     style = MaterialTheme.typography.h5.copy(
                         fontSize = MaterialTheme.typography.h5.fontSize * animateFloatAsState(if (isCurrentLine) 1.1f else 1f).value

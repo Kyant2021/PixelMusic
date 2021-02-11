@@ -54,6 +54,12 @@ open class BaseDataStore(
         }
     }
 
+    fun <T> writeWhileNotExist(key: String, content: T) {
+        if (!contains(key)) {
+            write(key, content)
+        }
+    }
+
     fun writeBitmap(key: String, bitmap: Bitmap) {
         try {
             FileOutputStream(File(key.coordinated.path)).apply {
@@ -63,18 +69,6 @@ open class BaseDataStore(
             }
         } catch (e: IOException) {
             error(e)
-        }
-    }
-
-    fun <T> writeWhileNotExist(key: String, content: T) {
-        if (!contains(key)) {
-            write(key, content)
-        }
-    }
-
-    fun writeBitmapWhileNotExist(key: String, bitmap: Bitmap) {
-        if (!contains(key)) {
-            writeBitmap(key, bitmap)
         }
     }
 
@@ -88,23 +82,13 @@ open class BaseDataStore(
         }
     }
 
-    inline operator fun <reified T> get(key: String, def: T? = null): T? {
-        try {
-            return key.coordinated.stream() ?: def
-        } catch (e: IOException) {
-            error(e)
-        } catch (e: ClassNotFoundException) {
-            error(e)
-        }
+    fun getBitmapOrNull(key: String): Bitmap? {
+        return if (contains(key)) BitmapFactory.decodeFile(key.coordinated.path) ?: null else null
     }
-
-    fun getBitmap(key: String, def: Bitmap? = null): Bitmap? {
-        return BitmapFactory.decodeFile(key.coordinated.path) ?: def
-    }
-
-    fun contains(key: String): Boolean = File(requirePath(key)).exists()
 
     fun requirePath(key: String): String = key.coordinated.path
+
+    fun contains(key: String): Boolean = File(requirePath(key)).exists()
 
     fun clear(key: String? = null) {
         if (key == null) {

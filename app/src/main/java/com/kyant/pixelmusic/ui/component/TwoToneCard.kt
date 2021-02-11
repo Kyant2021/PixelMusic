@@ -26,7 +26,7 @@ fun TwoToneCard(
         modifier
             .fillMaxWidth()
             .padding(16.dp, 8.dp),
-        SuperellipseCornerShape(16.dp),
+        SuperellipseCornerShape(8.dp),
         color.copy(if (MaterialTheme.colors.isLight) 0.05f else 0.2f),
         elevation = 0.dp
     ) {

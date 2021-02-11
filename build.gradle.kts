@@ -21,7 +21,7 @@ allprojects {
         jcenter()
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
         maven("https://kotlin.bintray.com/kotlinx")
-        maven("https://androidx.dev/snapshots/builds/7133861/artifacts/repository")
+        maven("https://androidx.dev/snapshots/builds/7138434/artifacts/repository")
         maven("https://jitpack.io")
     }
 }
