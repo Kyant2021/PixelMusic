@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.kyant.inimate.shape.SmoothRoundedCornerShape
 import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.locals.LocalPixelPlayer
-import com.kyant.pixelmusic.locals.Media
+import com.kyant.pixelmusic.media.Media
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.ui.song.Cover
 import kotlinx.coroutines.CoroutineScope

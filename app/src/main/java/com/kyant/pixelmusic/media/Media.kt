@@ -1,4 +1,4 @@
-package com.kyant.pixelmusic.locals
+package com.kyant.pixelmusic.media
 
 import android.content.ComponentName
 import android.content.Context
@@ -15,7 +15,6 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import com.kyant.pixelmusic.media.*
 import com.kyant.pixelmusic.util.DataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

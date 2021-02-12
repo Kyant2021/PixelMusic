@@ -6,6 +6,7 @@ plugins {
 android {
     compileSdkVersion(30)
     buildToolsVersion = "30.0.3"
+    ndkVersion = "21.3.6528147"
 
     defaultConfig {
         minSdkVersion(24)
@@ -13,6 +14,11 @@ android {
         versionCode(1)
         versionName = "0.1.0-alpha04"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            ndkBuild {
+                abiFilters("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
+            }
+        }
     }
 
     buildTypes {
@@ -37,6 +43,11 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.0.0-SNAPSHOT"
+    }
+    externalNativeBuild {
+        ndkBuild {
+            path = file("jni/Android.mk")
+        }
     }
 }
 

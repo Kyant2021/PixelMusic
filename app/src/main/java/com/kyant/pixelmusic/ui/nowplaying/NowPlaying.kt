@@ -3,7 +3,7 @@ package com.kyant.pixelmusic.ui.nowplaying
 import android.graphics.Bitmap
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.draggable
@@ -18,12 +18,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.palette.graphics.Palette
+import com.kyant.inimate.blur.blur
 import com.kyant.inimate.insets.LocalWindowInsets
 import com.kyant.inimate.insets.statusBarsPadding
 import com.kyant.inimate.layer.FloatingForeLayer
@@ -38,6 +40,7 @@ import com.kyant.pixelmusic.ui.player.PlayPauseTransparentButton
 import com.kyant.pixelmusic.ui.player.ProgressBar
 import com.kyant.pixelmusic.ui.song.Cover
 import com.kyant.pixelmusic.ui.theme.NowPlayingTheme
+import com.kyant.pixelmusic.util.EmptyImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -59,12 +62,13 @@ fun BoxWithConstraintsScope.NowPlaying(
     val infoState = rememberSwipeableState(false)
     val transition = updateTransition(lyricsState)
     val progress = state.progressOf(constraints.maxHeight.toFloat()).coerceIn(0f..1f)
-    val isLight = MaterialTheme.colors.isLight
     val defaultColor = MaterialTheme.colors.surface
-    var colors by remember { mutableStateOf(listOf(defaultColor, defaultColor)) }
+    val defaultOnColor = MaterialTheme.colors.onSurface
     var themeColor by remember { mutableStateOf(defaultColor) }
+    var onColor by remember { mutableStateOf(defaultOnColor) }
     val squareSize = minOf(maxWidth, maxHeight)
     var lyrics by remember { mutableStateOf(EmptyLyrics) }
+    var blurredImage: ImageBitmap? by remember { mutableStateOf(null) }
     LaunchedEffect(song.id) {
         withContext(Dispatchers.IO) {
             lyrics = (song.id?.findLyrics() ?: EmptyLyrics).toList().sortedBy { it.first }.toMap()
@@ -72,27 +76,16 @@ fun BoxWithConstraintsScope.NowPlaying(
     }
     LaunchedEffect(song.icon) {
         withContext(Dispatchers.IO) {
-            song.icon?.asAndroidBitmap()?.copy(Bitmap.Config.ARGB_8888, true)?.let { bitmap ->
+            blurredImage = song.icon?.asAndroidBitmap()?.blur(100)?.asImageBitmap()
+            blurredImage?.asAndroidBitmap()?.copy(Bitmap.Config.ARGB_8888, true)?.let { bitmap ->
                 Palette.from(bitmap).generate { palette ->
-                    colors = listOf(
-                        Color(
-                            (if (isLight) palette?.lightMutedSwatch?.rgb else palette?.darkMutedSwatch?.rgb)
-                                ?: defaultColor.toArgb()
-                        ),
-                        Color(
-                            (if (isLight) palette?.lightVibrantSwatch?.rgb else palette?.darkVibrantSwatch?.rgb)
-                                ?: defaultColor.toArgb()
-                        )
-                    )
                     themeColor = Color(palette?.dominantSwatch?.rgb ?: defaultColor.toArgb())
+                    onColor = if (themeColor.luminance() <= 0.5f) Color.White else Color.Black
                 }
             }
         }
     }
-    NowPlayingTheme(
-        color = themeColor,
-        onColor = if (colors.map { it.luminance() }.average() <= 0.5f) Color.White else Color.Black
-    ) {
+    NowPlayingTheme(color = themeColor, onColor = onColor) {
         Card(
             modifier
                 .size(
@@ -132,16 +125,12 @@ fun BoxWithConstraintsScope.NowPlaying(
             backgroundColor = Color.Transparent,
             elevation = 1.dp + 23.dp * progress
         ) {
-            BoxWithConstraints(
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.horizontalGradient(
-                            0f to animateColorAsState(colors[0]).value,
-                            1f to animateColorAsState(colors[1]).value
-                        )
-                    )
-            ) {
+            BoxWithConstraints(Modifier.fillMaxSize()) {
+                Image(
+                    blurredImage ?: EmptyImage, null,
+                    Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
                 Column(
                     Modifier.fillMaxWidth()
                         .align(Alignment.BottomCenter)
