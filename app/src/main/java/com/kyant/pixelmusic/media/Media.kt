@@ -61,22 +61,25 @@ object Media {
             val position = player?.currentPosition
             dataStore.write("playlist_0", songs.map { it.serialize() })
             if (songIndex != null && position != null) {
-                dataStore.write("playlist_0_state", songIndex to position)
+                dataStore.write(
+                    "playlist_0_state",
+                    Triple(songIndex, position, player?.isPlayingState ?: false)
+                )
             }
         }
     }
 
     fun syncWithPlaylists(context: Context) {
         scope.launch {
-            DataStore(context, "playlists")
-                .getOrNull<List<SerializedSong>>("playlist_0")?.forEach {
-                    addSongToPlaylist(songs.size, it.toSong(context))
-                }
-            DataStore(context, "playlists")
-                .getOrNull<Pair<Int?, Long?>>("playlist_0_state")?.let {
-                    player?.seekTo(it.first ?: 0, it.second ?: 0)
-                    player?.position?.snapTo(it.second?.toFloat() ?: 0f)
-                }
+            val dataStore = DataStore(context, "playlists")
+            dataStore.getOrNull<List<SerializedSong>>("playlist_0")?.forEach {
+                addSongToPlaylist(songs.size, it.toSong(context))
+            }
+            dataStore.getOrNull<Triple<Int?, Long?, Boolean?>>("playlist_0_state")?.let {
+                player?.seekTo(it.first ?: 0, it.second ?: 0)
+                player?.position?.snapTo(it.second?.toFloat() ?: 0f)
+                player?.playWhenReady = it.third ?: false
+            }
         }
     }
 

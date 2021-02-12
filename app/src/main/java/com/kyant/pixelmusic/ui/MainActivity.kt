@@ -32,6 +32,7 @@ import com.kyant.pixelmusic.ui.nowplaying.NowPlaying
 import com.kyant.pixelmusic.ui.player.PlayerPlaylist
 import com.kyant.pixelmusic.ui.screens.*
 import com.kyant.pixelmusic.ui.theme.PixelMusicTheme
+import com.kyant.pixelmusic.util.DataStore
 import kotlinx.coroutines.*
 
 enum class Screens { HOME, EXPLORE, NEW_SONGS }
@@ -193,6 +194,10 @@ class MainActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
         volumeControlStream = AudioManager.STREAM_MUSIC
+        DataStore(this, "playlists")
+            .getOrNull<Triple<Int?, Long?, Boolean?>>("playlist_0_state")?.let {
+                Media.player?.playWhenReady = it.third ?: false
+            }
     }
 
     override fun onDestroy() {
