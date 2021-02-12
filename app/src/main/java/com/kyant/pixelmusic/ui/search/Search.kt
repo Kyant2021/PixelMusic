@@ -17,7 +17,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.SoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -35,7 +34,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun Search(
     focusRequester: FocusRequester,
-    softwareKeyboardController: MutableState<SoftwareKeyboardController?>,
+    // softwareKeyboardController: MutableState<SoftwareKeyboardController?>,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -71,14 +70,14 @@ fun Search(
                 .focusRequester(focusRequester),
             label = { Text("Search songs") },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions.Default.apply {
-                onSearch?.let {
+            keyboardActions = KeyboardActions(
+                onSearch = {
                     focusRequester.freeFocus()
-                    softwareKeyboardController.value?.hideSoftwareKeyboard()
+                    // softwareKeyboardController.value?.hideSoftwareKeyboard()
                 }
-            },
+            ),
             singleLine = true,
-            onTextInputStarted = { softwareKeyboardController.value = it },
+            // onTextInputStarted = { softwareKeyboardController.value = it },
         )
         LazyColumn {
             items(songs, { it.id?.toString().orEmpty() }) {

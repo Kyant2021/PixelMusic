@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 
-@OptIn(ExperimentalLayout::class)
 @Composable
 fun BoxScope.ScrollHeader(
     state: LazyListState,
@@ -32,7 +31,6 @@ fun BoxScope.ScrollHeader(
     )
 }
 
-@OptIn(ExperimentalLayout::class)
 @Composable
 fun BoxScope.ScrollHeader(
     collapsed: Boolean,

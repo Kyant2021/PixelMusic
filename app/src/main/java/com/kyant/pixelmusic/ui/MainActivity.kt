@@ -15,7 +15,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.text.SoftwareKeyboardController
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.*
@@ -54,8 +53,8 @@ class MainActivity : AppCompatActivity() {
                 val topList = remember { mutableStateOf<TopList?>(null) }
                 val isLight = MaterialTheme.colors.isLight
                 val focusRequester = FocusRequester.Default
-                val softwareKeyboardController =
-                    remember { mutableStateOf<SoftwareKeyboardController?>(null) }
+                // val softwareKeyboardController =
+                //     remember { mutableStateOf<SoftwareKeyboardController?>(null) }
                 BackHandler(
                     myState.targetValue or
                             playerPlaylistState.targetValue or
@@ -106,14 +105,14 @@ class MainActivity : AppCompatActivity() {
                                 TopBar(searchState, myState)
                             }
                             ForeLayer(searchState) {
-                                Search(focusRequester, softwareKeyboardController)
+                                Search(focusRequester) //, softwareKeyboardController)
                                 LaunchedEffect(searchState.targetValue) {
                                     if (searchState.targetValue) {
                                         focusRequester.requestFocus()
-                                        softwareKeyboardController.value?.showSoftwareKeyboard()
+                                        // softwareKeyboardController.value?.showSoftwareKeyboard()
                                     } else {
                                         focusRequester.freeFocus()
-                                        softwareKeyboardController.value?.hideSoftwareKeyboard()
+                                        // softwareKeyboardController.value?.hideSoftwareKeyboard()
                                     }
                                 }
                             }
