@@ -1,7 +1,6 @@
 package com.kyant.inimate.blur
 
 import android.graphics.Bitmap
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -9,7 +8,6 @@ import java.util.*
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
-@Composable
 fun ImageBitmap.blur(radius: Int): ImageBitmap = asAndroidBitmap().blur(radius).asImageBitmap()
 
 fun Bitmap.blur(radius: Int): Bitmap {

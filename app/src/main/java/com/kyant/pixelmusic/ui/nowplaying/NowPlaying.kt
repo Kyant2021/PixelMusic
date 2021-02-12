@@ -75,7 +75,7 @@ fun BoxWithConstraintsScope.NowPlaying(
     }
     LaunchedEffect(song.icon) {
         withContext(Dispatchers.IO) {
-            blurredImage = song.icon?.asAndroidBitmap()?.blur(100)?.asImageBitmap()
+            blurredImage = song.icon?.blur(200)
             blurredImage?.asAndroidBitmap()?.copy(Bitmap.Config.ARGB_8888, true)?.let { bitmap ->
                 Palette.from(bitmap).generate { palette ->
                     themeColor = Color(palette?.dominantSwatch?.rgb ?: defaultColor.toArgb())
