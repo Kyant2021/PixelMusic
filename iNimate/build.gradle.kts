@@ -6,13 +6,13 @@ plugins {
 android {
     compileSdkVersion(30)
     buildToolsVersion = "30.0.3"
-    ndkVersion = "21.3.6528147"
+    ndkVersion = "22.0.7026061"
 
     defaultConfig {
         minSdkVersion(24)
         targetSdkVersion(30)
         versionCode(1)
-        versionName = "0.1.0-alpha04"
+        versionName = "0.1.0-alpha05"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             ndkBuild {
