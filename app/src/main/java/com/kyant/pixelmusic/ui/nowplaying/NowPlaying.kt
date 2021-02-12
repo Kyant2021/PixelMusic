@@ -57,7 +57,6 @@ fun BoxWithConstraintsScope.NowPlaying(
     val player = LocalPixelPlayer.current
     val song = LocalNowPlaying.current
     val scope = rememberCoroutineScope()
-    var horizontalDragOffset by remember { mutableStateOf(0f) }
     var lyricsState by remember { mutableStateOf(false) }
     val infoState = rememberSwipeableState(false)
     val transition = updateTransition(lyricsState)
@@ -126,6 +125,9 @@ fun BoxWithConstraintsScope.NowPlaying(
             elevation = 1.dp + 23.dp * progress
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
+                var horizontalDragOffset by remember { mutableStateOf(0f) }.apply {
+                    with(density) { value.coerceIn(-48.dp.toPx()..48.dp.toPx()) }
+                }
                 Image(
                     blurredImage ?: EmptyImage, null,
                     Modifier.fillMaxSize(),
@@ -161,21 +163,7 @@ fun BoxWithConstraintsScope.NowPlaying(
                         ProgressBar(Modifier.padding(32.dp, 8.dp))
                     }
                 }
-                Box(
-                    Modifier.draggable(
-                        rememberDraggableState {
-                            horizontalDragOffset += it
-                            with(density) {
-                                when {
-                                    horizontalDragOffset <= -48.dp.toPx() -> player.next()
-                                    horizontalDragOffset >= 48.dp.toPx() -> player.previous()
-                                }
-                            }
-                        },
-                        Orientation.Horizontal,
-                        onDragStopped = { horizontalDragOffset = 0f }
-                    ).padding(top = 12.dp)
-                ) {
+                Box(Modifier.padding(top = 12.dp)) {
                     Cover(
                         song,
                         Modifier
@@ -204,6 +192,20 @@ fun BoxWithConstraintsScope.NowPlaying(
                             .offset(
                                 80.dp + 16.dp * progress - transition.animateDp { if (it) 8.dp * progress else 0.dp }.value,
                                 4.dp + (squareSize + 68.dp) * progress - transition.animateDp { if (it) (squareSize + 48.dp) * progress else 0.dp }.value
+                            )
+                            .fillMaxWidth()
+                            .draggable(
+                                rememberDraggableState { horizontalDragOffset += it },
+                                Orientation.Horizontal,
+                                onDragStopped = {
+                                    with(density) {
+                                        when {
+                                            horizontalDragOffset <= -48.dp.toPx() -> player.next()
+                                            horizontalDragOffset >= 48.dp.toPx() -> player.previous()
+                                        }
+                                    }
+                                    horizontalDragOffset = 0f
+                                }
                             )
                             .alpha((progress - 0.5f).absoluteValue * 2)
                     ) {
