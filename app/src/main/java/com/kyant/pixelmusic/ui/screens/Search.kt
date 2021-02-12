@@ -14,6 +14,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -37,16 +39,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@OptIn(ExperimentalAnimatedInsets::class, ExperimentalMaterialApi::class)
+@OptIn(
+    ExperimentalAnimatedInsets::class,
+    ExperimentalMaterialApi::class,
+    ExperimentalComposeUiApi::class
+)
 @Composable
 fun Search(
     focusRequester: FocusRequester,
     state: LazyListState,
     nestedScrollConnection: NestedScrollConnection,
-    // softwareKeyboardController: MutableState<SoftwareKeyboardController?>,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     var value by remember { mutableStateOf(TextFieldValue()) }
     val songs = remember(value.text) { mutableStateListOf<Song>() }
     val icons = remember(value.text) { mutableStateMapOf<Long, ImageBitmap>() }
@@ -82,11 +88,10 @@ fun Search(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     focusRequester.freeFocus()
-                    // softwareKeyboardController.value?.hideSoftwareKeyboard()
+                    keyboardController?.hideSoftwareKeyboard()
                 }
             ),
-            singleLine = true,
-            // onTextInputStarted = { softwareKeyboardController.value = it }
+            singleLine = true
         )
         LazyColumn(
             Modifier

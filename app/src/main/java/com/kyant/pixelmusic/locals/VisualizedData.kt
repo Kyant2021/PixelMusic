@@ -11,7 +11,7 @@ import java.net.URL
 
 typealias Amplitudes = SnapshotStateList<Double>
 
-val LocalAmplitudes = compositionLocalOf<Amplitudes> { error("No Amplitudes was provided.") }
+val LocalAmplitudes = compositionLocalOf<Amplitudes> { error("CompositionLocal LocalAmplitudes not present") }
 
 @Composable
 fun ProvideAmplitudes(

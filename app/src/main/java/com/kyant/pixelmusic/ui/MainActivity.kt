@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.*
@@ -40,7 +42,7 @@ enum class Screens { HOME, EXPLORE, NEW_SONGS }
 class MainActivity : AppCompatActivity() {
     private val mediaButtonReceiver = MediaButtonReceiver()
 
-    @OptIn(ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         Media.init(this, connectionCallbacks)
         setContent {
             PixelMusicTheme(window) {
+                val keyboardController = LocalSoftwareKeyboardController.current
                 val scope = rememberCoroutineScope()
                 val navController = rememberNavController()
                 val (myState, playerPlaylistState, nowPlayingState, playlistState, searchState) =
@@ -55,8 +58,6 @@ class MainActivity : AppCompatActivity() {
                 val topList = remember { mutableStateOf<TopList?>(null) }
                 val isLight = MaterialTheme.colors.isLight
                 val focusRequester = FocusRequester.Default
-                // val softwareKeyboardController =
-                //     remember { mutableStateOf<SoftwareKeyboardController?>(null) }
                 BackHandler(
                     myState.targetValue or
                             playerPlaylistState.targetValue or
@@ -119,7 +120,7 @@ class MainActivity : AppCompatActivity() {
                                                 scope.launch {
                                                     searchState.animateTo(false)
                                                     focusRequester.freeFocus()
-                                                    // softwareKeyboardController.value?.hideSoftwareKeyboard()
+                                                    keyboardController?.hideSoftwareKeyboard()
                                                 }
                                             }
                                             return super.onPostScroll(consumed, available, source)
@@ -130,14 +131,14 @@ class MainActivity : AppCompatActivity() {
                                     focusRequester,
                                     lazyListState,
                                     nestedScrollConnection
-                                ) //, softwareKeyboardController)
+                                )
                                 LaunchedEffect(searchState.targetValue) {
                                     if (searchState.targetValue) {
                                         focusRequester.requestFocus()
-                                        // softwareKeyboardController.value?.showSoftwareKeyboard()
+                                        keyboardController?.showSoftwareKeyboard()
                                     } else {
                                         focusRequester.freeFocus()
-                                        // softwareKeyboardController.value?.hideSoftwareKeyboard()
+                                        keyboardController?.hideSoftwareKeyboard()
                                     }
                                 }
                             }

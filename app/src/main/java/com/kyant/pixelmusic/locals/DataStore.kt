@@ -2,14 +2,15 @@ package com.kyant.pixelmusic.locals
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import com.kyant.pixelmusic.util.CacheDataStore
 import com.kyant.pixelmusic.util.DataStore
 
-val LocalDataStore = compositionLocalOf<DataStore> { error("No DataStore was provided.") }
+val LocalDataStore =
+    staticCompositionLocalOf<DataStore> { error("CompositionLocal LocalDataStore not present") }
 val LocalCacheDataStore =
-    compositionLocalOf<CacheDataStore> { error("No CacheDataStore was provided.") }
+    staticCompositionLocalOf<CacheDataStore> { error("CompositionLocal LocalCacheDataStore not present") }
 
 @Composable
 fun ProvideDataStore(name: String, content: @Composable () -> Unit) {

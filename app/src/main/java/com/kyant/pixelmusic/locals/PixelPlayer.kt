@@ -3,12 +3,13 @@ package com.kyant.pixelmusic.locals
 import androidx.compose.animation.core.Animatable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import com.kyant.pixelmusic.media.PixelPlayer
 
-val LocalPixelPlayer = compositionLocalOf<PixelPlayer> { error("No PixelPlayer was provided.") }
+val LocalPixelPlayer =
+    staticCompositionLocalOf<PixelPlayer> { error("CompositionLocal PixelPlayer not present") }
 
 @Composable
 fun ProvidePixelPlayer(content: @Composable () -> Unit) {
