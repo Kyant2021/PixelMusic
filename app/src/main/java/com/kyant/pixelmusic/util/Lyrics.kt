@@ -12,7 +12,7 @@ import kotlin.time.toDuration
 fun String.toLyrics(): Lyrics {
     val lyrics = mutableMapOf<Time, Content>()
     split("\n").forEach { line ->
-        if (line.isNotBlank() && line[1].isDigit() && line.contains("")) {
+        if (line.isNotBlank() && line[1].isDigit()) {
             lyrics += line.substringBefore("]").drop(1) to line.substringAfter("]")
         }
     }
