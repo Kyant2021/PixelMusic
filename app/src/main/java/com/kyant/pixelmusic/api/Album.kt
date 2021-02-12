@@ -7,4 +7,4 @@ import java.net.URL
 typealias AlbumId = Long
 
 suspend fun AlbumId.findCoverUrl(size: Int = 500): String =
-    "${JsonParser().parse<AlbumResult>(URL("$API2/album?id=${this@findCoverUrl}").readText())?.album?.picUrl}?param=${size}y$size"
+    "${JsonParser().parse<AlbumResult>(URL("$API/album?id=${this@findCoverUrl}").readText())?.album?.picUrl}?param=${size}y$size"

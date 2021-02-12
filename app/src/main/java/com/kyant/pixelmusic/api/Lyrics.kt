@@ -12,5 +12,5 @@ typealias Lyrics = Map<Time, Content>
 val EmptyLyrics: Lyrics = emptyMap()
 
 suspend fun SongId.findLyrics(): Lyrics? = JsonParser().parse<LyricResult>(
-    URL("$API?type=lyric&id=${this@findLyrics}").readText()
+    URL("$API/lyric?id=${this@findLyrics}").readText()
 )?.lrc?.lyric?.toLyrics()

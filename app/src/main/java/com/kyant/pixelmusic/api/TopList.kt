@@ -8,4 +8,4 @@ import java.net.URL
 typealias TopListId = Long
 
 suspend fun findTopList(): List<TopList>? =
-    JsonParser().parse<TopListResult>(URL("$API2/toplist").readText())?.list
+    JsonParser().parse<TopListResult>(URL("$API/toplist").readText())?.list

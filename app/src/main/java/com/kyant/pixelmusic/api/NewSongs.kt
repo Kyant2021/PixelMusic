@@ -7,5 +7,5 @@ import com.kyant.pixelmusic.media.toSong
 import java.net.URL
 
 suspend fun findNewSongs(type: Int = 0): List<Song>? = JsonParser().parse<NewSongsResult>(
-    URL("$API2/top/song?type=$type").readText()
+    URL("$API/top/song?type=$type").readText()
 )?.data?.map { it.toSong() }
