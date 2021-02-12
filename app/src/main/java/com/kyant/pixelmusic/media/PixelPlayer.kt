@@ -96,7 +96,7 @@ class PixelPlayer(context: Context) : SimpleExoPlayer(Builder(context)) {
         playWhenReady = !isPlayingState
     }
 
-    fun snapTo(position: Long) {
+    fun seekToPosition(position: Long) {
         CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
             this@PixelPlayer.position.snapTo(position.toFloat())
             seekTo(position)

@@ -30,7 +30,7 @@ fun PlayController(
         Spacer(Modifier.width(16.dp))
         IconButton({
             player.previous()
-            player.snapTo(0)
+            player.seekToPosition(0)
         }) {
             Icon(Icons.Outlined.SkipPrevious, "Skip to prevoius")
         }
@@ -39,7 +39,7 @@ fun PlayController(
         Spacer(Modifier.width(16.dp))
         IconButton({
             player.next()
-            player.snapTo(0)
+            player.seekToPosition(0)
         }) {
             Icon(Icons.Outlined.SkipNext, "Skip to next")
         }
@@ -94,13 +94,14 @@ fun PlayPauseTransparentButton(modifier: Modifier = Modifier) {
         CircularProgressIndicator(
             player.bufferedProgress,
             Modifier.size(48.dp),
-            color = MaterialTheme.colors.primary.copy(0.4f),
-            strokeWidth = 3.dp
+            LocalContentColor.current.copy(0.4f),
+            3.dp
         )
         CircularProgressIndicator(
             player.progress,
             Modifier.size(48.dp),
-            strokeWidth = 3.dp
+            LocalContentColor.current,
+            3.dp
         )
     }
 }

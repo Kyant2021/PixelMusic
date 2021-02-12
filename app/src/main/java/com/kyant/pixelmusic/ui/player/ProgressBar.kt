@@ -10,6 +10,7 @@ import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -50,7 +51,7 @@ fun ProgressBar(modifier: Modifier = Modifier) {
                         .align(Alignment.CenterStart)
                         .clip(RoundedCornerShape(50)),
                     color = MaterialTheme.colors.primary.copy(0.4f),
-                    backgroundColor = MaterialTheme.colors.onSurface.copy(0.08f)
+                    backgroundColor = LocalContentColor.current.copy(0.08f)
                 )
                 LinearProgressIndicator(
                     player.progress,
@@ -66,14 +67,14 @@ fun ProgressBar(modifier: Modifier = Modifier) {
                         .onSizeChanged { width = it.width }
                         .pointerInput(Unit) {
                             detectTapGestures {
-                                player.snapTo(((it.x / width).coerceIn(0f..1f) * player.duration).toLong())
+                                player.seekToPosition(((it.x / width).coerceIn(0f..1f) * player.duration).toLong())
                             }
                         }
                         .draggable(
                             rememberDraggableState { draggingOffset += it },
                             Orientation.Horizontal,
                             onDragStopped = {
-                                player.snapTo((player.position.value + durationOffset).toLong())
+                                player.seekToPosition((player.position.value + durationOffset).toLong())
                                 draggingOffset = 0f
                             }
                         )
@@ -82,7 +83,7 @@ fun ProgressBar(modifier: Modifier = Modifier) {
                         Modifier
                             .offset(x = with(LocalDensity.current) { (this@BoxWithConstraints.maxWidth * player.progress + draggingOffset.toDp()) } - 8.dp)
                             .size(16.dp)
-                            .background(MaterialTheme.colors.primary, RoundedCornerShape(50))
+                            .background(LocalContentColor.current, RoundedCornerShape(50))
                     )
                 }
             }

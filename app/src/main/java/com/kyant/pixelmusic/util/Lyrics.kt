@@ -35,3 +35,7 @@ fun Time.isCurrentLine(lyrics: Lyrics): Boolean = this == lyrics.keys.lastOrNull
 fun Lyrics.currentIndex(): Int = keys.lastIndexOf(keys.lastOrNull {
     LocalPixelPlayer.current.position.value >= it.toMilliseconds()
 })
+
+fun Long.indexOf(lyrics: Lyrics): Int = lyrics.keys.lastIndexOf(lyrics.keys.lastOrNull {
+    this >= it.toMilliseconds()
+})
