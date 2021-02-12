@@ -1,10 +1,12 @@
-package com.kyant.pixelmusic.ui.search
+package com.kyant.pixelmusic.ui.screens
 
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -16,10 +18,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.kyant.inimate.insets.ExperimentalAnimatedInsets
+import com.kyant.inimate.insets.navigationBarsWithImePadding
+import com.kyant.inimate.insets.rememberImeNestedScrollConnection
 import com.kyant.pixelmusic.api.searchSongs
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.media.toSong
@@ -30,10 +37,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalAnimatedInsets::class, ExperimentalMaterialApi::class)
 @Composable
 fun Search(
     focusRequester: FocusRequester,
+    state: LazyListState,
+    nestedScrollConnection: NestedScrollConnection,
     // softwareKeyboardController: MutableState<SoftwareKeyboardController?>,
     modifier: Modifier = Modifier
 ) {
@@ -77,11 +86,19 @@ fun Search(
                 }
             ),
             singleLine = true,
-            // onTextInputStarted = { softwareKeyboardController.value = it },
+            // onTextInputStarted = { softwareKeyboardController.value = it }
         )
-        LazyColumn {
+        LazyColumn(
+            Modifier
+                .nestedScroll(rememberImeNestedScrollConnection())
+                .nestedScroll(nestedScrollConnection),
+            state
+        ) {
             items(songs, { it.id?.toString().orEmpty() }) {
                 Song(it.copy(icon = icons.getOrElse(it.albumId ?: 0) { EmptyImage }))
+            }
+            item {
+                Spacer(Modifier.navigationBarsWithImePadding())
             }
         }
     }

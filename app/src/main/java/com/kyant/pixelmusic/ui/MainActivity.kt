@@ -11,10 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.*
@@ -24,12 +28,9 @@ import com.kyant.pixelmusic.api.toplist.TopList
 import com.kyant.pixelmusic.locals.*
 import com.kyant.pixelmusic.media.*
 import com.kyant.pixelmusic.ui.component.TopBar
-import com.kyant.pixelmusic.ui.my.My
 import com.kyant.pixelmusic.ui.nowplaying.NowPlaying
 import com.kyant.pixelmusic.ui.player.PlayerPlaylist
-import com.kyant.pixelmusic.ui.playlist.Playlist
 import com.kyant.pixelmusic.ui.screens.*
-import com.kyant.pixelmusic.ui.search.Search
 import com.kyant.pixelmusic.ui.theme.PixelMusicTheme
 import kotlinx.coroutines.*
 
@@ -105,7 +106,30 @@ class MainActivity : AppCompatActivity() {
                                 TopBar(searchState, myState)
                             }
                             ForeLayer(searchState) {
-                                Search(focusRequester) //, softwareKeyboardController)
+                                val lazyListState = rememberLazyListState()
+                                val nestedScrollConnection = remember {
+                                    object : NestedScrollConnection {
+                                        override fun onPostScroll(
+                                            consumed: Offset,
+                                            available: Offset,
+                                            source: NestedScrollSource
+                                        ): Offset {
+                                            if (consumed.y == 0f && lazyListState.firstVisibleItemIndex == 0 && lazyListState.firstVisibleItemScrollOffset == 0) {
+                                                scope.launch {
+                                                    searchState.animateTo(false)
+                                                    focusRequester.freeFocus()
+                                                    // softwareKeyboardController.value?.hideSoftwareKeyboard()
+                                                }
+                                            }
+                                            return super.onPostScroll(consumed, available, source)
+                                        }
+                                    }
+                                }
+                                Search(
+                                    focusRequester,
+                                    lazyListState,
+                                    nestedScrollConnection
+                                ) //, softwareKeyboardController)
                                 LaunchedEffect(searchState.targetValue) {
                                     if (searchState.targetValue) {
                                         focusRequester.requestFocus()

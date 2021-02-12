@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import com.kyant.inimate.insets.ExperimentalAnimatedInsets
 import com.kyant.inimate.insets.LocalSysUiController
 import com.kyant.inimate.insets.ProvideWindowInsets
 import com.kyant.inimate.insets.SystemUiController
@@ -27,6 +28,7 @@ private val LightColorPalette = lightColors(
     secondary = androidGreen
 )
 
+@OptIn(ExperimentalAnimatedInsets::class)
 @Composable
 fun PixelMusicTheme(
     window: Window,
@@ -36,7 +38,7 @@ fun PixelMusicTheme(
     val colors = if (darkTheme) DarkColorPalette else LightColorPalette
     MaterialTheme(colors, typography, shapes) {
         CompositionLocalProvider(LocalContentColor provides colors.onSurface) {
-            ProvideWindowInsets {
+            ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                 CompositionLocalProvider(LocalSysUiController provides SystemUiController(window)) {
                     content()
                 }

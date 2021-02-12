@@ -15,10 +15,12 @@ import com.kyant.pixelmusic.api.findCoverUrl
 val EmptyImage = ImageBitmap(1, 1)
 
 suspend fun Any.loadImage(context: Context): ImageBitmap? = ImageLoader.Builder(context)
+    .bitmapPoolingEnabled(false)
     .build()
     .execute(
         ImageRequest.Builder(context)
             .data(this)
+            .memoryCachePolicy(CachePolicy.DISABLED)
             .diskCachePolicy(CachePolicy.DISABLED)
             .build()
     ).drawable?.toBitmap()?.asImageBitmap()
