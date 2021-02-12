@@ -39,10 +39,6 @@ This is a beautiful **unofficial NetEase Cloud music player** for Android 🥳!
 ## Special Thanks
 
 * **Google Sans Rounded
-  Font:** [google_sans_plus_font](https://github.com/nongthaihoang/google_sans_plus_font) by
-  nongthaihoang
-
-* **Amplitude Visualization:** [Amplituda](https://github.com/lincollincol/Amplituda) by
-  lincollincol
-
-* **Image Blur:** [android-stackblur](https://github.com/kikoso/android-stackblur) by kikoso
+  Font:** [google_sans_plus_font](https://github.com/nongthaihoang/google_sans_plus_font
+* **Amplitude Visualization:** [Amplituda](https://github.com/lincollincol/Amplituda)
+* **Image Blur:** [android-stackblur](https://github.com/kikoso/android-stackblur)
