@@ -166,24 +166,24 @@ class ImeNestedScrollConnection(
         if (imeAnimController.isInsetAnimationInProgress()) {
             // If we have an IME animation in progress, from the user scrolling, we can
             // animate to the end state using the velocity
-            var v: Velocity = Velocity.Zero
+            var velocity: Velocity = Velocity.Zero
             imeAnimController.animateToFinish(available.y) { remainingVelocity ->
-                v = Velocity(x = 0f, y = remainingVelocity)
+                velocity = Velocity(x = 0f, y = remainingVelocity)
             }
-            return v
+            return velocity
         }
 
         // If the fling is in a (upwards direction, and the IME is not visible)
         // start an control request with an immediate fling
         if (scrollImeOnScreenWhenNotVisible && available.y > 0 == imeVisible) {
-            var v: Velocity = Velocity.Zero
+            var velocity: Velocity = Velocity.Zero
             imeAnimController.startAndFling(
                 view = view,
                 velocityY = available.y
             ) { remainingVelocity ->
-                v = Velocity(x = 0f, y = remainingVelocity)
+                velocity = Velocity(x = 0f, y = remainingVelocity)
             }
-            return v
+            return velocity
         }
 
         // If we reach here we just call onFinished()

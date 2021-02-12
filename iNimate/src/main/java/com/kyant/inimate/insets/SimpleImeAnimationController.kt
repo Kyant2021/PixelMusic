@@ -25,7 +25,11 @@ import android.view.WindowInsetsAnimationController
 import android.view.animation.LinearInterpolator
 import androidx.annotation.RequiresApi
 import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
+import androidx.dynamicanimation.animation.springAnimationOf
+import androidx.dynamicanimation.animation.withSpringForceProperties
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 /**
  * A wrapper around the new [WindowInsetsAnimationController] APIs in Android 11, to simplify
@@ -361,36 +365,36 @@ internal class SimpleImeAnimationController {
         velocityY: Float? = null,
         onFinished: ((Float) -> Unit)? = null,
     ) {
-        // val controller = insetsAnimationController
-        //     ?: throw IllegalStateException("Controller should not be null")
-//
-        // currentSpringAnimation = springAnimationOf(
-        //     setter = { insetTo(it.roundToInt()) },
-        //     getter = { controller.currentInsets.bottom.toFloat() },
-        //     finalPosition = when {
-        //         visible -> controller.shownStateInsets.bottom.toFloat()
-        //         else -> controller.hiddenStateInsets.bottom.toFloat()
-        //     }
-        // ).withSpringForceProperties {
-        //     // Tweak the damping value, to remove any bounciness.
-        //     dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
-        //     // The stiffness value controls the strength of the spring animation, which
-        //     // controls the speed. Medium (the default) is a good value, but feel free to
-        //     // play around with this value.
-        //     stiffness = SpringForce.STIFFNESS_MEDIUM
-        // }.apply {
-        //     if (velocityY != null) {
-        //         setStartVelocity(velocityY)
-        //     }
-        //     addEndListener { anim, _, _, velocity ->
-        //         if (anim == currentSpringAnimation) {
-        //             currentSpringAnimation = null
-        //         }
-        //         // Once the animation has ended, finish the controller
-        //         finish()
-        //         onFinished?.invoke(velocity)
-        //     }
-        // }.also { it.start() }
+        val controller = insetsAnimationController
+            ?: throw IllegalStateException("Controller should not be null")
+
+        currentSpringAnimation = springAnimationOf(
+            setter = { insetTo(it.roundToInt()) },
+            getter = { controller.currentInsets.bottom.toFloat() },
+            finalPosition = when {
+                visible -> controller.shownStateInsets.bottom.toFloat()
+                else -> controller.hiddenStateInsets.bottom.toFloat()
+            }
+        ).withSpringForceProperties {
+            // Tweak the damping value, to remove any bounciness.
+            dampingRatio = SpringForce.DAMPING_RATIO_NO_BOUNCY
+            // The stiffness value controls the strength of the spring animation, which
+            // controls the speed. Medium (the default) is a good value, but feel free to
+            // play around with this value.
+            stiffness = SpringForce.STIFFNESS_MEDIUM
+        }.apply {
+            if (velocityY != null) {
+                setStartVelocity(velocityY)
+            }
+            addEndListener { anim, _, _, velocity ->
+                if (anim == currentSpringAnimation) {
+                    currentSpringAnimation = null
+                }
+                // Once the animation has ended, finish the controller
+                finish()
+                onFinished?.invoke(velocity)
+            }
+        }.also { it.start() }
     }
 
     private fun calculateFlingDistance(velocity: Float, friction: Float = 1.0f): Float {

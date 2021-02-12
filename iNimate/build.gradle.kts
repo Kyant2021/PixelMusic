@@ -58,6 +58,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-SNAPSHOT")
     implementation("androidx.appcompat:appcompat:1.3.0-SNAPSHOT")
     implementation("androidx.core:core-ktx:1.5.0-SNAPSHOT")
+    implementation("androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-SNAPSHOT")
     implementation("com.google.android.material:material:1.3.0")
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.material:material-icons-extended:$composeVersion")

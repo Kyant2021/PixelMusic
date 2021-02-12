@@ -31,10 +31,7 @@ import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.offset
+import androidx.compose.ui.unit.*
 
 /**
  * Selectively apply additional space which matches the width/height of any system bars present
@@ -166,31 +163,39 @@ private data class InsetsPaddingModifier(
  * @param top Whether to apply the inset on the top dimension.
  * @param end Whether to apply the inset on the end dimension.
  * @param bottom Whether to apply the inset on the bottom dimension.
+ * @param additionalStart Value to add to the start dimension.
+ * @param additionalTop Value to add to the top dimension.
+ * @param additionalEnd Value to add to the end dimension.
+ * @param additionalBottom Value to add to the bottom dimension.
  */
 @Composable
 fun Insets.toPaddingValues(
     start: Boolean = true,
     top: Boolean = true,
     end: Boolean = true,
-    bottom: Boolean = true
+    bottom: Boolean = true,
+    additionalStart: Dp = 0.dp,
+    additionalTop: Dp = 0.dp,
+    additionalEnd: Dp = 0.dp,
+    additionalBottom: Dp = 0.dp,
 ): PaddingValues = with(LocalDensity.current) {
     val layoutDirection = LocalLayoutDirection.current
     PaddingValues(
-        start = when {
+        start = additionalStart + when {
             start && layoutDirection == LayoutDirection.Ltr -> this@toPaddingValues.left.toDp()
             start && layoutDirection == LayoutDirection.Rtl -> this@toPaddingValues.right.toDp()
             else -> 0.dp
         },
-        top = when {
+        top = additionalTop + when {
             top -> this@toPaddingValues.top.toDp()
             else -> 0.dp
         },
-        end = when {
+        end = additionalEnd + when {
             end && layoutDirection == LayoutDirection.Ltr -> this@toPaddingValues.right.toDp()
             end && layoutDirection == LayoutDirection.Rtl -> this@toPaddingValues.left.toDp()
             else -> 0.dp
         },
-        bottom = when {
+        bottom = additionalBottom + when {
             bottom -> this@toPaddingValues.bottom.toDp()
             else -> 0.dp
         }
