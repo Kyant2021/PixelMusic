@@ -4,14 +4,17 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
 import com.kyant.pixelmusic.util.normalize
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import linc.com.amplituda.Amplituda
-import java.net.URL
 
 typealias Amplitudes = SnapshotStateList<Double>
 
-val LocalAmplitudes = compositionLocalOf<Amplitudes> { error("CompositionLocal LocalAmplitudes not present") }
+val LocalAmplitudes =
+    compositionLocalOf<Amplitudes> { error("CompositionLocal LocalAmplitudes not present") }
 
 @Composable
 fun ProvideAmplitudes(
@@ -30,7 +33,7 @@ fun ProvideAmplitudes(
                 withContext(Dispatchers.IO) {
                     dataStore.writeWhileNotExist(
                         song.id.toString(),
-                        URL(song.mediaUrl.toString()).readBytes()
+                        HttpClient(CIO).get<ByteArray>(song.mediaUrl.toString())
                     )
                     song.id?.let {
                         try {
