@@ -23,7 +23,10 @@ import com.kyant.pixelmusic.media.fix
 import com.kyant.pixelmusic.util.CacheDataStore
 import com.kyant.pixelmusic.util.EmptyImage
 import com.kyant.pixelmusic.util.loadCoverWithCache
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 @Composable
 fun Song(song: Song, modifier: Modifier = Modifier) {
@@ -57,13 +60,9 @@ fun BaseSong(song: Song, modifier: Modifier = Modifier) {
     var cover by remember { mutableStateOf(EmptyImage) }
     LaunchedEffect(song.albumId) {
         if (!CacheDataStore(context, "covers").contains("${song.albumId}_100.jpg")) {
-            withContext(Dispatchers.IO) {
-                cover = song.albumId?.loadCoverWithCache(context, 8)?.blur(8) ?: EmptyImage
-            }
+            cover = song.albumId?.loadCoverWithCache(context, 8)?.blur(8) ?: EmptyImage
         }
-        withContext(Dispatchers.IO) {
-            cover = song.albumId?.loadCoverWithCache(context, 100) ?: EmptyImage
-        }
+        cover = song.albumId?.loadCoverWithCache(context, 100) ?: EmptyImage
     }
     Row(
         modifier.clickable {

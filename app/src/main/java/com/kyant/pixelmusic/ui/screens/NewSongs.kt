@@ -18,18 +18,12 @@ import com.kyant.inimate.layout.StaggeredGrid
 import com.kyant.pixelmusic.api.findNewSongs
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.ui.song.SongCompact
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @Composable
 fun NewSongs(modifier: Modifier = Modifier) {
     val songs = remember { mutableStateListOf<Song>() }
     LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            findNewSongs()?.onEach {
-                songs += it
-            }
-        }
+        findNewSongs()?.let { songs.addAll(it) }
     }
     LazyColumn(
         modifier,

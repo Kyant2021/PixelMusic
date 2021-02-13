@@ -30,8 +30,6 @@ import com.kyant.pixelmusic.api.searchSongs
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.media.toSong
 import com.kyant.pixelmusic.ui.song.Song
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalAnimatedInsets::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -46,10 +44,7 @@ fun Search(
     val songs = remember(value.text) { mutableStateListOf<Song>() }
     LaunchedEffect(value.text) {
         if (value.text.isNotBlank()) {
-            withContext(Dispatchers.IO) {
-                value.text.searchSongs()?.result?.songs?.map { it.toSong() }
-                    ?.let { songs.addAll(it) }
-            }
+            value.text.searchSongs()?.result?.songs?.map { it.toSong() }?.let { songs.addAll(it) }
         }
     }
     Column(modifier) {

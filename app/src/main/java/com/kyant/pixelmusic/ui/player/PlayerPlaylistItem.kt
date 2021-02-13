@@ -21,10 +21,6 @@ import com.kyant.pixelmusic.locals.LocalPixelPlayer
 import com.kyant.pixelmusic.media.Media
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.ui.song.Cover
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 @Composable
 fun PlayerPlaylistItem(
@@ -62,14 +58,12 @@ fun PlayerPlaylistItem(
         Box(
             Modifier
                 .clickable {
-                    CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                        if (Media.browser.isConnected) {
-                            Media.session?.isActive = true
-                            if (!selected) {
-                                player.seekTo(index, 0)
-                            }
-                            player.play()
+                    if (Media.browser.isConnected) {
+                        Media.session?.isActive = true
+                        if (!selected) {
+                            player.seekTo(index, 0)
                         }
+                        player.play()
                     }
                 }
                 .padding(contentPadding)

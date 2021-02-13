@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import kotlin.concurrent.fixedRateTimer
 
 class PixelPlayer(context: Context) : SimpleExoPlayer(Builder(context)) {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val animationPeriod = AnimationConstants.DefaultDurationMillis.toLong()
     var isPlayingState: Boolean by mutableStateOf(false)
     lateinit var position: Animatable<Float, AnimationVector1D>
@@ -30,18 +31,19 @@ class PixelPlayer(context: Context) : SimpleExoPlayer(Builder(context)) {
 
     init {
         setThrowsWhenUsingWrongThread(false)
-        val mediaSessionConnector = Media.session?.let { MediaSessionConnector(it) }
-        mediaSessionConnector?.setPlayer(this)
-        Media.session?.let {
-            mediaSessionConnector?.setQueueNavigator(object : TimelineQueueNavigator(it) {
-                override fun getMediaDescription(
-                    player: Player,
-                    windowIndex: Int
-                ): MediaDescriptionCompat {
-                    return Media.songs.getOrNull(windowIndex)?.toMediaDescription()
-                        ?: MediaDescriptionCompat.Builder().build()
-                }
-            })
+        Media.session?.let { MediaSessionConnector(it) }?.apply {
+            setPlayer(this@PixelPlayer)
+            Media.session?.let {
+                setQueueNavigator(object : TimelineQueueNavigator(it) {
+                    override fun getMediaDescription(
+                        player: Player,
+                        windowIndex: Int
+                    ): MediaDescriptionCompat {
+                        return Media.songs.getOrNull(windowIndex)?.toMediaDescription()
+                            ?: MediaDescriptionCompat.Builder().build()
+                    }
+                })
+            }
         }
         setAudioAttributes(
             AudioAttributes.Builder()
@@ -61,7 +63,7 @@ class PixelPlayer(context: Context) : SimpleExoPlayer(Builder(context)) {
                             "buffered_position", false,
                             animationPeriod, animationPeriod
                         ) {
-                            CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
+                            scope.launch {
                                 bufferedPositionState.animateTo(
                                     bufferedPosition.toFloat(),
                                     tween(animationPeriod.toInt(), easing = LinearEasing)
@@ -75,7 +77,7 @@ class PixelPlayer(context: Context) : SimpleExoPlayer(Builder(context)) {
                                 "position", false,
                                 animationPeriod, animationPeriod
                             ) {
-                                CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
+                                scope.launch {
                                     position.animateTo(
                                         contentPosition.toFloat(),
                                         tween(animationPeriod.toInt(), easing = LinearEasing)
@@ -83,7 +85,7 @@ class PixelPlayer(context: Context) : SimpleExoPlayer(Builder(context)) {
                                 }
                             }
                         } else {
-                            CoroutineScope(SupervisorJob() + Dispatchers.Main).launch {
+                            scope.launch {
                                 position.stop()
                             }
                         }

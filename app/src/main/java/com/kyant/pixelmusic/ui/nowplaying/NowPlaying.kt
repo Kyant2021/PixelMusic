@@ -74,19 +74,13 @@ fun BoxWithConstraintsScope.NowPlaying(
     var lyrics by remember { mutableStateOf(EmptyLyrics) }
     var blurredImage: ImageBitmap? by remember { mutableStateOf(null) }
     LaunchedEffect(song.id) {
-        withContext(Dispatchers.IO) {
-            lyrics = (song.id?.findLyrics() ?: EmptyLyrics).toList().sortedBy { it.first }.toMap()
-        }
+        lyrics = (song.id?.findLyrics() ?: EmptyLyrics).toList().sortedBy { it.first }.toMap()
     }
     LaunchedEffect(song.albumId) {
         if (!CacheDataStore(context, "covers").contains("${song.albumId}_500.jpg")) {
-            withContext(Dispatchers.IO) {
-                cover = song.icon ?: song.albumId?.loadCoverWithCache(context, 100)
-            }
+            cover = song.icon ?: song.albumId?.loadCoverWithCache(context, 100)
         }
-        withContext(Dispatchers.IO) {
-            cover = song.albumId?.loadCoverWithCache(context, 500)
-        }
+        cover = song.albumId?.loadCoverWithCache(context, 500)
     }
     LaunchedEffect(cover) {
         withContext(Dispatchers.IO) {

@@ -25,8 +25,6 @@ import com.kyant.pixelmusic.media.toSong
 import com.kyant.pixelmusic.ui.song.Song
 import com.kyant.pixelmusic.util.EmptyImage
 import com.kyant.pixelmusic.util.loadImage
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @Composable
 fun Playlist(
@@ -37,11 +35,9 @@ fun Playlist(
     var image by remember(topList.value?.id) { mutableStateOf(EmptyImage) }
     val songs = remember(topList.value?.id) { mutableStateListOf<Song>() }
     LaunchedEffect(topList.value?.id) {
-        withContext(Dispatchers.IO) {
-            image = topList.value?.coverImgUrl?.loadImage(context) ?: EmptyImage
-            topList.value?.id?.findPlaylist()?.playlist?.tracks?.map { it.toSong() }
-                ?.let { songs.addAll(it) }
-        }
+        image = topList.value?.coverImgUrl?.loadImage(context) ?: EmptyImage
+        topList.value?.id?.findPlaylist()?.playlist?.tracks?.map { it.toSong() }
+            ?.let { songs.addAll(it) }
     }
     LazyColumn(modifier) {
         item {

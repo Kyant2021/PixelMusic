@@ -15,10 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kyant.pixelmusic.locals.LocalNowPlaying
 import com.kyant.pixelmusic.media.Media
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 @Composable
 fun PlayerPlaylist(modifier: Modifier = Modifier) {
@@ -34,11 +30,7 @@ fun PlayerPlaylist(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.h5
             )
             OutlinedButton(
-                {
-                    CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                        Media.clearPlaylist()
-                    }
-                },
+                { Media.clearPlaylist() },
                 Modifier.padding(horizontal = 8.dp)
             ) {
                 Icon(Icons.Outlined.ClearAll, "Clear all")

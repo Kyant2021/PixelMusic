@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.kyant.pixelmusic.api.findTopList
 import com.kyant.pixelmusic.api.toplist.TopList
 import com.kyant.pixelmusic.ui.playlist.TopSongItem
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -24,11 +24,10 @@ fun Explore(
     topList: MutableState<TopList?>,
     modifier: Modifier = Modifier
 ) {
+    val scope = rememberCoroutineScope()
     val topLists = remember { mutableStateListOf<TopList>() }
     LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            findTopList()?.let { topLists.addAll(it) }
-        }
+        findTopList()?.let { topLists.addAll(it) }
     }
     LazyColumn(
         modifier,
@@ -55,12 +54,14 @@ fun Explore(
         item {
             LazyRow(contentPadding = PaddingValues(64.dp, 16.dp)) {
                 items(topLists) {
-                    TopSongItem(it, {
-                        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                            state.animateTo(true)
+                    TopSongItem(
+                        it, {
+                            scope.launch {
+                                state.animateTo(true)
+                            }
+                            topList.value = it
                         }
-                        topList.value = it
-                    })
+                    )
                 }
             }
         }
