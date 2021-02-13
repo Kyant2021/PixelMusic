@@ -16,18 +16,3 @@ data class NewSongsResult(
     val data: List<Data>? = listOf(),
     val code: Int? = 0
 )
-
-@Serializable
-data class Data(
-    val artists: List<Artist>? = listOf(),
-    val album: Album? = Album(),
-    val name: String? = "",
-    val id: Long? = 0,
-    val url: String? = ""
-)
-
-@Serializable
-data class Artist(
-    val name: String? = "",
-    val id: Long? = 0
-)
