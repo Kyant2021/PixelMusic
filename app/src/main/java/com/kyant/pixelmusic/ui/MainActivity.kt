@@ -26,7 +26,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.*
 import com.kyant.inimate.layer.*
 import com.kyant.pixelmusic.R
-import com.kyant.pixelmusic.api.toplist.TopList
+import com.kyant.pixelmusic.api.TopList
 import com.kyant.pixelmusic.locals.*
 import com.kyant.pixelmusic.media.*
 import com.kyant.pixelmusic.ui.component.TopBar

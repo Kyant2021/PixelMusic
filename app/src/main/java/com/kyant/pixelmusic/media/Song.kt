@@ -5,11 +5,7 @@ import android.support.v4.media.MediaDescriptionCompat
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.core.net.toUri
-import com.kyant.pixelmusic.api.AlbumId
-import com.kyant.pixelmusic.api.SongId
-import com.kyant.pixelmusic.api.findUrl
-import com.kyant.pixelmusic.api.newsongs.Data
-import com.kyant.pixelmusic.api.playlist.Track
+import com.kyant.pixelmusic.api.*
 import com.kyant.pixelmusic.util.loadCoverWithCache
 import java.io.Serializable
 
@@ -61,20 +57,20 @@ fun Song.toMediaDescription(): MediaDescriptionCompat = MediaDescriptionCompat.B
     .setMediaUri(mediaUrl?.toUri())
     .build()
 
-fun com.kyant.pixelmusic.api.search.Song.toSong(): Song = Song(
-    id,
-    album?.id,
-    name,
-    artists?.map { it.name }?.joinToString(),
-    album?.name
-)
-
 fun Track.toSong(): Song = Song(
     id,
     al?.id,
     name,
     ar?.map { it.name }?.joinToString(),
     al?.name
+)
+
+fun com.kyant.pixelmusic.api.Song.toSong(): Song = Song(
+    id,
+    album?.id,
+    name,
+    artists?.map { it.name }?.joinToString(),
+    album?.name
 )
 
 fun Data.toSong(): Song = Song(

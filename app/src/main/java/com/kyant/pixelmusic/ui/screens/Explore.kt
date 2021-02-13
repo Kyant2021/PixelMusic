@@ -12,8 +12,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.kyant.pixelmusic.api.TopList
 import com.kyant.pixelmusic.api.findTopList
-import com.kyant.pixelmusic.api.toplist.TopList
 import com.kyant.pixelmusic.ui.playlist.TopSongItem
 import kotlinx.coroutines.launch
 

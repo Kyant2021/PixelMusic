@@ -52,7 +52,7 @@ android {
 }
 
 dependencies {
-    val composeVersion = "1.0.0-SNAPSHOT"
+    val compose = "1.0.0-SNAPSHOT"
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-SNAPSHOT")
@@ -60,12 +60,12 @@ dependencies {
     implementation("androidx.core:core-ktx:1.5.0-SNAPSHOT")
     implementation("androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-SNAPSHOT")
     implementation("com.google.android.material:material:1.3.0")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.compose.material:material-icons-extended:$composeVersion")
-    implementation("androidx.compose.runtime:runtime:$composeVersion")
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    implementation("androidx.compose.ui:ui-util:$composeVersion")
+    implementation("androidx.compose.material:material:$compose")
+    implementation("androidx.compose.material:material-icons-extended:$compose")
+    implementation("androidx.compose.runtime:runtime:$compose")
+    implementation("androidx.compose.ui:ui:$compose")
+    implementation("androidx.compose.ui:ui-tooling:$compose")
+    implementation("androidx.compose.ui:ui-util:$compose")
     implementation("androidx.navigation:navigation-compose:1.0.0-SNAPSHOT")
     testImplementation("junit:junit:4.13.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.3-alpha04")

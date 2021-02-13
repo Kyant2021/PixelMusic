@@ -1,13 +1,33 @@
 package com.kyant.pixelmusic.api
 
-import com.beust.klaxon.Klaxon
-import com.kyant.pixelmusic.api.search.SearchResult
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 
 suspend fun String.searchSongs(): SearchResult? = withContext(Dispatchers.IO) {
-    Klaxon().parse(HttpClient(CIO).get<String>("$API/search?keywords=${this@searchSongs}"))
+    jsonClient.get("$API/search?keywords=${this@searchSongs}")
 }
+
+@Serializable
+data class SearchResult(
+    val result: Result? = Result(),
+    val code: Int? = 0
+)
+
+@Serializable
+data class Result(
+    val songs: List<Song>? = listOf(),
+    val hasMore: Boolean? = false,
+    val songCount: Int? = 0
+)
+
+@Serializable
+data class Song(
+    val id: Long? = 0,
+    val name: String? = "",
+    val artists: List<Artist>? = listOf(),
+    val album: Album? = Album()
+)
