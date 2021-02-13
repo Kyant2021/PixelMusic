@@ -36,7 +36,7 @@ object Media {
     val songs: SnapshotStateList<Song> = mutableStateListOf<Song>().onEach {
         session?.controller?.addQueueItem(it.toMediaDescription())
     }
-    var nowPlaying: Song? by mutableStateOf(null)
+    var nowPlaying: Int? by mutableStateOf(null)
 
     fun init(
         context: Context,

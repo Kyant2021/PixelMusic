@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -40,7 +41,9 @@ import com.kyant.pixelmusic.ui.player.PlayPauseTransparentButton
 import com.kyant.pixelmusic.ui.player.ProgressBar
 import com.kyant.pixelmusic.ui.song.Cover
 import com.kyant.pixelmusic.ui.theme.NowPlayingTheme
+import com.kyant.pixelmusic.util.DataStore
 import com.kyant.pixelmusic.util.EmptyImage
+import com.kyant.pixelmusic.util.loadCoverWithCache
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -53,6 +56,7 @@ fun BoxWithConstraintsScope.NowPlaying(
     playlistState: SwipeableState<Boolean>,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     val density = LocalDensity.current
     val player = LocalPixelPlayer.current
     val song = LocalNowPlaying.current
@@ -61,6 +65,7 @@ fun BoxWithConstraintsScope.NowPlaying(
     val infoState = rememberSwipeableState(false)
     val transition = updateTransition(lyricsState)
     val progress = state.progressOf(constraints.maxHeight.toFloat()).coerceIn(0f..1f)
+    var cover: ImageBitmap? by remember { mutableStateOf(null) }
     val defaultColor = MaterialTheme.colors.surface
     val defaultOnColor = MaterialTheme.colors.onSurface
     var themeColor by remember { mutableStateOf(defaultColor) }
@@ -68,14 +73,31 @@ fun BoxWithConstraintsScope.NowPlaying(
     val squareSize = minOf(maxWidth, maxHeight)
     var lyrics by remember { mutableStateOf(EmptyLyrics) }
     var blurredImage: ImageBitmap? by remember { mutableStateOf(null) }
+    val dataStore = DataStore(context, "covers")
     LaunchedEffect(song.id) {
         withContext(Dispatchers.IO) {
             lyrics = (song.id?.findLyrics() ?: EmptyLyrics).toList().sortedBy { it.first }.toMap()
         }
     }
-    LaunchedEffect(song.icon) {
+    LaunchedEffect(song.albumId) {
+        if (!dataStore.contains("${song.albumId}_500.jpg")) {
+            withContext(Dispatchers.IO) {
+                cover = song.icon ?: song.albumId?.loadCoverWithCache(context, "covers", 100)
+                blurredImage = song.icon?.blur(100)
+                blurredImage?.asAndroidBitmap()?.copy(Bitmap.Config.ARGB_8888, true)
+                    ?.let { bitmap ->
+                        Palette.from(bitmap).generate { palette ->
+                            themeColor =
+                                Color(palette?.dominantSwatch?.rgb ?: defaultColor.toArgb())
+                            onColor =
+                                if (themeColor.luminance() <= 0.5f) Color.White else Color.Black
+                        }
+                    }
+            }
+        }
         withContext(Dispatchers.IO) {
-            blurredImage = song.icon?.blur(200)
+            cover = song.albumId?.loadCoverWithCache(context, "covers", 500)
+            blurredImage = song.icon?.blur(100)
             blurredImage?.asAndroidBitmap()?.copy(Bitmap.Config.ARGB_8888, true)?.let { bitmap ->
                 Palette.from(bitmap).generate { palette ->
                     themeColor = Color(palette?.dominantSwatch?.rgb ?: defaultColor.toArgb())
@@ -165,7 +187,8 @@ fun BoxWithConstraintsScope.NowPlaying(
                 }
                 Box(Modifier.padding(top = 12.dp)) {
                     Cover(
-                        song,
+                        cover,
+                        Unit,
                         Modifier
                             .padding(horizontal = 16.dp * (1f - progress))
                             .size(
@@ -200,8 +223,8 @@ fun BoxWithConstraintsScope.NowPlaying(
                                 onDragStopped = {
                                     with(density) {
                                         when {
-                                            horizontalDragOffset <= -48.dp.toPx() -> player.next()
-                                            horizontalDragOffset >= 48.dp.toPx() -> player.previous()
+                                            horizontalDragOffset <= -48.dp.toPx() -> player.seekToNext()
+                                            horizontalDragOffset >= 48.dp.toPx() -> player.seekToPrevious()
                                         }
                                     }
                                     horizontalDragOffset = 0f

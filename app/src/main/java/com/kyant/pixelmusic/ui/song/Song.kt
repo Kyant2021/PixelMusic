@@ -87,7 +87,8 @@ fun BaseSong(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Cover(
-            song,
+            song.icon,
+            song.albumId,
             Modifier
                 .size(48.dp)
                 .clip(SuperellipseCornerShape(8.dp))

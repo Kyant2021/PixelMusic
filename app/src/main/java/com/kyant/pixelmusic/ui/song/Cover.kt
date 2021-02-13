@@ -1,5 +1,6 @@
 package com.kyant.pixelmusic.ui.song
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
@@ -7,17 +8,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import com.kyant.pixelmusic.media.Song
+import androidx.compose.ui.graphics.ImageBitmap
 import com.kyant.pixelmusic.util.EmptyImage
 
+@SuppressLint("ModifierParameter")
 @Composable
 fun Cover(
-    song: Song,
+    image: ImageBitmap?,
+    key: Any?,
     modifier: Modifier = Modifier
 ) {
-    val alpha = remember(song.albumId) { Animatable(0f) }.apply {
-        LaunchedEffect(song.icon == null) {
-            if (song.icon != null) {
+    val alpha = remember(key) { Animatable(0f) }.apply {
+        LaunchedEffect(image == null) {
+            if (image != null) {
                 animateTo(1f)
             } else {
                 animateTo(0f)
@@ -25,8 +28,7 @@ fun Cover(
         }
     }
     Image(
-        song.icon ?: EmptyImage,
-        song.title.toString(),
+        image ?: EmptyImage, null,
         modifier.alpha(alpha.value)
     )
 }

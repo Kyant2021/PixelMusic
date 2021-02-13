@@ -28,7 +28,7 @@ suspend fun Any.loadImage(context: Context): ImageBitmap? = ImageLoader.Builder(
 suspend fun AlbumId.loadCoverWithCache(
     context: Context,
     name: String,
-    size: Int = 500
+    size: Int = 100
 ): ImageBitmap {
     val dataStore = CacheDataStore(context, name)
     val path = "${this}_$size.jpg"

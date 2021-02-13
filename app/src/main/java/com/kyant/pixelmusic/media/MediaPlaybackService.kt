@@ -2,7 +2,6 @@ package com.kyant.pixelmusic.media
 
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -20,17 +19,11 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
             )
             controller?.registerCallback(object : MediaControllerCompat.Callback() {
                 override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
-                    if (state?.state == PlaybackStateCompat.STATE_PLAYING ||
-                        state?.state == PlaybackStateCompat.STATE_PAUSED
-                    ) {
+                    if (state?.state == PlaybackStateCompat.STATE_PLAYING || state?.state == PlaybackStateCompat.STATE_PAUSED) {
                         startForeground(
-                            1, buildMediaStyleNotification(Media.NOTIFICATION_CHANNEL_ID).build()
+                            1, mediaStyleNotification(Media.NOTIFICATION_CHANNEL_ID)
                         )
                     }
-                }
-
-                override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
-                    Media.nowPlaying = metadata?.description?.toSong()
                 }
             })
             setSessionToken(sessionToken)

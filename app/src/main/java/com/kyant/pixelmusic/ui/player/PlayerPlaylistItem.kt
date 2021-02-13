@@ -79,7 +79,8 @@ fun PlayerPlaylistItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Cover(
-                    song,
+                    song.icon,
+                    song.albumId,
                     Modifier
                         .size(coverSize)
                         .clip(SmoothRoundedCornerShape())

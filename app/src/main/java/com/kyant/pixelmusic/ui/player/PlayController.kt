@@ -29,8 +29,7 @@ fun PlayController(
         }
         Spacer(Modifier.width(16.dp))
         IconButton({
-            player.previous()
-            player.seekToPosition(0)
+            player.seekToPrevious()
         }) {
             Icon(Icons.Outlined.SkipPrevious, "Skip to prevoius")
         }
@@ -38,8 +37,7 @@ fun PlayController(
         PlayPauseButton()
         Spacer(Modifier.width(16.dp))
         IconButton({
-            player.next()
-            player.seekToPosition(0)
+            player.seekToNext()
         }) {
             Icon(Icons.Outlined.SkipNext, "Skip to next")
         }
