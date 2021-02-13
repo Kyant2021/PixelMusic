@@ -40,7 +40,7 @@ fun Song.serialize(): SerializedSong = SerializedSong(
 )
 
 suspend fun Song.fix(context: Context, size: Int = 100): Song = copy(
-    icon = albumId?.loadCoverWithCache(context, "covers", size),
+    icon = albumId?.loadCoverWithCache(context, size),
     mediaUrl = id?.findUrl()
 )
 

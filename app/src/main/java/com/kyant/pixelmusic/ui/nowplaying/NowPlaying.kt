@@ -41,7 +41,7 @@ import com.kyant.pixelmusic.ui.player.PlayPauseTransparentButton
 import com.kyant.pixelmusic.ui.player.ProgressBar
 import com.kyant.pixelmusic.ui.song.Cover
 import com.kyant.pixelmusic.ui.theme.NowPlayingTheme
-import com.kyant.pixelmusic.util.DataStore
+import com.kyant.pixelmusic.util.CacheDataStore
 import com.kyant.pixelmusic.util.EmptyImage
 import com.kyant.pixelmusic.util.loadCoverWithCache
 import kotlinx.coroutines.Dispatchers
@@ -73,7 +73,7 @@ fun BoxWithConstraintsScope.NowPlaying(
     val squareSize = minOf(maxWidth, maxHeight)
     var lyrics by remember { mutableStateOf(EmptyLyrics) }
     var blurredImage: ImageBitmap? by remember { mutableStateOf(null) }
-    val dataStore = DataStore(context, "covers")
+    val dataStore = CacheDataStore(context, "covers")
     LaunchedEffect(song.id) {
         withContext(Dispatchers.IO) {
             lyrics = (song.id?.findLyrics() ?: EmptyLyrics).toList().sortedBy { it.first }.toMap()
@@ -82,22 +82,16 @@ fun BoxWithConstraintsScope.NowPlaying(
     LaunchedEffect(song.albumId) {
         if (!dataStore.contains("${song.albumId}_500.jpg")) {
             withContext(Dispatchers.IO) {
-                cover = song.icon ?: song.albumId?.loadCoverWithCache(context, "covers", 100)
-                blurredImage = song.icon?.blur(100)
-                blurredImage?.asAndroidBitmap()?.copy(Bitmap.Config.ARGB_8888, true)
-                    ?.let { bitmap ->
-                        Palette.from(bitmap).generate { palette ->
-                            themeColor =
-                                Color(palette?.dominantSwatch?.rgb ?: defaultColor.toArgb())
-                            onColor =
-                                if (themeColor.luminance() <= 0.5f) Color.White else Color.Black
-                        }
-                    }
+                cover = song.icon ?: song.albumId?.loadCoverWithCache(context, 100)
             }
         }
         withContext(Dispatchers.IO) {
-            cover = song.albumId?.loadCoverWithCache(context, "covers", 500)
-            blurredImage = song.icon?.blur(100)
+            cover = song.albumId?.loadCoverWithCache(context, 500)
+        }
+    }
+    LaunchedEffect(cover) {
+        withContext(Dispatchers.IO) {
+            blurredImage = cover?.blur(100)
             blurredImage?.asAndroidBitmap()?.copy(Bitmap.Config.ARGB_8888, true)?.let { bitmap ->
                 Palette.from(bitmap).generate { palette ->
                     themeColor = Color(palette?.dominantSwatch?.rgb ?: defaultColor.toArgb())

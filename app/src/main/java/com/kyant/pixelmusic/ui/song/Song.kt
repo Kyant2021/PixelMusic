@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -14,15 +14,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.kyant.inimate.blur.blur
 import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.locals.LocalPixelPlayer
 import com.kyant.pixelmusic.media.Media
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.media.fix
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import com.kyant.pixelmusic.util.CacheDataStore
+import com.kyant.pixelmusic.util.EmptyImage
+import com.kyant.pixelmusic.util.loadCoverWithCache
+import kotlinx.coroutines.*
 
 @Composable
 fun Song(
@@ -62,6 +63,19 @@ fun BaseSong(
 ) {
     val context = LocalContext.current
     val player = LocalPixelPlayer.current
+    var cover by remember { mutableStateOf(EmptyImage) }
+    val dataStore = CacheDataStore(context, "covers")
+    LaunchedEffect(song.albumId) {
+        if (!dataStore.contains("${song.albumId}_100.jpg")) {
+            withContext(Dispatchers.IO) {
+                cover = song.albumId?.loadCoverWithCache(context, 8)?.blur(8)
+                    ?: EmptyImage
+            }
+        }
+        withContext(Dispatchers.IO) {
+            cover = song.albumId?.loadCoverWithCache(context, 100) ?: EmptyImage
+        }
+    }
     Row(
         modifier.clickable {
             CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
@@ -87,7 +101,7 @@ fun BaseSong(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Cover(
-            song.icon,
+            cover,
             song.albumId,
             Modifier
                 .size(48.dp)

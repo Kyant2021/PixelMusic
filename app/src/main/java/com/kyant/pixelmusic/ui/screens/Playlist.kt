@@ -14,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -26,9 +25,7 @@ import com.kyant.pixelmusic.media.toSong
 import com.kyant.pixelmusic.ui.song.Song
 import com.kyant.pixelmusic.util.EmptyImage
 import com.kyant.pixelmusic.util.loadImage
-import com.kyant.pixelmusic.util.loadCoverWithCache
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -39,20 +36,11 @@ fun Playlist(
     val context = LocalContext.current
     var image by remember(topList.value?.id) { mutableStateOf(EmptyImage) }
     val songs = remember(topList.value?.id) { mutableStateListOf<Song>() }
-    val icons = remember(topList.value?.id) { mutableStateMapOf<Long, ImageBitmap>() }
     LaunchedEffect(topList.value?.id) {
         withContext(Dispatchers.IO) {
             image = topList.value?.coverImgUrl?.loadImage(context) ?: EmptyImage
-            topList.value?.id?.findPlaylist()?.playlist?.tracks?.apply {
-                forEach {
-                    songs += it.toSong()
-                }
-                parallelStream().forEachOrdered {
-                    launch {
-                        icons[it.al?.id ?: 0] =
-                            it.al?.id?.loadCoverWithCache(context, "covers", 100) ?: EmptyImage
-                    }
-                }
+            topList.value?.id?.findPlaylist()?.playlist?.tracks?.onEach {
+                songs += it.toSong()
             }
         }
     }
@@ -90,7 +78,7 @@ fun Playlist(
             }
         }
         items(songs, { it.id?.toString().orEmpty() }) {
-            Song(it.copy(icon = icons.getOrElse(it.albumId ?: 0) { EmptyImage }))
+            Song(it)
         }
     }
 }
