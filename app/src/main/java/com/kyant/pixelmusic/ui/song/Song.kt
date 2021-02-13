@@ -64,12 +64,10 @@ fun BaseSong(
     val context = LocalContext.current
     val player = LocalPixelPlayer.current
     var cover by remember { mutableStateOf(EmptyImage) }
-    val dataStore = CacheDataStore(context, "covers")
     LaunchedEffect(song.albumId) {
-        if (!dataStore.contains("${song.albumId}_100.jpg")) {
+        if (!CacheDataStore(context, "covers").contains("${song.albumId}_100.jpg")) {
             withContext(Dispatchers.IO) {
-                cover = song.albumId?.loadCoverWithCache(context, 8)?.blur(8)
-                    ?: EmptyImage
+                cover = song.albumId?.loadCoverWithCache(context, 8)?.blur(8) ?: EmptyImage
             }
         }
         withContext(Dispatchers.IO) {

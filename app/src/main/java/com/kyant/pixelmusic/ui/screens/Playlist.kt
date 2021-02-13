@@ -39,9 +39,8 @@ fun Playlist(
     LaunchedEffect(topList.value?.id) {
         withContext(Dispatchers.IO) {
             image = topList.value?.coverImgUrl?.loadImage(context) ?: EmptyImage
-            topList.value?.id?.findPlaylist()?.playlist?.tracks?.onEach {
-                songs += it.toSong()
-            }
+            topList.value?.id?.findPlaylist()?.playlist?.tracks?.map { it.toSong() }
+                ?.let { songs.addAll(it) }
         }
     }
     LazyColumn(modifier) {

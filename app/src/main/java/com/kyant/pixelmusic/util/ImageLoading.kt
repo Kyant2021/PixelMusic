@@ -30,15 +30,14 @@ suspend fun Any.loadImage(context: Context): ImageBitmap? = try {
     null
 }
 
+suspend fun AlbumId.loadCover(context: Context, size: Int = 100): ImageBitmap =
+    findCoverUrl(size).toUri().loadImage(context) ?: EmptyImage
+
 suspend fun AlbumId.loadCoverWithCache(context: Context, size: Int = 100): ImageBitmap {
     val dataStore = CacheDataStore(context, "covers")
     val path = "${this}_$size.jpg"
-    return if (dataStore.contains(path)) {
-        dataStore.getBitmapOrNull(path)?.asImageBitmap()
-    } else {
-        findCoverUrl(size).toUri().loadImage(context)?.asAndroidBitmap()?.let {
-            dataStore.writeBitmap(path, it)
-        }
-        dataStore.getBitmapOrNull(path)?.asImageBitmap()
-    } ?: EmptyImage
+    if (!dataStore.contains(path)) {
+        dataStore.writeBitmap(path, loadCover(context, size).asAndroidBitmap())
+    }
+    return dataStore.getBitmapOrNull(path)?.asImageBitmap() ?: EmptyImage
 }

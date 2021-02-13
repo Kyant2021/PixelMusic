@@ -73,14 +73,13 @@ fun BoxWithConstraintsScope.NowPlaying(
     val squareSize = minOf(maxWidth, maxHeight)
     var lyrics by remember { mutableStateOf(EmptyLyrics) }
     var blurredImage: ImageBitmap? by remember { mutableStateOf(null) }
-    val dataStore = CacheDataStore(context, "covers")
     LaunchedEffect(song.id) {
         withContext(Dispatchers.IO) {
             lyrics = (song.id?.findLyrics() ?: EmptyLyrics).toList().sortedBy { it.first }.toMap()
         }
     }
     LaunchedEffect(song.albumId) {
-        if (!dataStore.contains("${song.albumId}_500.jpg")) {
+        if (!CacheDataStore(context, "covers").contains("${song.albumId}_500.jpg")) {
             withContext(Dispatchers.IO) {
                 cover = song.icon ?: song.albumId?.loadCoverWithCache(context, 100)
             }
@@ -91,7 +90,7 @@ fun BoxWithConstraintsScope.NowPlaying(
     }
     LaunchedEffect(cover) {
         withContext(Dispatchers.IO) {
-            blurredImage = cover?.blur(100)
+            blurredImage = cover?.blur(150)
             blurredImage?.asAndroidBitmap()?.copy(Bitmap.Config.ARGB_8888, true)?.let { bitmap ->
                 Palette.from(bitmap).generate { palette ->
                     themeColor = Color(palette?.dominantSwatch?.rgb ?: defaultColor.toArgb())

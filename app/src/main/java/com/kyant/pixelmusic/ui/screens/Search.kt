@@ -47,9 +47,8 @@ fun Search(
     LaunchedEffect(value.text) {
         if (value.text.isNotBlank()) {
             withContext(Dispatchers.IO) {
-                value.text.searchSongs()?.result?.songs?.onEach {
-                    songs += it.toSong()
-                }
+                value.text.searchSongs()?.result?.songs?.map { it.toSong() }
+                    ?.let { songs.addAll(it) }
             }
         }
     }
