@@ -26,10 +26,7 @@ import com.kyant.pixelmusic.util.loadCoverWithCache
 import kotlinx.coroutines.*
 
 @Composable
-fun Song(
-    song: Song,
-    modifier: Modifier = Modifier
-) {
+fun Song(song: Song, modifier: Modifier = Modifier) {
     BaseSong(
         song,
         modifier
@@ -41,10 +38,7 @@ fun Song(
 }
 
 @Composable
-fun SongCompact(
-    song: Song,
-    modifier: Modifier = Modifier
-) {
+fun SongCompact(song: Song, modifier: Modifier = Modifier) {
     BaseSong(
         song,
         modifier
@@ -57,10 +51,7 @@ fun SongCompact(
 }
 
 @Composable
-fun BaseSong(
-    song: Song,
-    modifier: Modifier = Modifier
-) {
+fun BaseSong(song: Song, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val player = LocalPixelPlayer.current
     var cover by remember { mutableStateOf(EmptyImage) }
