@@ -82,78 +82,76 @@ class MainActivity : AppCompatActivity() {
                 }
                 ProvidePixelPlayer {
                     Media.player = LocalPixelPlayer.current
-                    ProvideJsonParser {
-                        BoxWithConstraints(Modifier.fillMaxSize()) {
-                            BackLayer(
-                                listOf(myState, playerPlaylistState, playlistState, searchState),
-                                darkIcons = { progress, statusBarHeightRatio ->
-                                    when {
-                                        nowPlayingState.progressOf(constraints.maxHeight.toFloat()) >= 1f - statusBarHeightRatio / 2 -> isLight
-                                        isLight -> progress <= 0.5f
-                                        else -> false
-                                    }
+                    BoxWithConstraints(Modifier.fillMaxSize()) {
+                        BackLayer(
+                            listOf(myState, playerPlaylistState, playlistState, searchState),
+                            darkIcons = { progress, statusBarHeightRatio ->
+                                when {
+                                    nowPlayingState.progressOf(constraints.maxHeight.toFloat()) >= 1f - statusBarHeightRatio / 2 -> isLight
+                                    isLight -> progress <= 0.5f
+                                    else -> false
                                 }
-                            ) {
-                                NavHost(navController, Screens.HOME.name) {
-                                    composable(Screens.HOME.name) {
-                                        Home(navController)
-                                    }
-                                    composable(Screens.EXPLORE.name) {
-                                        Explore(playlistState, topList)
-                                    }
-                                    composable(Screens.NEW_SONGS.name) {
-                                        NewSongs()
-                                    }
-                                }
-                                TopBar(searchState, myState)
                             }
-                            ForeLayer(searchState) {
-                                val lazyListState = rememberLazyListState()
-                                val nestedScrollConnection = remember {
-                                    object : NestedScrollConnection {
-                                        override fun onPostScroll(
-                                            consumed: Offset,
-                                            available: Offset,
-                                            source: NestedScrollSource
-                                        ): Offset {
-                                            if (consumed.y == 0f && lazyListState.firstVisibleItemIndex == 0 && lazyListState.firstVisibleItemScrollOffset == 0) {
-                                                scope.launch {
-                                                    searchState.animateTo(false)
-                                                    focusRequester.freeFocus()
-                                                    keyboardController?.hideSoftwareKeyboard()
-                                                }
+                        ) {
+                            NavHost(navController, Screens.HOME.name) {
+                                composable(Screens.HOME.name) {
+                                    Home(navController)
+                                }
+                                composable(Screens.EXPLORE.name) {
+                                    Explore(playlistState, topList)
+                                }
+                                composable(Screens.NEW_SONGS.name) {
+                                    NewSongs()
+                                }
+                            }
+                            TopBar(searchState, myState)
+                        }
+                        ForeLayer(searchState) {
+                            val lazyListState = rememberLazyListState()
+                            val nestedScrollConnection = remember {
+                                object : NestedScrollConnection {
+                                    override fun onPostScroll(
+                                        consumed: Offset,
+                                        available: Offset,
+                                        source: NestedScrollSource
+                                    ): Offset {
+                                        if (consumed.y == 0f && lazyListState.firstVisibleItemIndex == 0 && lazyListState.firstVisibleItemScrollOffset == 0) {
+                                            scope.launch {
+                                                searchState.animateTo(false)
+                                                focusRequester.freeFocus()
+                                                keyboardController?.hideSoftwareKeyboard()
                                             }
-                                            return super.onPostScroll(consumed, available, source)
                                         }
-                                    }
-                                }
-                                Search(
-                                    focusRequester,
-                                    lazyListState,
-                                    nestedScrollConnection
-                                )
-                                LaunchedEffect(searchState.targetValue) {
-                                    if (searchState.targetValue) {
-                                        focusRequester.requestFocus()
-                                        keyboardController?.showSoftwareKeyboard()
-                                    } else {
-                                        focusRequester.freeFocus()
-                                        keyboardController?.hideSoftwareKeyboard()
+                                        return super.onPostScroll(consumed, available, source)
                                     }
                                 }
                             }
-                            ForeLayer(playlistState) {
-                                Playlist(topList)
-                            }
-                            ProvideNowPlaying(Media.nowPlaying) {
-                                NowPlaying(nowPlayingState, playerPlaylistState)
-                                ForeLayer(playerPlaylistState) {
-                                    PlayerPlaylist()
+                            Search(
+                                focusRequester,
+                                lazyListState,
+                                nestedScrollConnection
+                            )
+                            LaunchedEffect(searchState.targetValue) {
+                                if (searchState.targetValue) {
+                                    focusRequester.requestFocus()
+                                    keyboardController?.showSoftwareKeyboard()
+                                } else {
+                                    focusRequester.freeFocus()
+                                    keyboardController?.hideSoftwareKeyboard()
                                 }
                             }
-                            ForeLayer(myState) {
-                                My()
+                        }
+                        ForeLayer(playlistState) {
+                            Playlist(topList)
+                        }
+                        ProvideNowPlaying(Media.nowPlaying) {
+                            NowPlaying(nowPlayingState, playerPlaylistState)
+                            ForeLayer(playerPlaylistState) {
+                                PlayerPlaylist()
                             }
+                        }
+                        ForeLayer(myState) {
+                            My()
                         }
                     }
                 }

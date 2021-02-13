@@ -1,8 +1,8 @@
 package com.kyant.pixelmusic.api
 
+import com.beust.klaxon.Klaxon
 import com.kyant.pixelmusic.api.search.SearchResult
-import com.kyant.pixelmusic.locals.JsonParser
 import java.net.URL
 
 suspend fun String.searchSongs(): SearchResult? =
-    JsonParser().parse(URL("$API/search?keywords=$this").readText())
+    Klaxon().parse(URL("$API/search?keywords=$this").readText())
