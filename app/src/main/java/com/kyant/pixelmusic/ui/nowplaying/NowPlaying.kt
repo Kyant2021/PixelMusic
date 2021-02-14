@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.draggable
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.palette.graphics.Palette
 import com.kyant.inimate.blur.blur
 import com.kyant.inimate.insets.LocalWindowInsets
@@ -133,7 +135,11 @@ fun BoxWithConstraintsScope.NowPlaying(
             backgroundColor = Color.Transparent,
             elevation = 1.dp + 23.dp * progress
         ) {
-            BoxWithConstraints(Modifier.fillMaxSize()) {
+            BoxWithConstraints(
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.surface)
+            ) {
                 var horizontalDragOffset by remember { mutableStateOf(0f) }.apply {
                     with(density) { value.coerceIn(-48.dp.toPx()..48.dp.toPx()) }
                 }
@@ -195,6 +201,7 @@ fun BoxWithConstraintsScope.NowPlaying(
                                     }
                                 }
                             }
+                            .zIndex(1f)
                     )
                     Column(
                         Modifier

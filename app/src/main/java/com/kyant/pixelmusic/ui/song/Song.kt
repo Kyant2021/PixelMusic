@@ -47,6 +47,7 @@ fun SongCompact(song: Song, modifier: Modifier = Modifier) {
         modifier
             .padding(8.dp)
             .padding(horizontal = 16.dp)
+            .widthIn(max = 256.dp)
             .height(72.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colors.onSurface.copy(0.02f))

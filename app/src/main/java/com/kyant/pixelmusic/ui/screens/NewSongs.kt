@@ -38,7 +38,7 @@ fun NewSongs() {
         }
         item {
             Row(Modifier.horizontalScroll(rememberScrollState())) {
-                StaggeredGrid {
+                StaggeredGrid(rows = 6) {
                     songs.forEach {
                         SongCompact(it)
                     }
