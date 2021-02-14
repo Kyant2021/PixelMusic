@@ -31,9 +31,6 @@ fun PlayerPlaylistItem(
 ) {
     val player = LocalPixelPlayer.current
     val transition = updateTransition(selected)
-    val cornerSize by transition.animateDp {
-        if (it) 16.dp else 8.dp
-    }
     val backgroundColor by transition.animateColor {
         if (it) MaterialTheme.colors.primary else MaterialTheme.colors.surface
     }
@@ -50,7 +47,7 @@ fun PlayerPlaylistItem(
         modifier
             .fillMaxWidth()
             .padding(16.dp, 8.dp),
-        SuperellipseCornerShape(cornerSize),
+        SuperellipseCornerShape(12.dp),
         backgroundColor,
         contentColor,
         elevation = 0.dp
