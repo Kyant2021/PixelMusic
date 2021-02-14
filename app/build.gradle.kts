@@ -49,6 +49,7 @@ dependencies {
 
     implementation(project(":iNimate"))
     implementation(kotlin("reflect", "1.4.30"))
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0-RC")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
     implementation("io.ktor:ktor-client-cio:$ktor")
     implementation("io.ktor:ktor-client-serialization:$ktor")

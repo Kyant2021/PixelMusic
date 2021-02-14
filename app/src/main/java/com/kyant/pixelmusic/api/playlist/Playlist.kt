@@ -1,0 +1,46 @@
+package com.kyant.pixelmusic.api.playlist
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Playlist(
+    val subscribers: List<String>? = listOf(),
+    val subscribed: Boolean? = false,
+    val creator: Creator? = Creator(),
+    val artists: String? = "",
+    val tracks: String? = "",
+    val updateFrequency: String? = "",
+    val backgroundCoverId: Long? = 0,
+    val backgroundCoverUrl: String? = "",
+    val titleImage: Long? = 0,
+    val titleImageUrl: String? = "",
+    val englishTitle: String? = "",
+    val opRecommend: Boolean? = false,
+    val recommendInfo: String? = "",
+    val adType: Long? = 0,
+    val trackNumberUpdateTime: Long? = 0,
+    val subscribedCount: Long? = 0,
+    val cloudTrackCount: Long? = 0,
+    val userId: Long? = 0,
+    val createTime: Long? = 0,
+    val highQuality: Boolean? = false,
+    val coverImgId: Long? = 0,
+    val newImported: Boolean? = false,
+    val anonimous: Boolean? = false,
+    val updateTime: Long? = 0,
+    val trackCount: Long? = 0,
+    val coverImgUrl: String? = "",
+    val specialType: Long? = 0,
+    val trackUpdateTime: Long? = 0,
+    val commentThreadId: String? = "",
+    val totalDuration: Long? = 0,
+    val privacy: Long? = 0,
+    val playCount: Long? = 0,
+    val ordered: Boolean? = false,
+    val description: String? = "",
+    val tags: List<String>? = listOf(),
+    val status: Long? = 0,
+    val name: String? = "",
+    val id: Long? = 0,
+    val coverImgIdStr: String? = ""
+)

@@ -16,17 +16,15 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.kyant.inimate.layer.LayerState
 import com.kyant.pixelmusic.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TopBar(
-    searchState: SwipeableState<Boolean>,
-    myState: SwipeableState<Boolean>,
+    searchState: LayerState,
+    accountState: LayerState,
     modifier: Modifier = Modifier
 ) {
     val scope = rememberCoroutineScope()
@@ -67,11 +65,11 @@ fun TopBar(
             }
             IconButton({
                 scope.launch {
-                    myState.animateTo(true, spring(stiffness = 700f))
+                    accountState.animateTo(true, spring(stiffness = 700f))
                 }
             }) {
                 Icon(
-                    Icons.Outlined.AccountCircle, "My",
+                    Icons.Outlined.AccountCircle, "Account",
                     tint = MaterialTheme.colors.onSurface.copy(ContentAlpha.medium)
                 )
             }

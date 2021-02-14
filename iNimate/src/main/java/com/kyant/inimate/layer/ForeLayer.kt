@@ -17,7 +17,7 @@ import com.kyant.inimate.insets.statusBarsPadding
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ForeLayer(
-    state: SwipeableState<Boolean>,
+    state: LayerState,
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {

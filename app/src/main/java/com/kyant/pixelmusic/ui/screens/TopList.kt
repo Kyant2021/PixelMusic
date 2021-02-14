@@ -18,8 +18,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kyant.inimate.shape.SuperellipseCornerShape
+import com.kyant.pixelmusic.api.TopList
 import com.kyant.pixelmusic.api.findPlaylist
-import com.kyant.pixelmusic.api.playlist.Playlist
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.media.toSong
 import com.kyant.pixelmusic.ui.song.Song
@@ -27,16 +27,13 @@ import com.kyant.pixelmusic.util.EmptyImage
 import com.kyant.pixelmusic.util.loadImage
 
 @Composable
-fun Playlist(
-    playlist: Playlist?,
-    modifier: Modifier = Modifier
-) {
+fun TopList(topList: TopList?, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    var image by remember(playlist?.id) { mutableStateOf(EmptyImage) }
-    val songs = remember(playlist?.id) { mutableStateListOf<Song>() }
-    LaunchedEffect(playlist?.id) {
-        image = playlist?.coverImgUrl?.loadImage(context) ?: EmptyImage
-        songs.addAll(playlist?.id?.findPlaylist()?.playlist?.tracks?.map { it.toSong() }
+    var image by remember(topList?.id) { mutableStateOf(EmptyImage) }
+    val songs = remember(topList?.id) { mutableStateListOf<Song>() }
+    LaunchedEffect(topList?.id) {
+        image = topList?.coverImgUrl?.loadImage(context) ?: EmptyImage
+        songs.addAll(topList?.id?.findPlaylist()?.playlist?.tracks?.map { it.toSong() }
             ?: emptyList())
     }
     LazyColumn(modifier) {
@@ -47,7 +44,7 @@ fun Playlist(
             ) {
                 Image(
                     image,
-                    playlist?.name.orEmpty(),
+                    topList?.name.orEmpty(),
                     modifier
                         .padding(16.dp)
                         .size(160.dp)
@@ -55,7 +52,7 @@ fun Playlist(
                 )
                 Column(Modifier.padding(horizontal = 16.dp)) {
                     Text(
-                        playlist?.name.orEmpty(),
+                        topList?.name.orEmpty(),
                         Modifier.padding(16.dp),
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,

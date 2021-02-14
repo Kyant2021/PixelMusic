@@ -175,8 +175,7 @@ fun BoxWithConstraintsScope.NowPlaying(
                 Box(Modifier.padding(top = 12.dp)) {
                     Cover(
                         cover,
-                        Unit,
-                        Modifier
+                        modifier = Modifier
                             .padding(horizontal = 16.dp * (1f - progress))
                             .size(
                                 48.dp + ((squareSize - 96.dp) * progress - transition.animateDp { if (it) (squareSize - 96.dp) * progress else 0.dp }.value)

@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kyant.inimate.layout.StaggeredGrid
 import com.kyant.pixelmusic.api.findNewSongs
@@ -20,20 +21,19 @@ import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.ui.song.SongCompact
 
 @Composable
-fun NewSongs(modifier: Modifier = Modifier) {
+fun NewSongs() {
     val songs = remember { mutableStateListOf<Song>() }
     LaunchedEffect(Unit) {
         findNewSongs()?.let { songs.addAll(it) }
     }
-    LazyColumn(
-        modifier,
-        contentPadding = PaddingValues(top = 64.dp, bottom = 128.dp)
-    ) {
+    LazyColumn(contentPadding = PaddingValues(top = 24.dp, bottom = 24.dp)) {
         item {
             Text(
                 "New songs",
                 Modifier.padding(16.dp),
-                style = MaterialTheme.typography.body1
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                style = MaterialTheme.typography.h5
             )
         }
         item {

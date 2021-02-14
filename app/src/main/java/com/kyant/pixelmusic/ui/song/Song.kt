@@ -97,7 +97,7 @@ fun BaseSong(song: Song, modifier: Modifier = Modifier) {
         )
         Column(Modifier.padding(horizontal = 16.dp)) {
             Text(
-                song.title.toString(),
+                song.title.orEmpty(),
                 fontWeight = FontWeight.Medium,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
@@ -105,7 +105,7 @@ fun BaseSong(song: Song, modifier: Modifier = Modifier) {
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                song.subtitle.toString(),
+                song.subtitle.orEmpty(),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.caption

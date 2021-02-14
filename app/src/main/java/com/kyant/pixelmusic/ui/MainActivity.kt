@@ -11,25 +11,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.*
 import com.kyant.inimate.layer.*
 import com.kyant.pixelmusic.R
-import com.kyant.pixelmusic.api.TopList
 import com.kyant.pixelmusic.locals.*
 import com.kyant.pixelmusic.media.*
-import com.kyant.pixelmusic.ui.component.TopBar
 import com.kyant.pixelmusic.ui.nowplaying.NowPlaying
 import com.kyant.pixelmusic.ui.player.PlayerPlaylist
 import com.kyant.pixelmusic.ui.screens.*
@@ -37,7 +29,7 @@ import com.kyant.pixelmusic.ui.theme.PixelMusicTheme
 import com.kyant.pixelmusic.util.DataStore
 import kotlinx.coroutines.*
 
-enum class Screens { HOME, EXPLORE, NEW_SONGS }
+enum class Screens { HOME, MY_PLAYLISTS, EXPLORE, NEW_SONGS }
 
 class MainActivity : AppCompatActivity() {
     private val mediaButtonReceiver = MediaButtonReceiver()
@@ -50,108 +42,31 @@ class MainActivity : AppCompatActivity() {
         Media.init(this, connectionCallbacks)
         setContent {
             PixelMusicTheme(window) {
-                val keyboardController = LocalSoftwareKeyboardController.current
                 val scope = rememberCoroutineScope()
                 val navController = rememberNavController()
-                val (myState, playerPlaylistState, nowPlayingState, playlistState, searchState) =
-                    rememberSwipeableState(false)
-                val topList = remember { mutableStateOf<TopList?>(null) }
-                val isLight = MaterialTheme.colors.isLight
-                val focusRequester = FocusRequester.Default
-                BackHandler(
-                    myState.targetValue or
-                            playerPlaylistState.targetValue or
-                            nowPlayingState.targetValue or
-                            playlistState.targetValue or
-                            searchState.targetValue
-                ) {
+                val (playlistState, nowPlayingState) = rememberSwipeableState(false)
+                BackHandler(playlistState.targetValue or nowPlayingState.targetValue) {
                     scope.launch {
-                        when {
-                            myState.targetValue ->
-                                myState.animateTo(false, spring(stiffness = 700f))
-                            playerPlaylistState.targetValue ->
-                                playerPlaylistState.animateTo(false, spring(stiffness = 700f))
-                            nowPlayingState.targetValue ->
-                                nowPlayingState.animateTo(false, spring(stiffness = 700f))
-                            playlistState.targetValue ->
-                                playlistState.animateTo(false, spring(stiffness = 700f))
-                            searchState.targetValue ->
-                                searchState.animateTo(false, spring(stiffness = 700f))
-                        }
+                        if (playlistState.targetValue)
+                            playlistState.animateTo(false, spring(stiffness = 700f))
+                        else if (nowPlayingState.targetValue)
+                            nowPlayingState.animateTo(false, spring(stiffness = 700f))
                     }
                 }
                 ProvidePixelPlayer {
                     Media.player = LocalPixelPlayer.current
                     BoxWithConstraints(Modifier.fillMaxSize()) {
-                        BackLayer(
-                            listOf(myState, playerPlaylistState, playlistState, searchState),
-                            darkIcons = { progress, statusBarHeightRatio ->
-                                when {
-                                    nowPlayingState.progressOf(constraints.maxHeight.toFloat()) >= 1f - statusBarHeightRatio / 2 -> isLight
-                                    isLight -> progress <= 0.5f
-                                    else -> false
-                                }
-                            }
-                        ) {
-                            NavHost(navController, Screens.HOME.name) {
-                                composable(Screens.HOME.name) {
-                                    Home(navController)
-                                }
-                                composable(Screens.EXPLORE.name) {
-                                    Explore(playlistState, topList)
-                                }
-                                composable(Screens.NEW_SONGS.name) {
-                                    NewSongs()
-                                }
-                            }
-                            TopBar(searchState, myState)
-                        }
-                        ForeLayer(searchState) {
-                            val lazyListState = rememberLazyListState()
-                            val nestedScrollConnection = remember {
-                                object : NestedScrollConnection {
-                                    override fun onPostScroll(
-                                        consumed: Offset,
-                                        available: Offset,
-                                        source: NestedScrollSource
-                                    ): Offset {
-                                        if (consumed.y == 0f && lazyListState.firstVisibleItemIndex == 0 && lazyListState.firstVisibleItemScrollOffset == 0) {
-                                            scope.launch {
-                                                searchState.animateTo(false)
-                                                focusRequester.freeFocus()
-                                                keyboardController?.hideSoftwareKeyboard()
-                                            }
-                                        }
-                                        return super.onPostScroll(consumed, available, source)
-                                    }
-                                }
-                            }
-                            Search(
-                                focusRequester,
-                                lazyListState,
-                                nestedScrollConnection
-                            )
-                            LaunchedEffect(searchState.targetValue) {
-                                if (searchState.targetValue) {
-                                    focusRequester.requestFocus()
-                                    keyboardController?.showSoftwareKeyboard()
-                                } else {
-                                    focusRequester.freeFocus()
-                                    keyboardController?.hideSoftwareKeyboard()
-                                }
-                            }
-                        }
-                        ForeLayer(playlistState) {
-                            Playlist(topList)
+                        NavHost(navController, Screens.HOME.name) {
+                            composable(Screens.HOME.name) { Home(navController) }
+                            composable(Screens.MY_PLAYLISTS.name) { UserPlaylists() }
+                            composable(Screens.EXPLORE.name) { Leaderboards() }
+                            composable(Screens.NEW_SONGS.name) { NewSongs() }
                         }
                         ProvideNowPlaying(Media.nowPlaying) {
-                            NowPlaying(nowPlayingState, playerPlaylistState)
-                            ForeLayer(playerPlaylistState) {
+                            NowPlaying(nowPlayingState, playlistState)
+                            ForeLayer(playlistState) {
                                 PlayerPlaylist()
                             }
-                        }
-                        ForeLayer(myState) {
-                            My()
                         }
                     }
                 }

@@ -3,6 +3,8 @@ package com.kyant.pixelmusic.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import java.io.*
 
 class DataStore(
@@ -80,6 +82,10 @@ open class BaseDataStore(
         } catch (e: ClassNotFoundException) {
             null
         }
+    }
+
+    inline fun <reified T> getJsonOrNull(key: String): T? {
+        return getOrNull<String>(key)?.let { Json.decodeFromString(it) }
     }
 
     fun getBitmapOrNull(key: String): Bitmap? {

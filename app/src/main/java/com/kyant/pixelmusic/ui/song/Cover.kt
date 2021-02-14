@@ -15,7 +15,7 @@ import com.kyant.pixelmusic.util.EmptyImage
 @Composable
 fun Cover(
     image: ImageBitmap?,
-    key: Any?,
+    key: Any? = null,
     modifier: Modifier = Modifier
 ) {
     val alpha = remember(key) { Animatable(0f) }.apply {
