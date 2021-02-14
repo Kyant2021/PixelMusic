@@ -73,7 +73,7 @@ fun Leaderboards() {
                             .clickable {
                                 scope.launch {
                                     topList = it
-                                    state.animateTo(true)
+                                    state.animateTo(true, spring(stiffness = 700f))
                                 }
                             },
                         contentScale = ContentScale.Crop
