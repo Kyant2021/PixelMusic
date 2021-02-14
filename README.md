@@ -20,10 +20,6 @@ This is a beautiful **unofficial NetEase Cloud music player** for Android 🥳!
 ![Lyrics](art/lyrics.png)
 ![Playlist](art/playlist.png)
 
-## Major plans
-
-- [ ] Support log in
-
 ## Technical features
 
 * **Kotlin** 1.4.30

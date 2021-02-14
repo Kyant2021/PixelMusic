@@ -12,7 +12,7 @@ android {
         minSdkVersion(24)
         targetSdkVersion(30)
         versionCode(1)
-        versionName = "0.1.0-alpha06"
+        versionName = "0.1.0-alpha07"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             ndkBuild {
