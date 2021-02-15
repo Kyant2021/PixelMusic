@@ -47,7 +47,12 @@ fun Page3(start: Int, setStart: (Int) -> Unit) {
                     style = MaterialTheme.typography.h5
                 )
             }
-            TextButton({ setStart(5) }) {
+            TextButton(
+                { setStart(5) },
+                Modifier
+                    .padding(64.dp)
+                    .align(Alignment.BottomEnd)
+            ) {
                 Text("Get started")
             }
         }

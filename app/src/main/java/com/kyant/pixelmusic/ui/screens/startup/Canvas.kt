@@ -1,6 +1,5 @@
 package com.kyant.pixelmusic.ui.screens.startup
 
-import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
@@ -57,14 +56,6 @@ fun BoxWithConstraintsScope.StartupCanvas(start: Int) {
                 else -> Offset(128.dp.toPx(), 256.dp.toPx())
             }
         }.value
-        val t2 = transition.animateColor({ spring(stiffness = 700f) }) {
-            when (it) {
-                0 -> googleGreen
-                1 -> googleGreen
-                2 -> googleGreen
-                else -> googleBlue
-            }
-        }.value
 
         val r3 = transition.animateFloat({ spring(stiffness = 350f) }) {
             when (it) {
@@ -93,7 +84,7 @@ fun BoxWithConstraintsScope.StartupCanvas(start: Int) {
                 CornerRadius(16.dp.toPx())
             )
             drawArc(
-                t2,
+                googleGreen,
                 150f + a2,
                 90f,
                 true,
