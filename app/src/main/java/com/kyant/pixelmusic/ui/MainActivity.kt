@@ -5,9 +5,9 @@ import android.media.AudioManager
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +31,7 @@ import kotlinx.coroutines.*
 
 enum class Screens { HOME, MY_PLAYLISTS, EXPLORE, NEW_SONGS }
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     private val mediaButtonReceiver = MediaButtonReceiver()
 
     @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)

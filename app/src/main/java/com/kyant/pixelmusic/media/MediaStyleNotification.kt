@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.app.NotificationCompat
@@ -38,7 +39,7 @@ fun Context.mediaStyleNotification(channelId: String): Notification {
         )
         setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         setSmallIcon(R.drawable.ic_launcher_foreground)
-        color = ContextCompat.getColor(this@mediaStyleNotification, R.color.black)
+        color = Color.BLACK
         addAction(
             R.drawable.ic_baseline_skip_previous_24,
             "Forward",
