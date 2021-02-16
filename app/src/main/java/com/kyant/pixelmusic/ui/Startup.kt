@@ -27,7 +27,7 @@ class Startup : ComponentActivity() {
         setContent {
             PixelMusicTheme(window) {
                 val (start, setStart) = remember { mutableStateOf(0) }
-                BackHandler(start != 0) {
+                BackHandler(start != 1) {
                     setStart(1)
                 }
                 BoxWithConstraints(Modifier.fillMaxSize()) {
