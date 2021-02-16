@@ -93,7 +93,9 @@ fun Page2(start: Int, setStart: (Int) -> Unit) {
                     TextButton({
                         scope.launch {
                             waiting = true
-                            dataStore.write("login", null)
+                            if (!dataStore.contains("login")) {
+                                dataStore.write("login", null)
+                            }
                             waiting = false
                             setStart(5)
                         }
