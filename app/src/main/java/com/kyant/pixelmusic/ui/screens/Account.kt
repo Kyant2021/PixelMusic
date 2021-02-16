@@ -22,53 +22,28 @@ import com.kyant.pixelmusic.util.DataStore
 fun Account(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val dataStore = DataStore(context, "account")
+    val name = dataStore.getJsonOrNull<LoginResult>("login")?.profile?.nickname
     LazyColumn(modifier) {
-        if (dataStore.getOrNull<String>("login") == null) {
-            item {
-                Card(
+        item {
+            Card(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                SuperellipseCornerShape(8.dp),
+                MaterialTheme.colors.primary,
+                elevation = 0.dp
+            ) {
+                Column(
                     Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    SuperellipseCornerShape(8.dp),
-                    MaterialTheme.colors.primary,
-                    elevation = 0.dp
+                        .clickable {
+                            context.startActivity(Intent(context, Startup::class.java))
+                        }
+                        .padding(32.dp)
                 ) {
-                    Column(
-                        Modifier
-                            .clickable {
-                                context.startActivity(Intent(context, Startup::class.java))
-                            }
-                            .padding(32.dp)
-                    ) {
-                        Text(
-                            "Log in to explore more",
-                            style = MaterialTheme.typography.h5
-                        )
-                    }
-                }
-            }
-        } else {
-            item {
-                Card(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    SuperellipseCornerShape(8.dp),
-                    MaterialTheme.colors.secondary,
-                    elevation = 0.dp
-                ) {
-                    Column(
-                        Modifier
-                            .clickable {
-                                context.startActivity(Intent(context, Startup::class.java))
-                            }
-                            .padding(32.dp)
-                    ) {
-                        Text(
-                            "Welcome, ${dataStore.getJsonOrNull<LoginResult>("login")?.profile?.nickname.orEmpty()}!",
-                            style = MaterialTheme.typography.h5
-                        )
-                    }
+                    Text(
+                        if (name == null) "Log in to explore more" else "Welcome, $name!",
+                        style = MaterialTheme.typography.h5
+                    )
                 }
             }
         }
