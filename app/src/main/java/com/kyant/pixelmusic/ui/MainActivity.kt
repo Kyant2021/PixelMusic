@@ -29,8 +29,6 @@ import com.kyant.pixelmusic.ui.theme.PixelMusicTheme
 import com.kyant.pixelmusic.util.DataStore
 import kotlinx.coroutines.*
 
-enum class Screens { HOME, MY_PLAYLISTS, EXPLORE, NEW_SONGS }
-
 class MainActivity : ComponentActivity() {
     private val mediaButtonReceiver = MediaButtonReceiver()
 
@@ -40,6 +38,9 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         createNotificationChannel(Media.NOTIFICATION_CHANNEL_ID, getString(R.string.app_name))
         Media.init(this, connectionCallbacks)
+        if (!DataStore(this, "account").contains("login")) {
+            startActivity(Intent(this, Startup::class.java))
+        }
         setContent {
             PixelMusicTheme(window) {
                 val scope = rememberCoroutineScope()
@@ -56,11 +57,11 @@ class MainActivity : ComponentActivity() {
                 ProvidePixelPlayer {
                     Media.player = LocalPixelPlayer.current
                     BoxWithConstraints(Modifier.fillMaxSize()) {
-                        NavHost(navController, Screens.HOME.name) {
-                            composable(Screens.HOME.name) { Home(navController) }
-                            composable(Screens.MY_PLAYLISTS.name) { UserPlaylists() }
-                            composable(Screens.EXPLORE.name) { Leaderboards() }
-                            composable(Screens.NEW_SONGS.name) { NewSongs() }
+                        NavHost(navController, Screens.Home.name) {
+                            composable(Screens.Home.name) { Home(navController) }
+                            composable(Screens.MyPlaylists.name) { UserPlaylists() }
+                            composable(Screens.NewReleases.name) { NewReleases() }
+                            composable(Screens.Leaderboards.name) { Leaderboards() }
                         }
                         ProvideNowPlaying(Media.nowPlaying) {
                             NowPlaying(nowPlayingState, playlistState)

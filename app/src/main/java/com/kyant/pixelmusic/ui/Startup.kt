@@ -1,6 +1,5 @@
 package com.kyant.pixelmusic.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -45,7 +44,6 @@ class Startup : ComponentActivity() {
                     if (start == 5) {
                         delay(500)
                         finish()
-                        startActivity(Intent(this@Startup, MainActivity::class.java))
                     }
                 }
             }

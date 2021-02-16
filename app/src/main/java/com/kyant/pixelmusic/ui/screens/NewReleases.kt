@@ -16,20 +16,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kyant.inimate.layout.StaggeredGrid
-import com.kyant.pixelmusic.api.findNewSongs
+import com.kyant.pixelmusic.api.findNewReleases
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.ui.song.SongCompact
 
 @Composable
-fun NewSongs() {
+fun NewReleases() {
     val songs = remember { mutableStateListOf<Song>() }
     LaunchedEffect(Unit) {
-        findNewSongs()?.let { songs.addAll(it) }
+        songs.addAll(findNewReleases() ?: emptyList())
     }
     LazyColumn(contentPadding = PaddingValues(top = 24.dp, bottom = 24.dp)) {
         item {
             Text(
-                "New songs",
+                "New releases",
                 Modifier.padding(16.dp),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,

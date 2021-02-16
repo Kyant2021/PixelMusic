@@ -2,10 +2,12 @@ package com.kyant.pixelmusic.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -14,14 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
@@ -30,16 +33,15 @@ import com.kyant.inimate.layer.BackLayer
 import com.kyant.inimate.layer.ForeLayer
 import com.kyant.inimate.layer.component1
 import com.kyant.inimate.layer.component2
-import com.kyant.inimate.scroll.ScrollCard
-import com.kyant.inimate.scroll.ScrollFixedCard
-import com.kyant.inimate.scroll.ScrollHeader
-import com.kyant.inimate.scroll.ScrollMoreCard
 import com.kyant.inimate.shape.SuperellipseCornerShape
-import com.kyant.pixelmusic.ui.Screens
 import com.kyant.pixelmusic.ui.component.TopBar
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
+@OptIn(
+    ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 fun Home(navController: NavHostController) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -56,99 +58,64 @@ fun Home(navController: NavHostController) {
     }
     BackLayer(searchState, accountState) {
         TopBar(searchState, accountState, Modifier.zIndex(1f))
-        LazyColumn(contentPadding = PaddingValues(top = 64.dp, bottom = 128.dp)) {
-            item {
-                Card(
+        Column(Modifier.padding(top = 64.dp)) {
+            Card(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                SuperellipseCornerShape(12.dp),
+                MaterialTheme.colors.secondary,
+                elevation = 24.dp
+            ) {
+                Column(
                     Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    SuperellipseCornerShape(12.dp),
-                    MaterialTheme.colors.secondary,
-                    elevation = 24.dp
+                        .clickable {}
+                        .padding(32.dp)
                 ) {
-                    Column(
+                    Text(
+                        "Pixel Music Alpha",
+                        style = MaterialTheme.typography.h5
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "Still developing...",
+                        style = MaterialTheme.typography.body1
+                    )
+                }
+            }
+            Spacer(Modifier.height(32.dp))
+            val items = listOf(
+                Triple("History", Icons.Outlined.History, null),
+                Triple("Playlists", Icons.Outlined.FeaturedPlayList, Screens.MyPlaylists.name),
+                Triple("Statistics", Icons.Outlined.TrendingUp, null),
+                Triple("New releases", Icons.Outlined.NewReleases, Screens.NewReleases.name),
+                Triple("Leaderboards", Icons.Outlined.Leaderboard, Screens.Leaderboards.name)
+            )
+            LazyVerticalGrid(GridCells.Fixed(2)) {
+                items(items) {
+                    Card(
                         Modifier
-                            .clickable {}
-                            .padding(32.dp)
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        SuperellipseCornerShape(8.dp),
+                        MaterialTheme.colors.onSurface.copy(0.02f),
+                        elevation = 0.dp
                     ) {
-                        Text(
-                            "Pixel Music Alpha",
-                            style = MaterialTheme.typography.h5
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            "Still developing...",
-                            style = MaterialTheme.typography.body1
-                        )
-                    }
-                }
-                Spacer(Modifier.height(32.dp))
-            }
-            item {
-                val state = rememberLazyListState()
-                Box {
-                    ScrollHeader(state, Icons.Outlined.AccountCircle, "My") {}
-                    LazyRow(state = state, contentPadding = PaddingValues(start = 64.dp)) {
-                        item {
-                            ScrollCard(
-                                "History", Icons.Outlined.History, "History",
-                                Color(0xFF3F51B5)
-                            ) {}
+                        Row(
+                            Modifier
+                                .clickable { it.third?.let { navController.navigate(it) } }
+                                .padding(16.dp, 32.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(it.second, it.first)
+                            Spacer(Modifier.width(16.dp))
+                            Text(
+                                it.first,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
+                                style = MaterialTheme.typography.h6
+                            )
                         }
-                        item {
-                            ScrollCard(
-                                "Favorites", Icons.Outlined.Favorite, "Favorites",
-                                Color(0xFFE91E63)
-                            ) {}
-                        }
-                        item {
-                            ScrollCard(
-                                "Playlists", Icons.Outlined.FeaturedPlayList, "Playlists",
-                                Color(0xFF009688)
-                            ) { navController.navigate(Screens.MY_PLAYLISTS.name) }
-                        }
-                        item {
-                            ScrollCard(
-                                "Statistics", Icons.Outlined.TrendingUp, "Statistics",
-                                Color(0xFF4CAF50)
-                            ) {}
-                        }
-                        item {
-                            ScrollMoreCard {}
-                        }
-                    }
-                }
-            }
-            item {
-                val state = rememberLazyListState()
-                Box {
-                    ScrollHeader(state, Icons.Outlined.NewReleases, "New songs") {}
-                    LazyRow(state = state, contentPadding = PaddingValues(start = 64.dp)) {
-                        item {
-                            ScrollCard("全部", Icons.Outlined.NewReleases, "全部") {
-                                navController.navigate(Screens.NEW_SONGS.name)
-                            }
-                        }
-                        item {
-                            ScrollCard("华语", Icons.Outlined.NewReleases, "华语") {}
-                        }
-                        item {
-                            ScrollCard("欧美", Icons.Outlined.NewReleases, "欧美") {}
-                        }
-                        item {
-                            ScrollCard("日本", Icons.Outlined.NewReleases, "日本") {}
-                        }
-                        item {
-                            ScrollCard("韩国", Icons.Outlined.NewReleases, "韩国") {}
-                        }
-                    }
-                }
-            }
-            item {
-                Box {
-                    ScrollHeader(false, Icons.Outlined.Leaderboard, "Leaderboards") {}
-                    ScrollFixedCard("Leaderboards", Icons.Outlined.Leaderboard, "Leaderboards") {
-                        navController.navigate(Screens.EXPLORE.name)
                     }
                 }
             }

@@ -7,10 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +31,7 @@ fun Page2(start: Int, setStart: (Int) -> Unit) {
     val scope = rememberCoroutineScope()
     var phone by remember { mutableStateOf(TextFieldValue()) }
     var password by remember { mutableStateOf(TextFieldValue()) }
+    var waiting by remember { mutableStateOf(false) }
     val transition = updateTransition(start)
     val dataStore = DataStore(context, "account")
     AnimatedVisibility(
@@ -80,19 +78,31 @@ fun Page2(start: Int, setStart: (Int) -> Unit) {
                 Row(Modifier.padding(16.dp)) {
                     Button({
                         scope.launch {
+                            waiting = true
                             dataStore.write(
                                 "login",
                                 Json.encodeToString(login(phone.text, password.text.md5()))
                             )
+                            waiting = false
                             setStart(3)
                         }
                     }) {
                         Text("Login")
                     }
                     Spacer(Modifier.width(16.dp))
-                    TextButton({ setStart(5) }) {
+                    TextButton({
+                        scope.launch {
+                            waiting = true
+                            dataStore.write("login", null)
+                            waiting = false
+                            setStart(5)
+                        }
+                    }) {
                         Text("Skip login")
                     }
+                }
+                if (waiting) {
+                    CircularProgressIndicator(Modifier.padding(32.dp))
                 }
             }
         }
