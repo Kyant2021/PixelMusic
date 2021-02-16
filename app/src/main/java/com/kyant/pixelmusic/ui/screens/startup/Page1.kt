@@ -49,8 +49,8 @@ fun BoxWithConstraintsScope.Page1(start: Int, setStart: (Int) -> Unit) {
 
         val ot = transition.animateIntOffset({ spring(stiffness = 700f) }) {
             when (it) {
-                1 -> IntOffset(128.dp.roundToPx(), 288.dp.roundToPx())
-                else -> IntOffset(128.dp.roundToPx(), 64.dp.roundToPx())
+                1 -> IntOffset(0, 288.dp.roundToPx())
+                else -> IntOffset(0, 64.dp.roundToPx())
             }
         }.value
         val at = transition.animateFloat({ spring(stiffness = 700f) }) {
@@ -115,6 +115,7 @@ fun BoxWithConstraintsScope.Page1(start: Int, setStart: (Int) -> Unit) {
             Text(
                 stringResource(R.string.app_name),
                 Modifier
+                    .align(Alignment.TopCenter)
                     .offset { ot }
                     .alpha(animateFloatAsState(at).value),
                 color = MaterialTheme.colors.primary,

@@ -9,7 +9,7 @@ android {
     ndkVersion = "22.0.7026061"
 
     defaultConfig {
-        minSdkVersion(24)
+        minSdkVersion(21)
         targetSdkVersion(30)
         versionCode(1)
         versionName = "0.1.0-alpha08"
