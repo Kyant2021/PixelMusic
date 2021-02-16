@@ -1,6 +1,7 @@
 package com.kyant.pixelmusic.ui.screens.startup
 
-import androidx.compose.animation.*
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.R
 import com.kyant.pixelmusic.ui.theme.googleBlue
 import com.kyant.pixelmusic.ui.theme.googleGreen
@@ -40,10 +42,17 @@ fun BoxWithConstraintsScope.Page1(start: Int, setStart: (Int) -> Unit) {
                 else -> 64.dp
             }
         }.value
-        val oi = transition.animateIntOffset({ spring(stiffness = 700f) }) {
+        val oi = transition.animateIntOffset({ spring(dampingRatio = 0.7f, stiffness = 350f) }) {
             when (it) {
                 1 -> IntOffset((constraints.minWidth - si.roundToPx()) / 2, 128.dp.roundToPx())
                 else -> IntOffset(32.dp.roundToPx(), 64.dp.roundToPx())
+            }
+        }.value
+        val ai = transition.animateFloat({ spring(stiffness = 700f) }) {
+            when (it) {
+                1 -> 1f
+                2 -> 1f
+                else -> 0f
             }
         }.value
 
@@ -101,17 +110,14 @@ fun BoxWithConstraintsScope.Page1(start: Int, setStart: (Int) -> Unit) {
         }.value
 
         BoxWithConstraints(Modifier.fillMaxSize()) {
-            AnimatedVisibility(
-                transition.targetState == 1 || transition.targetState == 2,
-                Modifier.offset { oi },
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                Image(
-                    painterResource(R.drawable.ic_launcher_foreground), null,
-                    Modifier.size(si)
-                )
-            }
+            Image(
+                painterResource(R.drawable.ic_launcher_foreground), null,
+                Modifier
+                    .size(si)
+                    .offset { oi }
+                    .background(googleBlue, SuperellipseCornerShape(16.dp))
+                    .alpha(ai)
+            )
             Text(
                 stringResource(R.string.app_name),
                 Modifier

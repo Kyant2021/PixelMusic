@@ -15,7 +15,6 @@ import androidx.core.view.WindowCompat
 import com.kyant.pixelmusic.ui.screens.startup.Page1
 import com.kyant.pixelmusic.ui.screens.startup.Page2
 import com.kyant.pixelmusic.ui.screens.startup.Page3
-import com.kyant.pixelmusic.ui.screens.startup.StartupCanvas
 import com.kyant.pixelmusic.ui.theme.PixelMusicTheme
 import kotlinx.coroutines.delay
 
@@ -31,7 +30,6 @@ class Startup : ComponentActivity() {
                     setStart(1)
                 }
                 BoxWithConstraints(Modifier.fillMaxSize()) {
-                    StartupCanvas(start)
                     Page1(start, setStart)
                     Page2(start, setStart)
                     Page3(start, setStart)
