@@ -44,6 +44,7 @@ fun Page3(start: Int, setStart: (Int) -> Unit) {
             ) {
                 Text(
                     dataStore.getJsonOrNull<LoginResult>("login")?.profile?.nickname.orEmpty(),
+                    color = MaterialTheme.colors.onPrimary,
                     style = MaterialTheme.typography.h5
                 )
             }

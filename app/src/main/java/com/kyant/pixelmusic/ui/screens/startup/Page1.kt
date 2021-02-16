@@ -1,12 +1,11 @@
 package com.kyant.pixelmusic.ui.screens.startup
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -25,6 +24,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.kyant.pixelmusic.R
+import com.kyant.pixelmusic.ui.theme.googleBlue
+import com.kyant.pixelmusic.ui.theme.googleGreen
+import com.kyant.pixelmusic.ui.theme.googleYellow
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -59,6 +61,45 @@ fun BoxWithConstraintsScope.Page1(start: Int, setStart: (Int) -> Unit) {
             }
         }.value
 
+        val sn = transition.animateDp({ spring(stiffness = 700f) }) {
+            when (it) {
+                0 -> 0.dp
+                1 -> 48.dp
+                2 -> 128.dp
+                3 -> 256.dp
+                else -> maxOf(maxWidth, maxHeight)
+            }
+        }.value
+        val on = transition.animateIntOffset({ spring(stiffness = 700f) }) {
+            when (it) {
+                0 -> IntOffset(-sn.roundToPx() / 2, constraints.maxHeight + sn.roundToPx() / 2)
+                1 -> IntOffset((constraints.maxWidth - sn.roundToPx()) / 2, -128.dp.roundToPx())
+                2 -> IntOffset(-sn.roundToPx() / 4, sn.roundToPx() / 4)
+                3 -> IntOffset(
+                    (constraints.maxWidth - sn.roundToPx()) / 2,
+                    -(constraints.maxHeight - sn.roundToPx()) / 2
+                )
+                else -> IntOffset(0, -(constraints.maxHeight - sn.roundToPx()) / 2)
+            }
+        }.value
+        val rn = transition.animateInt({ spring(stiffness = 350f) }) {
+            when (it) {
+                0 -> 50
+                1 -> 50
+                2 -> 50
+                3 -> 50
+                else -> 0
+            }
+        }.value
+        val cn = transition.animateColor({ spring(stiffness = 350f) }) {
+            when (it) {
+                0 -> googleGreen
+                1 -> googleGreen
+                2 -> googleYellow
+                else -> googleBlue
+            }
+        }.value
+
         BoxWithConstraints(Modifier.fillMaxSize()) {
             AnimatedVisibility(
                 transition.targetState == 1 || transition.targetState == 2,
@@ -82,14 +123,23 @@ fun BoxWithConstraintsScope.Page1(start: Int, setStart: (Int) -> Unit) {
                 maxLines = 1,
                 style = MaterialTheme.typography.h4
             )
-            AnimatedVisibility(
-                transition.targetState == 1,
+            Box(
                 Modifier
-                    .align(Alignment.BottomEnd)
-                    .offset((-48).dp, (-128).dp)
+                    .size(sn)
+                    .align(Alignment.BottomStart)
+                    .offset { on }
+                    .background(cn, RoundedCornerShape(rn))
             ) {
-                IconButton({ setStart(2) }) {
-                    Icon(Icons.Outlined.NavigateNext, "Next")
+                if (transition.targetState == 1) {
+                    IconButton(
+                        { setStart(2) },
+                        Modifier.align(Alignment.Center)
+                    ) {
+                        Icon(
+                            Icons.Outlined.NavigateNext, "Next",
+                            tint = MaterialTheme.colors.onPrimary
+                        )
+                    }
                 }
             }
         }

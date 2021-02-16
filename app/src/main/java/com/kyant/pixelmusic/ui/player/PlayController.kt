@@ -1,7 +1,6 @@
 package com.kyant.pixelmusic.ui.player
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -60,7 +59,7 @@ fun PlayPauseButton(modifier: Modifier = Modifier) {
             }
         },
         modifier.background(
-            animateColorAsState(MaterialTheme.colors.primary).value,
+            MaterialTheme.colors.primary,
             RoundedCornerShape(50)
         )
     ) {
