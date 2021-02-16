@@ -9,10 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.BugReport
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.History
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,10 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.api.login.LoginResult
 import com.kyant.pixelmusic.ui.Startup
-import com.kyant.pixelmusic.ui.component.TwoToneCard
-import com.kyant.pixelmusic.ui.theme.androidBlue
-import com.kyant.pixelmusic.ui.theme.androidOrange
-import com.kyant.pixelmusic.ui.theme.googleRed
 import com.kyant.pixelmusic.util.DataStore
 
 @Composable
@@ -79,27 +71,6 @@ fun Account(modifier: Modifier = Modifier) {
                     }
                 }
             }
-        }
-        item {
-            TwoToneCard(
-                androidBlue,
-                "History",
-                Icons.Outlined.History, "History"
-            )
-        }
-        item {
-            TwoToneCard(
-                androidOrange,
-                "Favorites",
-                Icons.Outlined.Favorite, "Favorites"
-            )
-        }
-        item {
-            TwoToneCard(
-                googleRed,
-                "Join QQ group to feedback: 1026441579",
-                Icons.Outlined.BugReport, "Report bug"
-            )
         }
     }
 }
