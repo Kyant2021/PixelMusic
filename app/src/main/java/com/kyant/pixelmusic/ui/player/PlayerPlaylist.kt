@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kyant.pixelmusic.locals.LocalNowPlaying
-import com.kyant.pixelmusic.media.Media
+import com.kyant.pixelmusic.data.Media
 
 @Composable
 fun PlayerPlaylist(modifier: Modifier = Modifier) {

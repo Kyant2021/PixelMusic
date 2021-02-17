@@ -38,6 +38,7 @@ import com.kyant.pixelmusic.api.EmptyLyrics
 import com.kyant.pixelmusic.api.findLyrics
 import com.kyant.pixelmusic.locals.LocalNowPlaying
 import com.kyant.pixelmusic.locals.LocalPixelPlayer
+import com.kyant.pixelmusic.locals.LocalPreferences
 import com.kyant.pixelmusic.ui.player.PlayController
 import com.kyant.pixelmusic.ui.player.PlayPauseTransparentButton
 import com.kyant.pixelmusic.ui.player.ProgressBar
@@ -62,6 +63,7 @@ fun BoxWithConstraintsScope.NowPlaying(
     val density = LocalDensity.current
     val player = LocalPixelPlayer.current
     val song = LocalNowPlaying.current
+    val preferences = LocalPreferences.current
     val scope = rememberCoroutineScope()
     var lyricsState by remember { mutableStateOf(false) }
     val infoState = rememberSwipeableState(false)
@@ -95,7 +97,10 @@ fun BoxWithConstraintsScope.NowPlaying(
             }
         }
     }
-    NowPlayingTheme(color = themeColor, onColor = onColor) {
+    NowPlayingTheme(
+        color = if (preferences.improveAccessibility) MaterialTheme.colors.surface else themeColor,
+        onColor = if (preferences.improveAccessibility) MaterialTheme.colors.onSurface else onColor
+    ) {
         Card(
             modifier
                 .size(
@@ -131,7 +136,7 @@ fun BoxWithConstraintsScope.NowPlaying(
                         }
                     }
                 },
-            shape = RoundedCornerShape(12.dp * (1f - progress)),
+            shape = RoundedCornerShape(12.dp * (1f - progress) + preferences.screenCornerSizeDp.dp * progress),
             backgroundColor = Color.Transparent,
             elevation = 1.dp + 23.dp * progress
         ) {
@@ -143,11 +148,13 @@ fun BoxWithConstraintsScope.NowPlaying(
                 var horizontalDragOffset by remember { mutableStateOf(0f) }.apply {
                     with(density) { value.coerceIn(-48.dp.toPx()..48.dp.toPx()) }
                 }
-                Image(
-                    blurredImage ?: EmptyImage, null,
-                    Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
+                if (!preferences.improveAccessibility) {
+                    Image(
+                        blurredImage ?: EmptyImage, null,
+                        Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
                 Column(
                     Modifier.fillMaxWidth()
                         .align(Alignment.BottomCenter)

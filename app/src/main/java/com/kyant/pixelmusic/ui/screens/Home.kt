@@ -2,7 +2,6 @@ package com.kyant.pixelmusic.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -37,7 +36,7 @@ import com.kyant.pixelmusic.ui.theme.androidGreen
 import com.kyant.pixelmusic.ui.theme.androidOrange
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Home(navController: NavHostController) {
     // val keyboardController = LocalSoftwareKeyboardController.current

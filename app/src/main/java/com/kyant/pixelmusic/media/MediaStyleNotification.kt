@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
 import com.kyant.pixelmusic.R
+import com.kyant.pixelmusic.data.Media
 
 fun Context.createNotificationChannel(channelId: String, name: String) {
     ContextCompat.getSystemService(this, NotificationManager::class.java)?.apply {

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.kyant.pixelmusic.locals.LocalPixelPlayer
-import com.kyant.pixelmusic.media.Media
+import com.kyant.pixelmusic.data.Media
 
 @SuppressLint("ModifierParameter")
 @Composable
