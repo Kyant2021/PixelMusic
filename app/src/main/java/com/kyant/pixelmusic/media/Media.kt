@@ -73,7 +73,7 @@ object Media {
         scope.launch {
             val dataStore = DataStore(context, "playlists")
             dataStore.getOrNull<List<SerializedSong>>("playlist_0")?.forEach {
-                addSongToPlaylist(songs.size, it.toSong(context))
+                addSongToPlaylist(it.toSong(context))
             }
             dataStore.getOrNull<Triple<Int?, Long?, Boolean?>>("playlist_0_state")?.let {
                 player?.seekTo(it.first ?: 0, it.second ?: 0)
@@ -86,11 +86,20 @@ object Media {
     fun restore() {
         player?.stop()
         player = null
-        browser.disconnect()
         session?.isActive = false
         session = null
         songs.clear()
         nowPlaying = null
+    }
+
+    private fun addSongToPlaylist(song: Song) {
+        song.mediaUrl?.let {
+            songs += song
+            val source = ProgressiveMediaSource
+                .Factory(dataSourceFactory)
+                .createMediaSource(MediaItem.fromUri(it.toUri()))
+            player?.addMediaSource(source)
+        }
     }
 
     fun addSongToPlaylist(index: Int, song: Song) {
@@ -103,7 +112,7 @@ object Media {
         }
     }
 
-    fun clearPlaylist() {
+    fun clearPlaylists() {
         songs.clear()
         player?.clearMediaItems()
     }

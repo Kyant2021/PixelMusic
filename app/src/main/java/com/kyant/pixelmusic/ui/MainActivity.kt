@@ -38,8 +38,10 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         createNotificationChannel(Media.NOTIFICATION_CHANNEL_ID, getString(R.string.app_name))
         Media.init(this, connectionCallbacks)
-        if (!DataStore(this, "account").contains("login")) {
-            startActivity(Intent(this, Startup::class.java))
+        CoroutineScope(Dispatchers.IO).launch {
+            if (!DataStore(this@MainActivity, "account").contains("login")) {
+                startActivity(Intent(this@MainActivity, Startup::class.java))
+            }
         }
         setContent {
             PixelMusicTheme(window) {
@@ -80,7 +82,13 @@ class MainActivity : ComponentActivity() {
             Media.browser.sessionToken.also { token ->
                 val mediaController = MediaControllerCompat(this@MainActivity, token)
                 MediaControllerCompat.setMediaController(this@MainActivity, mediaController)
-                Media.syncWithPlaylists(this@MainActivity)
+                ContextCompat.startForegroundService(
+                    this@MainActivity,
+                    Intent(application, MediaPlaybackService::class.java)
+                )
+                if (Media.songs.isEmpty()) {
+                    Media.syncWithPlaylists(this@MainActivity)
+                }
             }
         }
 
@@ -110,8 +118,9 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         volumeControlStream = AudioManager.STREAM_MUSIC
         DataStore(this, "playlists")
-            .getOrNull<Triple<Int?, Long?, Boolean?>>("playlist_0_state")?.let {
-                Media.player?.playWhenReady = it.third ?: false
+            .getOrNull<Triple<Int?, Long?, Boolean?>>("playlist_0_state")?.let { triple ->
+                triple.first?.let { Media.nowPlaying = it }
+                triple.third?.let { Media.player?.playWhenReady = it }
             }
     }
 
@@ -120,6 +129,7 @@ class MainActivity : ComponentActivity() {
         Media.syncPlaylistsToLocal(this)
         unregisterReceiver(mediaButtonReceiver)
         ContextCompat.getSystemService(this, MediaPlaybackService::class.java)?.stopSelf()
-        Media.restore()
+        Media.browser.disconnect()
+        // Media.restore()
     }
 }

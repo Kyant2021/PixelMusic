@@ -13,13 +13,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -31,7 +29,7 @@ import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.media.toSong
 import com.kyant.pixelmusic.ui.song.Song
 
-@OptIn(ExperimentalAnimatedInsets::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalAnimatedInsets::class)
 @Composable
 fun Search(
     focusRequester: FocusRequester,
@@ -39,7 +37,7 @@ fun Search(
     nestedScrollConnection: NestedScrollConnection,
     modifier: Modifier = Modifier
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
+    // val keyboardController = LocalSoftwareKeyboardController.current
     var value by remember { mutableStateOf(TextFieldValue()) }
     val songs = remember(value.text) { mutableStateListOf<Song>() }
     LaunchedEffect(value.text) {
@@ -61,7 +59,7 @@ fun Search(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     focusRequester.freeFocus()
-                    keyboardController?.hideSoftwareKeyboard()
+                    // keyboardController?.hideSoftwareKeyboard()
                 }
             ),
             singleLine = true

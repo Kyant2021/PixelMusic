@@ -17,13 +17,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -37,14 +35,10 @@ import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.ui.component.TopBar
 import kotlinx.coroutines.launch
 
-@OptIn(
-    ExperimentalComposeUiApi::class,
-    ExperimentalFoundationApi::class,
-    ExperimentalMaterialApi::class
-)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun Home(navController: NavHostController) {
-    val keyboardController = LocalSoftwareKeyboardController.current
+    // val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = FocusRequester.Default
     val scope = rememberCoroutineScope()
     val (searchState, accountState) = rememberSwipeableState(false)
@@ -134,7 +128,7 @@ fun Home(navController: NavHostController) {
                         scope.launch {
                             searchState.animateTo(false)
                             focusRequester.freeFocus()
-                            keyboardController?.hideSoftwareKeyboard()
+                            // keyboardController?.hideSoftwareKeyboard()
                         }
                     }
                     return super.onPostScroll(consumed, available, source)
@@ -149,10 +143,10 @@ fun Home(navController: NavHostController) {
         LaunchedEffect(searchState.targetValue) {
             if (searchState.targetValue) {
                 focusRequester.requestFocus()
-                keyboardController?.showSoftwareKeyboard()
+                // keyboardController?.showSoftwareKeyboard()
             } else {
                 focusRequester.freeFocus()
-                keyboardController?.hideSoftwareKeyboard()
+                // keyboardController?.hideSoftwareKeyboard()
             }
         }
     }

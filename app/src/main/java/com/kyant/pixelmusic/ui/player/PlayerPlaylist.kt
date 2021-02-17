@@ -30,7 +30,7 @@ fun PlayerPlaylist(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.h5
             )
             OutlinedButton(
-                { Media.clearPlaylist() },
+                {},
                 Modifier.padding(horizontal = 8.dp)
             ) {
                 Icon(Icons.Outlined.ClearAll, "Clear all")
@@ -39,10 +39,8 @@ fun PlayerPlaylist(modifier: Modifier = Modifier) {
             }
         }
         LazyColumn {
-            if (!Media.songs.isNullOrEmpty()) {
-                itemsIndexed(Media.songs, { _, song -> song.id.toString() }) { index, song ->
-                    PlayerPlaylistItem(index, song, song.id == LocalNowPlaying.current.id)
-                }
+            itemsIndexed(Media.songs) { index, song ->
+                PlayerPlaylistItem(index, song, song.id == LocalNowPlaying.current.id)
             }
         }
     }
