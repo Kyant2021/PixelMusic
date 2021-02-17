@@ -24,10 +24,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.kyant.pixelmusic.ui.insets.navigationBarsPadding
-import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.api.Lyrics
 import com.kyant.pixelmusic.locals.LocalPixelPlayer
+import com.kyant.pixelmusic.locals.LocalPreferences
+import com.kyant.pixelmusic.ui.insets.navigationBarsPadding
+import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.util.currentIndex
 import com.kyant.pixelmusic.util.indexOf
 import com.kyant.pixelmusic.util.isCurrentLine
@@ -44,6 +45,7 @@ fun Lyrics(
 ) {
     val density = LocalDensity.current
     val player = LocalPixelPlayer.current
+    val preferences = LocalPreferences.current
     val scope = rememberCoroutineScope()
     val state = rememberLazyListState()
     var dragOffset by remember { mutableStateOf(0f) }
@@ -89,9 +91,11 @@ fun Lyrics(
                                     else (0.4f * (6 - deltaIndex) / 6).coerceAtLeast(0.1f)
                                 ).value
                             ),
-                        fontWeight = FontWeight.Black,
+                        fontWeight = FontWeight(preferences.lyricsFontWeight),
                         style = MaterialTheme.typography.h5.copy(
-                            fontSize = MaterialTheme.typography.h5.fontSize * animateFloatAsState(if (isCurrentLine) 1.1f else 1f).value
+                            fontSize = MaterialTheme.typography.h5.fontSize
+                                    * animateFloatAsState(if (isCurrentLine) 1.1f else 1f).value
+                                    * preferences.lyricsFontScale
                         )
                     )
                 }

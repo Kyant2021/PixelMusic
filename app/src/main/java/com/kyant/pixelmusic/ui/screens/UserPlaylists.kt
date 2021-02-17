@@ -16,14 +16,14 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.kyant.pixelmusic.ui.layer.BackLayer
-import com.kyant.pixelmusic.ui.layer.ForeLayer
 import com.kyant.pixelmusic.api.UserId
 import com.kyant.pixelmusic.api.findUserPlaylist
-import com.kyant.pixelmusic.api.login.LoginResult
 import com.kyant.pixelmusic.api.playlist.Playlist
+import com.kyant.pixelmusic.locals.LocalLogin
+import com.kyant.pixelmusic.locals.ProvideLogin
+import com.kyant.pixelmusic.ui.layer.BackLayer
+import com.kyant.pixelmusic.ui.layer.ForeLayer
 import com.kyant.pixelmusic.ui.song.PlaylistItem
-import com.kyant.pixelmusic.util.DataStore
 import com.kyant.pixelmusic.util.EmptyImage
 import com.kyant.pixelmusic.util.loadImage
 import kotlinx.coroutines.launch
@@ -38,42 +38,43 @@ fun UserPlaylists() {
     var playlist by remember { mutableStateOf<Playlist?>(null) }
     val playlists = remember(userId) { mutableStateListOf<Playlist>() }
     val images = remember(userId) { mutableStateListOf<ImageBitmap>() }
-    val dataStore = DataStore(context, "account")
-    val login = dataStore.getJsonOrNull<LoginResult>("login")
-    LaunchedEffect(userId) {
-        userId = login?.account?.id
-        playlists.addAll(userId?.findUserPlaylist()?.playlist ?: emptyList())
-        playlists.forEach {
-            images += it.coverImgUrl?.loadImage(context) ?: EmptyImage
-        }
-    }
-    BackHandler(state.targetValue) {
-        scope.launch {
-            state.animateTo(false, spring(stiffness = 700f))
-        }
-    }
-    BackLayer(state) {
-        LazyColumn(contentPadding = PaddingValues(top = 24.dp, bottom = 24.dp)) {
-            item {
-                Text(
-                    "${login?.profile?.nickname.orEmpty()}'s playlists",
-                    Modifier.padding(16.dp),
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    style = MaterialTheme.typography.h5
-                )
-            }
-            items(playlists, { it.id?.toString().orEmpty() }) {
-                PlaylistItem(it, {
-                    playlist = it
-                    scope.launch {
-                        state.animateTo(true, spring(stiffness = 700f))
-                    }
-                })
+    ProvideLogin {
+        val login = LocalLogin.current
+        LaunchedEffect(userId) {
+            userId = login?.account?.id
+            playlists.addAll(userId?.findUserPlaylist()?.playlist ?: emptyList())
+            playlists.forEach {
+                images += it.coverImgUrl?.loadImage(context) ?: EmptyImage
             }
         }
-    }
-    ForeLayer(state) {
-        Playlist(playlist)
+        BackHandler(state.targetValue) {
+            scope.launch {
+                state.animateTo(false, spring(stiffness = 700f))
+            }
+        }
+        BackLayer(state) {
+            LazyColumn(contentPadding = PaddingValues(top = 24.dp, bottom = 24.dp)) {
+                item {
+                    Text(
+                        "${login?.profile?.nickname.orEmpty()}'s playlists",
+                        Modifier.padding(16.dp),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = MaterialTheme.typography.h5
+                    )
+                }
+                items(playlists, { it.id?.toString().orEmpty() }) {
+                    PlaylistItem(it, {
+                        playlist = it
+                        scope.launch {
+                            state.animateTo(true, spring(stiffness = 700f))
+                        }
+                    })
+                }
+            }
+        }
+        ForeLayer(state) {
+            Playlist(playlist)
+        }
     }
 }

@@ -29,7 +29,7 @@ import com.kyant.pixelmusic.ui.layer.component1
 import com.kyant.pixelmusic.ui.layer.component2
 import com.kyant.pixelmusic.ui.layout.TwoColumnGrid
 import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
-import com.kyant.pixelmusic.ui.util.Quadruple
+import com.kyant.pixelmusic.util.Quadruple
 import com.kyant.pixelmusic.ui.component.TopBar
 import com.kyant.pixelmusic.ui.theme.androidBlue
 import com.kyant.pixelmusic.ui.theme.androidGreen

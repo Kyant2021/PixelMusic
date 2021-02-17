@@ -3,7 +3,7 @@ package com.kyant.pixelmusic.api.playlist
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Creator(
+data class Subscriber(
     val defaultAvatar: Boolean? = false,
     val province: Long? = 0,
     val authStatus: Long? = 0,
@@ -30,7 +30,7 @@ data class Creator(
     val vipType: Long? = 0,
     val remarkName: String? = "",
     val authenticationTypes: Long? = 0,
-    val avatarDetail: AvatarDetail? = AvatarDetail(),
+    val avatarDetail: String? = "",
     val anchor: Boolean? = false,
     val backgroundImgIdStr: String? = "",
     val avatarImgIdStr: String? = ""

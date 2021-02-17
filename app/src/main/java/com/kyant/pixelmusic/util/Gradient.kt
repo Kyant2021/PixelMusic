@@ -1,4 +1,4 @@
-package com.kyant.pixelmusic.ui.util
+package com.kyant.pixelmusic.util
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background

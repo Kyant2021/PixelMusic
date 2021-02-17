@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.kyant.pixelmusic.ui.iconassets.appleIcon
+import com.kyant.pixelmusic.ui.iconassets.outlinedAppleIcon
 
 @Composable
 fun About() {
     Column {
-        Image(appleIcon(), null, Modifier.size(256.dp))
+        Image(outlinedAppleIcon(), null, Modifier.size(256.dp))
     }
 }

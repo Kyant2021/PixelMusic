@@ -1,4 +1,4 @@
-package com.kyant.pixelmusic.ui.util
+package com.kyant.pixelmusic.util
 
 import java.io.Serializable
 

@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
-import com.kyant.pixelmusic.ui.util.Quadruple
+import com.kyant.pixelmusic.util.Quadruple
 
 @SuppressLint("ModifierParameter")
 @OptIn(ExperimentalFoundationApi::class)

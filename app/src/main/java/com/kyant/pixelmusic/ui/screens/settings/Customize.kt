@@ -3,14 +3,12 @@ package com.kyant.pixelmusic.ui.screens.settings
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
@@ -26,11 +24,16 @@ fun Customize() {
         val legacyPreferences = LocalPreferences.current
         var preferences by remember { mutableStateOf(legacyPreferences) }
         var screenCornerSizeDp by remember { mutableStateOf(TextFieldValue(preferences.screenCornerSizeDp.toString())) }
-        LaunchedEffect(preferences, screenCornerSizeDp) {
+        var lyricsFontScale by remember { mutableStateOf(TextFieldValue(preferences.lyricsFontScale.toString())) }
+        var lyricsFontWeight by remember { mutableStateOf(preferences.lyricsFontWeight) }
+        LaunchedEffect(preferences, screenCornerSizeDp, lyricsFontScale, lyricsFontWeight) {
             context.updatePreferences(
                 preferences.copy(
                     screenCornerSizeDp = screenCornerSizeDp.text.toFloatOrNull()
-                        ?: legacyPreferences.screenCornerSizeDp
+                        ?: legacyPreferences.screenCornerSizeDp,
+                    lyricsFontScale = lyricsFontScale.text.toFloatOrNull()
+                        ?: legacyPreferences.lyricsFontScale,
+                    lyricsFontWeight = lyricsFontWeight
                 )
             )
         }
@@ -51,7 +54,7 @@ fun Customize() {
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .height(56.dp)
+                        .heightIn(min = 56.dp)
                         .padding(horizontal = 16.dp),
                     Arrangement.SpaceBetween,
                     Alignment.CenterVertically
@@ -69,7 +72,7 @@ fun Customize() {
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .height(56.dp)
+                        .heightIn(min = 56.dp)
                         .padding(horizontal = 16.dp),
                     Arrangement.SpaceBetween,
                     Alignment.CenterVertically
@@ -81,6 +84,79 @@ fun Customize() {
                         Modifier.width(128.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true
+                    )
+                }
+            }
+            item {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 56.dp)
+                        .padding(horizontal = 16.dp)
+                ) {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        Arrangement.SpaceBetween,
+                        Alignment.CenterVertically
+                    ) {
+                        Text("Lyrics font scale")
+                        OutlinedTextField(
+                            lyricsFontScale,
+                            { lyricsFontScale = it },
+                            Modifier.width(128.dp),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            singleLine = true
+                        )
+                    }
+                    Text(
+                        "This is a lyric.",
+                        Modifier.padding(vertical = 16.dp),
+                        MaterialTheme.colors.primary,
+                        fontWeight = FontWeight(lyricsFontWeight),
+                        style = MaterialTheme.typography.h5
+                    )
+                }
+            }
+            item {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 56.dp)
+                        .padding(horizontal = 16.dp)
+                ) {
+                    Text("Lyrics font weight")
+                    Slider(
+                        lyricsFontWeight / 100f,
+                        { lyricsFontWeight = it.toInt() * 100 },
+                        valueRange = 1f..10f
+                    )
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        Arrangement.SpaceBetween,
+                        Alignment.CenterVertically
+                    ) {
+                        Text(
+                            "Thin",
+                            color = MaterialTheme.colors.primary,
+                            fontWeight = FontWeight.Thin,
+                            style = MaterialTheme.typography.caption
+                        )
+                        Text(
+                            "Normal",
+                            color = MaterialTheme.colors.primary,
+                            fontWeight = FontWeight.Normal,
+                            style = MaterialTheme.typography.caption
+                        )
+                        Text(
+                            "Black",
+                            color = MaterialTheme.colors.primary,
+                            fontWeight = FontWeight.Black,
+                            style = MaterialTheme.typography.caption
+                        )
+                    }
+                    Text(
+                        lyricsFontWeight.toString(),
+                        Modifier.padding(vertical = 16.dp)
                     )
                 }
             }
