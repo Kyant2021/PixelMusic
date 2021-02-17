@@ -17,7 +17,7 @@ import kotlin.time.toDuration
 
 @OptIn(ExperimentalTime::class)
 @Composable
-fun ProgressBar(modifier: Modifier = Modifier) {
+fun ProgressBar(animationProgress: Float, modifier: Modifier = Modifier) {
     val player = LocalPixelPlayer.current
     Column(modifier.fillMaxWidth()) {
         Box {
@@ -30,11 +30,16 @@ fun ProgressBar(modifier: Modifier = Modifier) {
                 color = MaterialTheme.colors.primary.copy(0.4f),
                 backgroundColor = LocalContentColor.current.copy(0.08f)
             )
-            Slider(
-                player.position.value,
-                { player.seekToPosition(it.toLong()) },
-                valueRange = 0f..player.duration.coerceAtLeast(0).toFloat()
-            )
+            if (animationProgress == 1f) {
+                Slider(
+                    player.position.value,
+                    {
+                        if (animationProgress == 1f && !(it - 1000..it + 1000).contains(player.position.value))
+                            player.seekToPosition(it.toLong())
+                    },
+                    valueRange = 0f..player.duration.coerceAtLeast(0).toFloat()
+                )
+            }
         }
         Row(
             Modifier

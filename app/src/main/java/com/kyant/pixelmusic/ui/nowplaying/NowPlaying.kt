@@ -175,7 +175,7 @@ fun BoxWithConstraintsScope.NowPlaying(
                             },
                             Modifier.padding(16.dp)
                         )
-                        ProgressBar(Modifier.padding(32.dp, 8.dp))
+                        ProgressBar(progress, Modifier.padding(32.dp, 8.dp))
                     }
                 }
                 Box(Modifier.padding(top = 12.dp)) {
