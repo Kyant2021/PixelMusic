@@ -24,8 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.R
+import com.kyant.pixelmusic.ui.iconassets.appleIcon
 import com.kyant.pixelmusic.ui.theme.googleBlue
 import com.kyant.pixelmusic.ui.theme.googleGreen
 import com.kyant.pixelmusic.ui.theme.googleYellow
@@ -110,14 +110,21 @@ fun BoxWithConstraintsScope.Page1(start: Int, setStart: (Int) -> Unit) {
         }.value
 
         BoxWithConstraints(Modifier.fillMaxSize()) {
-            Image(
-                painterResource(R.drawable.ic_launcher_foreground), null,
+            Box(
                 Modifier
                     .size(si)
                     .offset { oi }
                     .alpha(ai)
-                    .background(googleBlue, SuperellipseCornerShape(16.dp))
-            )
+            ) {
+                Image(
+                    appleIcon(googleBlue), null,
+                    Modifier.fillMaxSize()
+                )
+                Image(
+                    painterResource(R.drawable.ic_launcher_foreground), null,
+                    Modifier.fillMaxSize()
+                )
+            }
             Text(
                 stringResource(R.string.app_name),
                 Modifier

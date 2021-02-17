@@ -11,10 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
-import com.kyant.inimate.insets.ExperimentalAnimatedInsets
-import com.kyant.inimate.insets.LocalSysUiController
-import com.kyant.inimate.insets.ProvideWindowInsets
-import com.kyant.inimate.insets.SystemUiController
+import com.kyant.pixelmusic.ui.insets.ExperimentalAnimatedInsets
+import com.kyant.pixelmusic.ui.insets.LocalSysUiController
+import com.kyant.pixelmusic.ui.insets.ProvideWindowInsets
+import com.kyant.pixelmusic.ui.insets.SystemUiController
+import com.kyant.pixelmusic.locals.ProvidePreferences
 
 private val DarkColorPalette = darkColors(
     primary = googleBlueDark,
@@ -39,8 +40,10 @@ fun PixelMusicTheme(
     MaterialTheme(colors, typography, shapes) {
         CompositionLocalProvider(LocalContentColor provides colors.onSurface) {
             ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
-                CompositionLocalProvider(LocalSysUiController provides SystemUiController(window)) {
-                    content()
+                ProvidePreferences {
+                    CompositionLocalProvider(LocalSysUiController provides SystemUiController(window)) {
+                        content()
+                    }
                 }
             }
         }

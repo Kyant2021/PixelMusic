@@ -15,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.layout.StaggeredGrid
+import com.kyant.pixelmusic.ui.layout.StaggeredGrid
 import com.kyant.pixelmusic.api.findNewReleases
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.ui.song.SongCompact

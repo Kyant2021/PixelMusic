@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.shape.SmoothRoundedCornerShape
-import com.kyant.inimate.shape.SuperellipseCornerShape
+import com.kyant.pixelmusic.ui.shape.SmoothRoundedCornerShape
+import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.locals.LocalPixelPlayer
 import com.kyant.pixelmusic.data.Media
 import com.kyant.pixelmusic.media.Song

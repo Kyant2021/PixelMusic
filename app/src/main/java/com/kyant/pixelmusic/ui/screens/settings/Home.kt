@@ -13,8 +13,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
-import com.kyant.inimate.layout.TwoColumnGrid
-import com.kyant.inimate.util.Quadruple
+import com.kyant.pixelmusic.ui.layout.TwoColumnGrid
+import com.kyant.pixelmusic.ui.util.Quadruple
 import com.kyant.pixelmusic.ui.theme.androidBlue
 import com.kyant.pixelmusic.ui.theme.androidOrange
 

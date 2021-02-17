@@ -20,9 +20,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.layer.BackLayer
-import com.kyant.inimate.layer.ForeLayer
-import com.kyant.inimate.shape.SuperellipseCornerShape
+import com.kyant.pixelmusic.ui.layer.BackLayer
+import com.kyant.pixelmusic.ui.layer.ForeLayer
+import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.api.TopList
 import com.kyant.pixelmusic.api.findTopList
 import com.kyant.pixelmusic.util.EmptyImage

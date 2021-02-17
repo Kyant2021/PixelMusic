@@ -15,6 +15,11 @@ android {
         versionCode(1)
         versionName = "0.1.0-alpha09"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            ndkBuild {
+                abiFilters("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
+            }
+        }
     }
 
     buildTypes {
@@ -23,6 +28,11 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
+        }
+    }
+    externalNativeBuild {
+        ndkBuild {
+            path = file("jni/Android.mk")
         }
     }
     compileOptions {
@@ -47,7 +57,6 @@ dependencies {
     val compose = "1.0.0-SNAPSHOT"
     val exoPlayer = "2.12.3"
 
-    implementation(project(":iNimate"))
     implementation(kotlin("reflect", "1.4.30"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0-RC")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
@@ -55,6 +64,7 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:$ktor")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-SNAPSHOT")
     implementation("androidx.core:core-ktx:1.5.0-SNAPSHOT")
+    implementation("androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-SNAPSHOT")
     implementation("androidx.media:media:1.3.0-SNAPSHOT")
     implementation("androidx.palette:palette:1.0.0")
     implementation("androidx.compose.material:material:$compose")

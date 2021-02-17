@@ -21,9 +21,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.insets.ExperimentalAnimatedInsets
-import com.kyant.inimate.insets.navigationBarsWithImePadding
-import com.kyant.inimate.insets.rememberImeNestedScrollConnection
+import com.kyant.pixelmusic.ui.insets.ExperimentalAnimatedInsets
+import com.kyant.pixelmusic.ui.insets.navigationBarsWithImePadding
+import com.kyant.pixelmusic.ui.insets.rememberImeNestedScrollConnection
 import com.kyant.pixelmusic.api.searchSongs
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.media.toSong

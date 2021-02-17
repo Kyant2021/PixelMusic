@@ -24,8 +24,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.insets.navigationBarsPadding
-import com.kyant.inimate.shape.SuperellipseCornerShape
+import com.kyant.pixelmusic.ui.insets.navigationBarsPadding
+import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.api.Lyrics
 import com.kyant.pixelmusic.locals.LocalPixelPlayer
 import com.kyant.pixelmusic.util.currentIndex

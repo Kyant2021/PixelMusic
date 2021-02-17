@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.insets.statusBarsPadding
+import com.kyant.pixelmusic.ui.insets.statusBarsPadding
 import com.kyant.pixelmusic.api.login.LoginResult
 import com.kyant.pixelmusic.util.DataStore
 

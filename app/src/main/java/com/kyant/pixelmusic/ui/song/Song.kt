@@ -14,8 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.blur.blur
-import com.kyant.inimate.shape.SuperellipseCornerShape
+import com.kyant.pixelmusic.ui.blur.blur
+import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.locals.LocalPixelPlayer
 import com.kyant.pixelmusic.data.Media
 import com.kyant.pixelmusic.media.Song

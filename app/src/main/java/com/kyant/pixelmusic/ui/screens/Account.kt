@@ -17,9 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.layout.TwoColumnGrid
-import com.kyant.inimate.shape.SuperellipseCornerShape
-import com.kyant.inimate.util.Quadruple
+import com.kyant.pixelmusic.ui.layout.TwoColumnGrid
+import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
+import com.kyant.pixelmusic.ui.util.Quadruple
 import com.kyant.pixelmusic.locals.LocalLogin
 import com.kyant.pixelmusic.locals.ProvideLogin
 import com.kyant.pixelmusic.ui.Settings

@@ -16,8 +16,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.layer.BackLayer
-import com.kyant.inimate.layer.ForeLayer
+import com.kyant.pixelmusic.ui.layer.BackLayer
+import com.kyant.pixelmusic.ui.layer.ForeLayer
 import com.kyant.pixelmusic.api.UserId
 import com.kyant.pixelmusic.api.findUserPlaylist
 import com.kyant.pixelmusic.api.login.LoginResult

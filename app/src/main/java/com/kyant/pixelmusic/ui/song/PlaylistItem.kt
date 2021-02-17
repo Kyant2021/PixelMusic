@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.shape.SuperellipseCornerShape
+import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.api.playlist.Playlist
 import com.kyant.pixelmusic.util.EmptyImage
 import com.kyant.pixelmusic.util.loadImage

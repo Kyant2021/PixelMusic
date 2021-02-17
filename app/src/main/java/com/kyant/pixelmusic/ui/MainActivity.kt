@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.*
-import com.kyant.inimate.layer.*
+import com.kyant.pixelmusic.ui.layer.*
 import com.kyant.pixelmusic.R
 import com.kyant.pixelmusic.data.Media
 import com.kyant.pixelmusic.locals.*
@@ -67,9 +67,7 @@ class MainActivity : ComponentActivity() {
                             composable(Screens.Leaderboards.name) { Leaderboards() }
                         }
                         ProvideNowPlaying(Media.nowPlaying) {
-                            ProvidePreferences {
-                                NowPlaying(nowPlayingState, playlistState)
-                            }
+                            NowPlaying(nowPlayingState, playlistState)
                             ForeLayer(playlistState) {
                                 PlayerPlaylist()
                             }

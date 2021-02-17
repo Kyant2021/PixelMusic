@@ -16,7 +16,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.kyant.inimate.insets.statusBarsPadding
+import com.kyant.pixelmusic.ui.insets.statusBarsPadding
 import com.kyant.pixelmusic.api.login
 import com.kyant.pixelmusic.util.DataStore
 import com.kyant.pixelmusic.util.md5
