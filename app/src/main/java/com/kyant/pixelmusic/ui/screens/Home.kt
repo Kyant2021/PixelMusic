@@ -5,24 +5,21 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.FeaturedPlayList
+import androidx.compose.material.icons.outlined.Leaderboard
+import androidx.compose.material.icons.outlined.NewReleases
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
@@ -31,6 +28,7 @@ import com.kyant.inimate.layer.BackLayer
 import com.kyant.inimate.layer.ForeLayer
 import com.kyant.inimate.layer.component1
 import com.kyant.inimate.layer.component2
+import com.kyant.inimate.layout.TwoColumnGrid
 import com.kyant.inimate.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.ui.component.TopBar
 import kotlinx.coroutines.launch
@@ -78,41 +76,14 @@ fun Home(navController: NavHostController) {
                 }
             }
             Spacer(Modifier.height(32.dp))
-            val items = listOf(
-                Triple("History", Icons.Outlined.History, null),
-                Triple("Playlists", Icons.Outlined.FeaturedPlayList, Screens.MyPlaylists.name),
-                Triple("Statistics", Icons.Outlined.TrendingUp, null),
-                Triple("New releases", Icons.Outlined.NewReleases, Screens.NewReleases.name),
-                Triple("Leaderboards", Icons.Outlined.Leaderboard, Screens.Leaderboards.name)
+            TwoColumnGrid(
+                listOf(
+                    Triple("Playlists", Icons.Outlined.FeaturedPlayList, Screens.MyPlaylists.name),
+                    Triple("New releases", Icons.Outlined.NewReleases, Screens.NewReleases.name),
+                    Triple("Leaderboards", Icons.Outlined.Leaderboard, Screens.Leaderboards.name)
+                ),
+                { navController.navigate(it) }
             )
-            LazyVerticalGrid(GridCells.Fixed(2)) {
-                items(items) {
-                    Card(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        SuperellipseCornerShape(8.dp),
-                        MaterialTheme.colors.onSurface.copy(0.02f),
-                        elevation = 0.dp
-                    ) {
-                        Row(
-                            Modifier
-                                .clickable { it.third?.let { navController.navigate(it) } }
-                                .padding(16.dp, 32.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(it.second, it.first)
-                            Spacer(Modifier.width(16.dp))
-                            Text(
-                                it.first,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                                style = MaterialTheme.typography.h6
-                            )
-                        }
-                    }
-                }
-            }
         }
     }
     ForeLayer(searchState) {

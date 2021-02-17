@@ -33,7 +33,7 @@ fun ProgressBar(modifier: Modifier = Modifier) {
             Slider(
                 player.position.value,
                 { player.seekToPosition(it.toLong()) },
-                valueRange = 0f..player.duration.toFloat()
+                valueRange = 0f..player.duration.coerceAtLeast(0).toFloat()
             )
         }
         Row(

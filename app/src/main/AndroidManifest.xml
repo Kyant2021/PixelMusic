@@ -27,6 +27,9 @@
         <activity
             android:name=".ui.Startup"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.Settings"
+            android:windowSoftInputMode="adjustResize" />
 
         <service
             android:name=".media.MediaPlaybackService"
