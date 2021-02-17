@@ -2,7 +2,7 @@ package com.kyant.inimate.util
 
 import java.io.Serializable
 
-data class Rectple<out A, out B, out C, out D>(
+data class Quadruple<out A, out B, out C, out D>(
     val first: A,
     val second: B,
     val third: C,
@@ -11,4 +11,4 @@ data class Rectple<out A, out B, out C, out D>(
     override fun toString(): String = "($first, $second, $third, $fourth)"
 }
 
-fun <T> Rectple<T, T, T, T>.toList(): List<T> = listOf(first, second, third, fourth)
+fun <T> Quadruple<T, T, T, T>.toList(): List<T> = listOf(first, second, third, fourth)

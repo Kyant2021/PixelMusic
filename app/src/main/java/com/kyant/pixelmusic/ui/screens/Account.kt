@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.kyant.inimate.layout.TwoColumnGrid
 import com.kyant.inimate.shape.SuperellipseCornerShape
-import com.kyant.inimate.util.Rectple
+import com.kyant.inimate.util.Quadruple
 import com.kyant.pixelmusic.locals.LocalLogin
 import com.kyant.pixelmusic.locals.ProvideLogin
 import com.kyant.pixelmusic.ui.Settings
@@ -57,22 +57,22 @@ fun Account(modifier: Modifier = Modifier) {
             }
             TwoColumnGrid(
                 listOf(
-                    Rectple(
+                    Quadruple(
                         "Favorites",
                         Icons.Outlined.Favorite, androidOrange,
                         null
                     ),
-                    Rectple(
+                    Quadruple(
                         "History",
                         Icons.Outlined.History, androidNavy,
                         null
                     ),
-                    Rectple(
+                    Quadruple(
                         "Statistics",
                         Icons.Outlined.TrendingUp, androidGreen,
                         null
                     ),
-                    Rectple(
+                    Quadruple(
                         "Settings",
                         Icons.Outlined.Settings, null,
                         Settings::class.java

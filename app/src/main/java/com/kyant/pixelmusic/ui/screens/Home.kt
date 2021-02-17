@@ -30,7 +30,7 @@ import com.kyant.inimate.layer.component1
 import com.kyant.inimate.layer.component2
 import com.kyant.inimate.layout.TwoColumnGrid
 import com.kyant.inimate.shape.SuperellipseCornerShape
-import com.kyant.inimate.util.Rectple
+import com.kyant.inimate.util.Quadruple
 import com.kyant.pixelmusic.ui.component.TopBar
 import com.kyant.pixelmusic.ui.theme.androidBlue
 import com.kyant.pixelmusic.ui.theme.androidGreen
@@ -82,17 +82,17 @@ fun Home(navController: NavHostController) {
             Spacer(Modifier.height(32.dp))
             TwoColumnGrid(
                 listOf(
-                    Rectple(
+                    Quadruple(
                         "Playlists",
                         Icons.Outlined.FeaturedPlayList, androidBlue,
                         Screens.MyPlaylists.name
                     ),
-                    Rectple(
+                    Quadruple(
                         "New releases",
                         Icons.Outlined.NewReleases, androidOrange,
                         Screens.NewReleases.name
                     ),
-                    Rectple(
+                    Quadruple(
                         "Leaderboards",
                         Icons.Outlined.Leaderboard, androidGreen,
                         Screens.Leaderboards.name

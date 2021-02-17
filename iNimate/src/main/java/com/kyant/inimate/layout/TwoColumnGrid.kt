@@ -19,13 +19,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kyant.inimate.shape.SuperellipseCornerShape
-import com.kyant.inimate.util.Rectple
+import com.kyant.inimate.util.Quadruple
 
 @SuppressLint("ModifierParameter")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun <T> TwoColumnGrid(
-    items: List<Rectple<String, ImageVector, Color?, T>>,
+    items: List<Quadruple<String, ImageVector, Color?, T>>,
     onClick: ((T) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
