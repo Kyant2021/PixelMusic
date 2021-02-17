@@ -75,10 +75,10 @@ object Media {
             dataStore.getOrNull<List<SerializedSong>>("playlist_0")?.forEach {
                 addSongToPlaylist(it.toSong(context))
             }
-            dataStore.getOrNull<Triple<Int?, Long?, Boolean?>>("playlist_0_state")?.let {
-                player?.seekTo(it.first ?: 0, it.second ?: 0)
-                player?.position?.snapTo(it.second?.toFloat() ?: 0f)
-                player?.playWhenReady = it.third ?: false
+            dataStore.getOrNull<Triple<Int?, Long?, Boolean?>>("playlist_0_state")?.let { triple ->
+                triple.first?.let { player?.seekToDefaultPosition(it) }
+                triple.second?.let { player?.seekToPosition(it) }
+                triple.third?.let { player?.playWhenReady = it }
             }
         }
     }

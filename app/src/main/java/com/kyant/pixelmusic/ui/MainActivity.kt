@@ -82,13 +82,11 @@ class MainActivity : ComponentActivity() {
             Media.browser.sessionToken.also { token ->
                 val mediaController = MediaControllerCompat(this@MainActivity, token)
                 MediaControllerCompat.setMediaController(this@MainActivity, mediaController)
-                ContextCompat.startForegroundService(
-                    this@MainActivity,
-                    Intent(application, MediaPlaybackService::class.java)
-                )
-                if (Media.songs.isEmpty()) {
-                    Media.syncWithPlaylists(this@MainActivity)
-                }
+                // ContextCompat.startForegroundService(
+                //     this@MainActivity,
+                //     Intent(application, MediaPlaybackService::class.java)
+                // )
+                Media.syncWithPlaylists(this@MainActivity)
             }
         }
 
@@ -130,6 +128,6 @@ class MainActivity : ComponentActivity() {
         unregisterReceiver(mediaButtonReceiver)
         ContextCompat.getSystemService(this, MediaPlaybackService::class.java)?.stopSelf()
         Media.browser.disconnect()
-        // Media.restore()
+        Media.restore()
     }
 }

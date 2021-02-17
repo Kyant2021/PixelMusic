@@ -115,8 +115,8 @@ fun BoxWithConstraintsScope.Page1(start: Int, setStart: (Int) -> Unit) {
                 Modifier
                     .size(si)
                     .offset { oi }
-                    .background(googleBlue, SuperellipseCornerShape(16.dp))
                     .alpha(ai)
+                    .background(googleBlue, SuperellipseCornerShape(16.dp))
             )
             Text(
                 stringResource(R.string.app_name),
