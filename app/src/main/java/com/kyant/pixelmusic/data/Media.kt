@@ -93,7 +93,7 @@ object Media {
         nowPlaying = null
     }
 
-    private fun addSongToPlaylist(song: Song) {
+    fun addSongToPlaylist(song: Song) {
         song.mediaUrl?.let {
             songs += song
             val source = ProgressiveMediaSource

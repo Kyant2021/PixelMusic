@@ -20,6 +20,8 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.*
 import com.kyant.pixelmusic.ui.layer.*
 import com.kyant.pixelmusic.R
+import com.kyant.pixelmusic.api.client
+import com.kyant.pixelmusic.api.jsonClient
 import com.kyant.pixelmusic.data.Media
 import com.kyant.pixelmusic.locals.*
 import com.kyant.pixelmusic.media.*
@@ -130,5 +132,7 @@ class MainActivity : ComponentActivity() {
         ContextCompat.getSystemService(this, MediaPlaybackService::class.java)?.stopSelf()
         Media.browser.disconnect()
         Media.restore()
+        client.close()
+        jsonClient.close()
     }
 }

@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import com.kyant.pixelmusic.util.EmptyImage
 
 @SuppressLint("ModifierParameter")
@@ -29,6 +30,7 @@ fun Cover(
     }
     Image(
         image ?: EmptyImage, null,
-        modifier.alpha(alpha.value)
+        modifier.alpha(alpha.value),
+        contentScale = ContentScale.Crop
     )
 }

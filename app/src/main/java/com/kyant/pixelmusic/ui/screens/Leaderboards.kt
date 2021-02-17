@@ -5,7 +5,10 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
@@ -20,11 +23,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.kyant.pixelmusic.api.findTopList
+import com.kyant.pixelmusic.api.playlist.Playlist
 import com.kyant.pixelmusic.ui.layer.BackLayer
 import com.kyant.pixelmusic.ui.layer.ForeLayer
 import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
-import com.kyant.pixelmusic.api.TopList
-import com.kyant.pixelmusic.api.findTopList
 import com.kyant.pixelmusic.util.EmptyImage
 import com.kyant.pixelmusic.util.loadImage
 import kotlinx.coroutines.launch
@@ -35,8 +38,8 @@ fun Leaderboards() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val state = rememberSwipeableState(false)
-    var topList by remember { mutableStateOf<TopList?>(null) }
-    val topLists = remember { mutableStateListOf<TopList>() }
+    var playlist by remember { mutableStateOf<Playlist?>(null) }
+    val topLists = remember { mutableStateListOf<Playlist>() }
     LaunchedEffect(Unit) {
         topLists.addAll(findTopList() ?: emptyList())
     }
@@ -72,7 +75,7 @@ fun Leaderboards() {
                             .clip(SuperellipseCornerShape(8.dp))
                             .clickable {
                                 scope.launch {
-                                    topList = it
+                                    playlist = it
                                     state.animateTo(true, spring(stiffness = 700f))
                                 }
                             },
@@ -83,6 +86,6 @@ fun Leaderboards() {
         }
     }
     ForeLayer(state) {
-        TopList(topList)
+        Playlist(playlist)
     }
 }

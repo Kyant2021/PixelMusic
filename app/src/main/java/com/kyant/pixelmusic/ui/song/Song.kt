@@ -14,12 +14,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.kyant.pixelmusic.ui.blur.blur
-import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
-import com.kyant.pixelmusic.locals.LocalPixelPlayer
 import com.kyant.pixelmusic.data.Media
+import com.kyant.pixelmusic.locals.LocalPixelPlayer
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.media.fix
+import com.kyant.pixelmusic.ui.blur.blur
+import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
 import com.kyant.pixelmusic.util.CacheDataStore
 import com.kyant.pixelmusic.util.EmptyImage
 import com.kyant.pixelmusic.util.loadCoverWithCache
@@ -76,8 +76,7 @@ fun BaseSong(song: Song, modifier: Modifier = Modifier) {
                             song.fix(context)
                         )
                         Media.session?.isActive = true
-                        player.next()
-                        player.seekTo(0)
+                        player.seekToNext(0)
                     } else {
                         if (Media.songs[player.currentWindowIndex].id != song.id) {
                             player.seekTo(index, 0)
