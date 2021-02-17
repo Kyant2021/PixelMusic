@@ -14,16 +14,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kyant.inimate.shape.SuperellipseCornerShape
+import com.kyant.inimate.util.Rectple
 
 @SuppressLint("ModifierParameter")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun <T> TwoColumnGrid(
-    items: List<Triple<String, ImageVector, T>>,
+    items: List<Rectple<String, ImageVector, Color?, T>>,
     onClick: ((T) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
@@ -39,11 +41,15 @@ fun <T> TwoColumnGrid(
             ) {
                 Row(
                     Modifier
-                        .clickable { onClick?.invoke(it.third) }
+                        .clickable { onClick?.invoke(it.fourth) }
                         .padding(16.dp, 32.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(it.second, it.first)
+                    if (it.third == null) {
+                        Icon(it.second, it.first)
+                    } else {
+                        Icon(it.second, it.first, tint = it.third)
+                    }
                     Spacer(Modifier.width(16.dp))
                     Text(
                         it.first,

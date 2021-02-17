@@ -30,7 +30,11 @@ import com.kyant.inimate.layer.component1
 import com.kyant.inimate.layer.component2
 import com.kyant.inimate.layout.TwoColumnGrid
 import com.kyant.inimate.shape.SuperellipseCornerShape
+import com.kyant.inimate.util.Rectple
 import com.kyant.pixelmusic.ui.component.TopBar
+import com.kyant.pixelmusic.ui.theme.androidBlue
+import com.kyant.pixelmusic.ui.theme.androidGreen
+import com.kyant.pixelmusic.ui.theme.androidOrange
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
@@ -78,9 +82,21 @@ fun Home(navController: NavHostController) {
             Spacer(Modifier.height(32.dp))
             TwoColumnGrid(
                 listOf(
-                    Triple("Playlists", Icons.Outlined.FeaturedPlayList, Screens.MyPlaylists.name),
-                    Triple("New releases", Icons.Outlined.NewReleases, Screens.NewReleases.name),
-                    Triple("Leaderboards", Icons.Outlined.Leaderboard, Screens.Leaderboards.name)
+                    Rectple(
+                        "Playlists",
+                        Icons.Outlined.FeaturedPlayList, androidBlue,
+                        Screens.MyPlaylists.name
+                    ),
+                    Rectple(
+                        "New releases",
+                        Icons.Outlined.NewReleases, androidOrange,
+                        Screens.NewReleases.name
+                    ),
+                    Rectple(
+                        "Leaderboards",
+                        Icons.Outlined.Leaderboard, androidGreen,
+                        Screens.Leaderboards.name
+                    )
                 ),
                 { navController.navigate(it) }
             )

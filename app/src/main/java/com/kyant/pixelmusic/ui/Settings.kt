@@ -15,7 +15,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import com.kyant.inimate.layout.TwoColumnGrid
+import com.kyant.inimate.util.Rectple
 import com.kyant.pixelmusic.ui.theme.PixelMusicTheme
+import com.kyant.pixelmusic.ui.theme.androidBlue
+import com.kyant.pixelmusic.ui.theme.androidOrange
 
 class Settings : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +36,16 @@ class Settings : ComponentActivity() {
                     )
                     TwoColumnGrid(
                         listOf(
-                            Triple("Customize", Icons.Outlined.Palette, null),
-                            Triple("About", Icons.Outlined.Info, null)
+                            Rectple(
+                                "Customize",
+                                Icons.Outlined.Palette, androidOrange,
+                                null
+                            ),
+                            Rectple(
+                                "About",
+                                Icons.Outlined.Info, androidBlue,
+                                null
+                            )
                         )
                     )
                 }

@@ -19,10 +19,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.kyant.inimate.layout.TwoColumnGrid
 import com.kyant.inimate.shape.SuperellipseCornerShape
+import com.kyant.inimate.util.Rectple
 import com.kyant.pixelmusic.locals.LocalLogin
 import com.kyant.pixelmusic.locals.ProvideLogin
 import com.kyant.pixelmusic.ui.Settings
 import com.kyant.pixelmusic.ui.Startup
+import com.kyant.pixelmusic.ui.theme.androidGreen
+import com.kyant.pixelmusic.ui.theme.androidNavy
+import com.kyant.pixelmusic.ui.theme.androidOrange
 
 @Composable
 fun Account(modifier: Modifier = Modifier) {
@@ -53,10 +57,26 @@ fun Account(modifier: Modifier = Modifier) {
             }
             TwoColumnGrid(
                 listOf(
-                    Triple("Favorites", Icons.Outlined.Favorite, null),
-                    Triple("History", Icons.Outlined.History, null),
-                    Triple("Statistics", Icons.Outlined.TrendingUp, null),
-                    Triple("Settings", Icons.Outlined.Settings, Settings::class.java)
+                    Rectple(
+                        "Favorites",
+                        Icons.Outlined.Favorite, androidOrange,
+                        null
+                    ),
+                    Rectple(
+                        "History",
+                        Icons.Outlined.History, androidNavy,
+                        null
+                    ),
+                    Rectple(
+                        "Statistics",
+                        Icons.Outlined.TrendingUp, androidGreen,
+                        null
+                    ),
+                    Rectple(
+                        "Settings",
+                        Icons.Outlined.Settings, null,
+                        Settings::class.java
+                    )
                 ),
                 { it?.let { context.startActivity(Intent(context, it)) } }
             )
