@@ -9,7 +9,9 @@ import com.kyant.pixelmusic.api.AlbumId
 import com.kyant.pixelmusic.api.Data
 import com.kyant.pixelmusic.api.SongId
 import com.kyant.pixelmusic.api.findUrl
+import com.kyant.pixelmusic.api.login.LoginResult
 import com.kyant.pixelmusic.api.playlist.Track
+import com.kyant.pixelmusic.util.DataStore
 import com.kyant.pixelmusic.util.loadCoverWithCache
 import java.io.Serializable
 
@@ -41,7 +43,9 @@ fun Song.serialize(): SerializedSong = SerializedSong(
 
 suspend fun Song.fix(context: Context, size: Int = 100): Song = copy(
     icon = albumId?.loadCoverWithCache(context, size),
-    mediaUrl = id?.findUrl()
+    mediaUrl = id?.findUrl(
+        DataStore(context, "account").getJsonOrNull<LoginResult>("login")?.cookie
+    )
 )
 
 suspend fun SerializedSong.toSong(context: Context): Song = Song(

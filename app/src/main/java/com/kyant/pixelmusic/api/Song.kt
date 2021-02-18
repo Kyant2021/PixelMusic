@@ -10,8 +10,11 @@ import kotlinx.serialization.Serializable
 
 typealias SongId = Long
 
-suspend fun SongId.findUrl(): String? = withContext(Dispatchers.IO) {
-    jsonClient.get<SongResult>("$API/song/url?id=${this@findUrl}").data?.getOrNull(0)?.url
+suspend fun SongId.findUrl(cookie: String? = null): String? = withContext(Dispatchers.IO) {
+    jsonClient.get<SongResult>(
+        if (cookie.isNullOrEmpty()) "$API/song/url?id=${this@findUrl}"
+        else "$API/song/url?id=${this@findUrl}&cookie=$cookie"
+    ).data?.getOrNull(0)?.url
 }
 
 @Serializable
