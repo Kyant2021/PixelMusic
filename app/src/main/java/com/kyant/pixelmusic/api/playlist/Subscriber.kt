@@ -1,6 +1,7 @@
 package com.kyant.pixelmusic.api.playlist
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class Subscriber(
@@ -30,7 +31,7 @@ data class Subscriber(
     val vipType: Long? = 0,
     val remarkName: String? = "",
     val authenticationTypes: Long? = 0,
-    val avatarDetail: String? = "",
+    val avatarDetail: JsonObject? = JsonObject(mapOf()),
     val anchor: Boolean? = false,
     val backgroundImgIdStr: String? = "",
     val avatarImgIdStr: String? = ""
