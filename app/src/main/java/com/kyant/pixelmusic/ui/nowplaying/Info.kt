@@ -8,9 +8,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.kyant.pixelmusic.data.Media
 import com.kyant.pixelmusic.media.Song
 import com.kyant.pixelmusic.ui.component.Tag
-import com.kyant.pixelmusic.ui.theme.*
+import com.kyant.pixelmusic.ui.theme.androidBlue
+import com.kyant.pixelmusic.ui.theme.androidChartreuse
+import com.kyant.pixelmusic.ui.theme.androidFawn
+import com.kyant.pixelmusic.ui.theme.androidGreen
 
 @Composable
 fun Info(
@@ -38,6 +42,11 @@ fun Info(
                 Tag(androidBlue, "320k bits")
                 Tag(androidFawn, "free")
             }
+            Media.player!!.DrawFFT(
+                Modifier.fillMaxWidth()
+                    .padding(16.dp)
+                    .height(256.dp)
+            )
         }
     }
 }

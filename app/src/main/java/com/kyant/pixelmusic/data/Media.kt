@@ -33,6 +33,8 @@ object Media {
     lateinit var browser: MediaBrowserCompat
     var session: MediaSessionCompat? by mutableStateOf(null)
 
+    val fftAudioProcessor = FFTAudioProcessor()
+
     private lateinit var dataSourceFactory: DataSource.Factory
     val songs: SnapshotStateList<Song> = mutableStateListOf<Song>().onEach {
         session?.controller?.addQueueItem(it.toMediaDescription())
