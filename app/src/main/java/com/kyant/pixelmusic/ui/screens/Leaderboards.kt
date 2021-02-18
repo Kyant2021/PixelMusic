@@ -49,7 +49,7 @@ fun Leaderboards() {
         }
     }
     BackLayer(state) {
-        Column(Modifier.padding(top = 24.dp)) {
+        Column(Modifier.padding(top = 24.dp, bottom = 128.dp)) {
             Text(
                 "Leaderboards",
                 Modifier.padding(16.dp),

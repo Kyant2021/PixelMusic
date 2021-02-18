@@ -156,9 +156,7 @@ private fun PositionedSharedElement.Placeholder(
     )
 }
 
-private val LocalSharedElementsRootState = staticCompositionLocalOf<SharedElementsRootState> {
-    error("SharedElementsRoot not found. SharedElement must be hosted in SharedElementsRoot.")
-}
+private val LocalSharedElementsRootState = compositionLocalOf { SharedElementsRootState() }
 
 private class SharedElementsRootState {
     val choreographer = ChoreographerWrapper()

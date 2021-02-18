@@ -4,7 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FeaturedPlayList
@@ -12,28 +11,24 @@ import androidx.compose.material.icons.outlined.Leaderboard
 import androidx.compose.material.icons.outlined.NewReleases
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
+import com.kyant.pixelmusic.ui.component.TopBar
 import com.kyant.pixelmusic.ui.layer.BackLayer
 import com.kyant.pixelmusic.ui.layer.ForeLayer
 import com.kyant.pixelmusic.ui.layer.component1
 import com.kyant.pixelmusic.ui.layer.component2
 import com.kyant.pixelmusic.ui.layout.TwoColumnGrid
 import com.kyant.pixelmusic.ui.shape.SuperellipseCornerShape
-import com.kyant.pixelmusic.util.Quadruple
-import com.kyant.pixelmusic.ui.component.TopBar
 import com.kyant.pixelmusic.ui.theme.androidBlue
 import com.kyant.pixelmusic.ui.theme.androidGreen
 import com.kyant.pixelmusic.ui.theme.androidOrange
+import com.kyant.pixelmusic.util.Quadruple
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -102,30 +97,7 @@ fun Home(navController: NavHostController) {
         }
     }
     ForeLayer(searchState) {
-        val lazyListState = rememberLazyListState()
-        val nestedScrollConnection = remember {
-            object : NestedScrollConnection {
-                override fun onPostScroll(
-                    consumed: Offset,
-                    available: Offset,
-                    source: NestedScrollSource
-                ): Offset {
-                    if (consumed.y == 0f && lazyListState.firstVisibleItemIndex == 0 && lazyListState.firstVisibleItemScrollOffset == 0) {
-                        scope.launch {
-                            searchState.animateTo(false)
-                            focusRequester.freeFocus()
-                            // keyboardController?.hideSoftwareKeyboard()
-                        }
-                    }
-                    return super.onPostScroll(consumed, available, source)
-                }
-            }
-        }
-        Search(
-            focusRequester,
-            lazyListState,
-            nestedScrollConnection
-        )
+        Search(focusRequester)
         LaunchedEffect(searchState.targetValue) {
             if (searchState.targetValue) {
                 focusRequester.requestFocus()

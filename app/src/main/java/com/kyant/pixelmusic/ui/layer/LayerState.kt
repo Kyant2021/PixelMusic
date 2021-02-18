@@ -10,8 +10,7 @@ typealias LayerState = SwipeableState<Boolean>
 
 @OptIn(ExperimentalMaterialApi::class)
 fun LayerState.progressOf(to: Float): Float =
-    (if (offset.value.isNaN()) 0f
-    else 1f - offset.value / to).coerceIn(0f..1f)
+    (if (offset.value.isNaN()) 0f else 1f - offset.value / to).coerceIn(0f..1f)
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
