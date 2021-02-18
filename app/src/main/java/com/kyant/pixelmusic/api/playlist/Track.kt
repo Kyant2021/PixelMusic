@@ -36,7 +36,7 @@ data class Track(
     val originCoverType: Long? = 0,
     val originSongSimpleData: JsonObject? = JsonObject(mapOf()),
     val single: Long? = 0,
-    val noCopyrightRcmd: String? = "",
+    val noCopyrightRcmd: JsonObject? = JsonObject(mapOf()),
     val rtype: Long? = 0,
     val rurl: String? = "",
     val mst: Long? = 0,

@@ -7,5 +7,5 @@ data class H(
     val br: Long? = 0,
     val fid: Long? = 0,
     val size: Long? = 0,
-    val vd: Long? = 0
+    val vd: Double? = 0.0
 )
