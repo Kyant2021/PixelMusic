@@ -1,4 +1,4 @@
-package com.kyant.pixelmusic.ui.nowplaying
+package com.kyant.pixelmusic.ui.visualizer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
