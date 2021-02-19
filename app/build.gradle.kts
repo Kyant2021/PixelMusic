@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion(30)
-    buildToolsVersion = "30.0.3"
+    compileSdkVersion("android-S")
+    buildToolsVersion = "31.0.0 rc1"
 
     defaultConfig {
         applicationId = "com.kyant.pixelmusic"
         minSdkVersion(21)
-        targetSdkVersion(30)
+        targetSdkVersion("android-S")
         versionCode(1)
         versionName = "0.1.0-alpha10"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
