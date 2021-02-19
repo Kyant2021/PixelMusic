@@ -7,6 +7,7 @@ plugins {
 android {
     compileSdkVersion("android-S")
     buildToolsVersion = "31.0.0 rc1"
+    ndkVersion = "23.0.7123448 rc1"
 
     defaultConfig {
         applicationId = "com.kyant.pixelmusic"
