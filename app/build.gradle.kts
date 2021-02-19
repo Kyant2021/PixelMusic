@@ -11,9 +11,9 @@ android {
     defaultConfig {
         applicationId = "com.kyant.pixelmusic"
         minSdkVersion(21)
-        targetSdkVersion("android-S")
+        targetSdkVersion(31)
         versionCode(1)
-        versionName = "0.1.0-alpha10"
+        versionName = "0.1.0-alpha11"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             ndkBuild {

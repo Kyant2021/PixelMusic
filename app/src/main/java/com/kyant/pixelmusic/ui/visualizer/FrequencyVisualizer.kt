@@ -18,13 +18,13 @@ import kotlin.math.pow
 @Composable
 fun FrequencyVisualizer(modifier: Modifier = Modifier) {
     // Taken from: https://en.wikipedia.org/wiki/Preferred_number#Audio_frequencies
-    val FREQUENCY_BAND_LIMITS = arrayOf(
+    val frequencyBandLimits = arrayOf(
         20, 25, 32, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630,
         800, 1000, 1250, 1600, 2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000,
         12500, 16000, 20000
     )
 
-    val bands = FREQUENCY_BAND_LIMITS.size
+    val bands = frequencyBandLimits.size
     val size = FFTAudioProcessor.SAMPLE_SIZE / 2
     val maxConst = 25_000 // Reference max value for accum magnitude
 
@@ -62,7 +62,7 @@ fun FrequencyVisualizer(modifier: Modifier = Modifier) {
             // We divide the bands by frequency.
             // Check until which index we need to stop for the current band
             val nextLimitAtPosition =
-                floor(FREQUENCY_BAND_LIMITS[currentFrequencyBandLimitIndex] / 20_000.toFloat() * size).toInt()
+                floor(frequencyBandLimits[currentFrequencyBandLimitIndex] / 20_000.toFloat() * size).toInt()
 
             synchronized(finalFft) {
                 // Here we iterate within this single band
@@ -112,7 +112,6 @@ fun FrequencyVisualizer(modifier: Modifier = Modifier) {
             val barHeight =
                 (height * (smoothedAccum / maxConst.toDouble()).coerceAtMost(1.0).toFloat())
             val top = height - barHeight
-            println(currentAverage)
 
             drawRect(
                 Color(0x20000000),
