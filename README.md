@@ -25,14 +25,14 @@ I will update it fortnightly.
 
 * **Kotlin** 1.4.30
 * **Ktor** 1.5.1
-* **Androidx** snapshot 7155479
+* **Androidx** snapshot 7172183
 * **Jetpack Compose** snapshot (1.0.0-beta02)
 * **ExoPlayer** 2.12.3
 
 ## Build requirements
 
-* **Android Studio** Arctic Fox | 2020.3.1 Canary 6 or higher, or **IDEA**
-* **Gradle** 7.0-milestone-1 or higher
+* **Android Studio** Arctic Fox 2020.3.1 Canary 8 or higher, **IDEA**
+* **Gradle** 7.0-milestone-2 or higher
 
 ## Special Thanks
 
