@@ -81,7 +81,7 @@ dependencies {
     implementation("io.coil-kt:coil:1.1.1")
     implementation("com.github.lincollincol:Amplituda:1.5")
     implementation("com.github.paramsen:noise:2.0.0")
-    testImplementation("junit:junit:4.13.1")
+    testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3-alpha04")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0-alpha04")
 }

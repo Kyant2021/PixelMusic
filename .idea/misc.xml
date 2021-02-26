@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/kyant/StudioProjects/PixelMusic/app/src/main/res/drawable/ic_baseline_pause_24.xml" value="0.23177083333333334" />
+        <entry key="..\:/Users/kyant/StudioProjects/PixelMusic/app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.23177083333333334" />
+        <entry key="..\:/Users/kyant/StudioProjects/PixelMusic/app/src/main/res/drawable/ic_baseline_skip_next_24.xml" value="0.23177083333333334" />
+        <entry key="..\:/Users/kyant/StudioProjects/PixelMusic/app/src/main/res/drawable/ic_baseline_skip_previous_24.xml" value="0.23177083333333334" />
+      </map>
+    </option>
+  </component>
   <component name="EntryPointsManager">
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue="androidx.compose.runtime.Composable" />
