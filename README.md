@@ -4,7 +4,8 @@ This is a beautiful **unofficial NetEase Cloud music player** for Android 🥳!
 
 **Notice:**
 
-* This project is still **in progress**.
+* This project is still **in progress**. Due to my schoolwork,
+I will update it fortnightly.
 
 ## Where to get test apk 😉😉😉😉😉😉😉😉 我应该从哪里获得测试版 apk?
 
