@@ -43,7 +43,11 @@ android {
     kotlinOptions {
         jvmTarget = "11"
         useIR = true
-        freeCompilerArgs = freeCompilerArgs + listOf("-Xopt-in=kotlin.RequiresOptIn")
+        freeCompilerArgs = freeCompilerArgs + listOf(
+            "-Xopt-in=kotlin.RequiresOptIn",
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
+        )
     }
     buildFeatures {
         compose = true
@@ -58,7 +62,7 @@ dependencies {
     val compose = "1.0.0-SNAPSHOT"
     val exoPlayer = "2.12.3"
 
-    implementation(kotlin("reflect", "1.4.30"))
+    implementation(kotlin("reflect", "1.4.31"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0-RC")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
     implementation("io.ktor:ktor-client-cio:$ktor")

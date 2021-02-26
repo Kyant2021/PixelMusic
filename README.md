@@ -23,7 +23,7 @@ I will update it fortnightly.
 
 ## Technical features
 
-* **Kotlin** 1.4.30
+* **Kotlin** 1.4.31
 * **Ktor** 1.5.1
 * **Androidx** snapshot 7172183
 * **Jetpack Compose** snapshot (1.0.0-beta02)
