@@ -14,7 +14,7 @@ I will update it fortnightly.
 
 ## Screenshots
 
-### 0.1.0-alpha03: 2021, Feb 10
+### 0.1.0-alpha11: 2021, Feb 27
 
 ![Home](art/home.png)
 ![Now Playing](art/now_playing.png)
@@ -24,7 +24,7 @@ I will update it fortnightly.
 ## Technical features
 
 * **Kotlin** 1.4.31
-* **Ktor** 1.5.1
+* **Ktor** 1.5.2
 * **Androidx** snapshot 7172183
 * **Jetpack Compose** snapshot (1.0.0-beta02)
 * **ExoPlayer** 2.12.3
