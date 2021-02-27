@@ -14,11 +14,13 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -32,10 +34,10 @@ import com.kyant.pixelmusic.ui.sharedelements.*
 import com.kyant.pixelmusic.ui.song.ExpandedSong
 import com.kyant.pixelmusic.ui.song.Song
 
-@OptIn(ExperimentalAnimatedInsets::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalAnimatedInsets::class)
 @Composable
 fun Search(focusRequester: FocusRequester, modifier: Modifier = Modifier) {
-    // val keyboardController = LocalSoftwareKeyboardController.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     var value by remember { mutableStateOf(TextFieldValue()) }
     val songs = remember(value.text) { mutableStateListOf<Song>() }
     LaunchedEffect(value.text) {
@@ -61,7 +63,7 @@ fun Search(focusRequester: FocusRequester, modifier: Modifier = Modifier) {
                     keyboardActions = KeyboardActions(
                         onSearch = {
                             focusRequester.freeFocus()
-                            // keyboardController?.hideSoftwareKeyboard()
+                            keyboardController?.hideSoftwareKeyboard()
                         }
                     ),
                     singleLine = true
@@ -94,7 +96,8 @@ fun Search(focusRequester: FocusRequester, modifier: Modifier = Modifier) {
             val state = rememberDraggableState { offset += it }
             with(LocalDensity.current) {
                 DelayExit(song != null) {
-                    BoxWithConstraints(Modifier.align(Alignment.Center)
+                    BoxWithConstraints(Modifier
+                        .align(Alignment.Center)
                         .offset(y = offset.toDp() / 2)
                         .draggable(
                             state,

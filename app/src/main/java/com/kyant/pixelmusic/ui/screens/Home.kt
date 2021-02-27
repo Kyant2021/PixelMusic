@@ -12,8 +12,10 @@ import androidx.compose.material.icons.outlined.NewReleases
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
@@ -31,10 +33,10 @@ import com.kyant.pixelmusic.ui.theme.androidOrange
 import com.kyant.pixelmusic.util.Quadruple
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun Home(navController: NavHostController) {
-    // val keyboardController = LocalSoftwareKeyboardController.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = FocusRequester.Default
     val scope = rememberCoroutineScope()
     val (searchState, accountState) = rememberSwipeableState(false)
@@ -101,10 +103,10 @@ fun Home(navController: NavHostController) {
         LaunchedEffect(searchState.targetValue) {
             if (searchState.targetValue) {
                 focusRequester.requestFocus()
-                // keyboardController?.showSoftwareKeyboard()
+                keyboardController?.showSoftwareKeyboard()
             } else {
                 focusRequester.freeFocus()
-                // keyboardController?.hideSoftwareKeyboard()
+                keyboardController?.hideSoftwareKeyboard()
             }
         }
     }
