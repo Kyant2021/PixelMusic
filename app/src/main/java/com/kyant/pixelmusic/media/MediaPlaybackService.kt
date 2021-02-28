@@ -21,9 +21,7 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
             controller?.registerCallback(object : MediaControllerCompat.Callback() {
                 override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
                     if (state?.state == PlaybackStateCompat.STATE_PLAYING || state?.state == PlaybackStateCompat.STATE_PAUSED) {
-                        startForeground(
-                            1, mediaStyleNotification(Media.NOTIFICATION_CHANNEL_ID)
-                        )
+                        startForeground(1, mediaStyleNotification(Media.NOTIFICATION_CHANNEL_ID))
                     }
                 }
             })
@@ -37,41 +35,17 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
         rootHints: Bundle?
     ): BrowserRoot {
         return BrowserRoot(Media.EMPTY_MEDIA_ROOT_ID, null)
-        // // (Optional) Control the level of access for the specified package name.
-        // // You'll need to write your own logic to do this.
-        // return if (allowBrowsing(clientPackageName, clientUid)) {
-        //     // Returns a root ID that clients can use with onLoadChildren() to retrieve
-        //     // the content hierarchy.
-        //     BrowserRoot(Media.MEDIA_ROOT_ID, null)
-        // } else {
-        //     // Clients can connect, but this BrowserRoot is an empty hierachy
-        //     // so onLoadChildren returns nothing. This disables the ability to browse for content.
-        //     BrowserRoot(Media.EMPTY_MEDIA_ROOT_ID, null)
-        // }
     }
 
     override fun onLoadChildren(
         parentMediaId: String,
         result: Result<List<MediaBrowserCompat.MediaItem>>
     ) {
-        //  Browsing not allowed
         if (Media.EMPTY_MEDIA_ROOT_ID == parentMediaId) {
             result.sendResult(null)
             return
         }
-
-        // Assume for example that the music catalog is already loaded/cached.
-
         val mediaItems = emptyList<MediaBrowserCompat.MediaItem>()
-
-        // Check if this is the root menu:
-        if (Media.MEDIA_ROOT_ID == parentMediaId) {
-            // Build the MediaItem objects for the top level,
-            // and put them in the mediaItems list...
-        } else {
-            // Examine the passed parentMediaId to see which submenu we're at,
-            // and put the children of that menu in the mediaItems list...
-        }
         result.sendResult(mediaItems)
     }
 }
